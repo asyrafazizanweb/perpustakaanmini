@@ -46,6 +46,11 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
 @media(max-width:380px){.gallery-grid{grid-template-columns:1fr}.gallery-cover{height:220px}}
 @media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:0 12px 28px}.panel{padding:16px}}
 @media(max-width:500px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:13px}}
+
+/* Barcode scanner */
+.scan-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}.scan-camera-card video{display:block;width:100%;min-height:230px;max-height:390px;object-fit:cover;background:#15231f;border-radius:10px;margin:10px 0}.scan-result{margin-top:16px}.scan-found{display:grid;grid-template-columns:100px 1fr;gap:14px;align-items:start;border:1px solid var(--line);background:#f7faf8;border-radius:12px;padding:14px}.scan-found img{width:100px;height:140px;object-fit:contain;background:#edf3f0;border-radius:6px}.scan-found h4{margin:0 0 6px;font-size:17px;line-height:1.3}.scan-found .code{font-weight:800;letter-spacing:1px;color:var(--accent)}.scan-empty{padding:14px;border-radius:10px;background:#fff4f1;color:#8b3328}.scan-status-good{color:#24674f;font-weight:700}.scan-status-bad{color:#9b3c32;font-weight:700}
+@media(max-width:700px){.scan-layout{grid-template-columns:1fr}.scan-camera-card video{min-height:200px}.scan-found{grid-template-columns:76px 1fr}.scan-found img{width:76px;height:110px}}
+
 @media print{
  @page{size:A4 landscape;margin:12mm}
  body.single-book-print{background:#fff}
@@ -68,6 +73,7 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
 .print-heading,.print-meta{display:none}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/umd/index.min.js"></script>
 </head>
 <body>
 <header>
@@ -81,6 +87,7 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
     <button class="tab" data-tab="formPanel">Borang Maklumat Buku</button>
     <button class="tab" data-tab="loanPanel">Rekod Pinjaman</button>
     <button class="tab" data-tab="collectionPanel">Koleksi Buku</button>
+    <button class="tab" data-tab="scanPanel">Scan Barkod</button>
     <button class="tab" data-tab="syncPanel">Sync & Tetapan</button>
   </nav>
 
@@ -146,6 +153,26 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
     <div id="bookGalleryView" class="gallery-grid" style="display:none"></div>
     <div class="actions no-print"><button class="btn secondary" id="exportBtn" type="button">Eksport Sandaran (.json)</button><label class="btn secondary" for="importFile" style="cursor:pointer">Import Sandaran (.json)</label><input id="importFile" type="file" accept=".json,application/json" hidden></div>
     <p class="small no-print">Untuk cetakan: pilih “Cetak Koleksi (A4)”, kemudian pilih kertas A4 dan orientasi landskap dalam dialog cetak. Anda juga boleh memilih “Save as PDF”.</p>
+  </section>
+
+  <section id="scanPanel" class="panel">
+    <h2>Scan Barkod Buku</h2>
+    <p class="sub">Imbas barkod ID katalog (contoh MAA00001) yang dicetak melalui rekod buku. Kamera memerlukan kebenaran pengguna dan laman HTTPS atau localhost.</p>
+    <div class="scan-layout">
+      <div class="dash-card scan-camera-card">
+        <h3><span aria-hidden="true">▣</span> Pengimbas kamera</h3>
+        <video id="scanVideo" playsinline muted></video>
+        <div id="scanCameraStatus" class="small" role="status">Kamera belum diaktifkan.</div>
+        <div class="actions"><button class="btn" type="button" id="startScanBtn">Aktifkan kamera</button><button class="btn secondary" type="button" id="stopScanBtn" disabled>Hentikan kamera</button></div>
+      </div>
+      <div class="dash-card">
+        <h3>Masukkan kod secara manual</h3>
+        <p class="small">Jika kamera tidak disokong, masukkan ID buku yang tercetak di bawah barkod atau ISBN.</p>
+        <form id="scanManualForm"><div class="field"><label for="scanCodeInput">ID Buku / ISBN</label><input id="scanCodeInput" autocomplete="off" placeholder="Contoh: MAA00001" required></div><div class="actions"><button class="btn" type="submit">Cari buku</button></div></form>
+        <div id="scanResult" class="scan-result" aria-live="polite"><p class="small">Hasil imbasan akan dipaparkan di sini.</p></div>
+      </div>
+    </div>
+    <div class="notice" style="margin-top:16px;margin-bottom:0"><strong>Petua:</strong> Pastikan barkod jelas, tidak berkilat dan memenuhi sebahagian besar skrin kamera. Barkod sistem menggunakan ID katalog MAA, bukan nombor ISBN.</div>
   </section>
 
   <section id="syncPanel" class="panel">
@@ -248,13 +275,13 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
       *{box-sizing:border-box}html,body{margin:0;padding:0;background:#edf2f0;color:#1d2c3a;font-family:Arial,"Segoe UI",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
       body{padding:24px}.sheet{width:100%;max-width:780px;min-height:1000px;margin:0 auto;background:#fff;border:1px solid #dce5e1;box-shadow:0 10px 34px #142e2417;padding:30px;position:relative;overflow:hidden}
       .topline{height:7px;background:#245b52;margin:-30px -30px 25px}.brand{display:flex;justify-content:space-between;align-items:center;gap:18px;padding-bottom:17px;border-bottom:1px solid #dce5e1}.brand-name{font-size:11px;font-weight:800;letter-spacing:2px;color:#245b52;text-transform:uppercase}.doc-type{font-size:10px;color:#65766f;text-transform:uppercase;letter-spacing:1.2px}
-      .catalog-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding:11px 13px;background:#f1f6f3;border-left:4px solid #245b52;border-radius:4px}.catalog-id{font-size:16px;font-weight:800;letter-spacing:1.5px;color:#245b52}.catalog-code{height:28px;width:112px;background:repeating-linear-gradient(90deg,#24372f 0 2px,transparent 2px 4px,#24372f 4px 5px,transparent 5px 8px);opacity:.8}.layout{display:grid;grid-template-columns:36% 1fr;gap:28px;margin-top:20px;align-items:start}.cover-panel{background:#f3f7f5;border:1px solid #e0e8e4;border-radius:8px;padding:14px;min-height:350px;display:flex;align-items:flex-start;justify-content:center}.cover{display:block;width:100%;height:auto;max-height:470px;object-fit:contain;object-position:top center;border-radius:3px;box-shadow:0 5px 15px #13282020}.no-cover{width:100%;min-height:290px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed #b7c7c0;color:#7a8d85;font-size:12px;letter-spacing:1px;line-height:1.8}
+      .catalog-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding:11px 13px;background:#f1f6f3;border-left:4px solid #245b52;border-radius:4px}.catalog-id{font-size:16px;font-weight:800;letter-spacing:1.5px;color:#245b52}.catalog-code-wrap{width:190px;text-align:center}.catalog-code-wrap svg{width:100%;height:48px}.barcode-caption{font:700 10px Arial,sans-serif;letter-spacing:1.5px;color:#24372f;margin-top:2px}.layout{display:grid;grid-template-columns:36% 1fr;gap:28px;margin-top:20px;align-items:start}.cover-panel{background:#f3f7f5;border:1px solid #e0e8e4;border-radius:8px;padding:14px;min-height:350px;display:flex;align-items:flex-start;justify-content:center}.cover{display:block;width:100%;height:auto;max-height:470px;object-fit:contain;object-position:top center;border-radius:3px;box-shadow:0 5px 15px #13282020}.no-cover{width:100%;min-height:290px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed #b7c7c0;color:#7a8d85;font-size:12px;letter-spacing:1px;line-height:1.8}
       .eyebrow{font-size:10px;letter-spacing:1.8px;color:#668177;font-weight:700;text-transform:uppercase;margin:0 0 8px}.title{font-size:25px;line-height:1.22;margin:0 0 8px;color:#1c3934;overflow-wrap:anywhere}.subtitle{font-size:12px;color:#687a73;margin:0 0 20px}.section-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.4px;color:#245b52;border-bottom:2px solid #dcece6;padding-bottom:8px;margin:0 0 10px}
       .detail{display:grid;grid-template-columns:42% 1fr;gap:10px;padding:9px 0;border-bottom:1px solid #edf1ef;break-inside:avoid}.label{font-size:10px;color:#718078;text-transform:uppercase;letter-spacing:.35px;font-weight:700}.value{font-size:12px;color:#24372f;overflow-wrap:anywhere;white-space:pre-wrap}.status{display:inline-block;padding:4px 8px;border-radius:4px;background:#e6f1ec;color:#245b52;font-weight:700}
       .footer{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:12px;border-top:1px solid #dce5e1;color:#7b8983;font-size:9px}.screen-actions{max-width:780px;margin:0 auto 14px;display:flex;gap:8px;justify-content:flex-end}.screen-actions button{border:0;border-radius:6px;padding:10px 15px;background:#245b52;color:#fff;font-weight:700;cursor:pointer}.screen-actions .close{background:#e4ebe8;color:#24372f}
       @media(max-width:650px){body{padding:8px}.sheet{padding:18px;min-height:0}.topline{margin:-18px -18px 18px}.layout{grid-template-columns:34% 1fr;gap:14px}.cover-panel{min-height:220px;padding:8px}.title{font-size:20px}.detail{grid-template-columns:1fr;gap:3px}}
       @media print{html,body{background:#fff!important;padding:0!important}.screen-actions{display:none!important}.sheet{max-width:none;width:auto;min-height:0;margin:0;border:0;box-shadow:none;padding:0;overflow:visible}.topline{margin:0 0 20px}.layout{grid-template-columns:36% 1fr;gap:24px;margin-top:22px}.cover-panel{min-height:0;padding:12px}.cover{max-height:225mm}.title{font-size:23px}.detail{grid-template-columns:42% 1fr;padding:7px 0}.footer{margin-top:20px}}
-      </style></head><body><div class="screen-actions"><button onclick="window.print()">Cetak / Simpan PDF</button><button class="close" onclick="window.close()">Tutup</button></div><main class="sheet"><div class="topline"></div><div class="brand"><div class="brand-name">Perpustakaan Mini Muhammad Asyraf Azizan</div><div class="doc-type">Rekod Maklumat Buku</div></div><div class="catalog-strip"><div><div style="font-size:9px;letter-spacing:1.4px;color:#718078;text-transform:uppercase">Nombor katalog</div><div class="catalog-id">${esc(b.bookCode||'—')}</div></div><div class="catalog-code" aria-label="Hiasan kod katalog"></div></div><div class="layout"><aside><div class="cover-panel">${cover}</div></aside><section><p class="eyebrow">Maklumat koleksi</p><h1 class="title">${esc(b.title||'Nama buku tidak diisi')}</h1><p class="subtitle">Rekod katalog buku peribadi</p><h2 class="section-label">Butiran buku</h2>${rows}</section></div><div class="footer"><span>PERPUSTAKAAN MINI · REKOD BUKU</span><span>Dicetak pada ${new Date().toLocaleDateString('ms-MY')}</span></div></main><script>window.addEventListener('load',()=>{const imgs=[...document.images];Promise.all(imgs.map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=r;i.onerror=r;}))).then(()=>setTimeout(()=>window.print(),250));});<\/script></body></html>`);
+      </style></head><body><div class="screen-actions"><button onclick="window.print()">Cetak / Simpan PDF</button><button class="close" onclick="window.close()">Tutup</button></div><main class="sheet"><div class="topline"></div><div class="brand"><div class="brand-name">Perpustakaan Mini Muhammad Asyraf Azizan</div><div class="doc-type">Rekod Maklumat Buku</div></div><div class="catalog-strip"><div><div style="font-size:9px;letter-spacing:1.4px;color:#718078;text-transform:uppercase">Nombor katalog</div><div class="catalog-id">${esc(b.bookCode||'—')}</div></div><div class="catalog-code-wrap"><svg id="catalogBarcode" aria-label="Barkod ID buku"></svg><div class="barcode-caption">${esc(b.bookCode||'')}</div></div></div><div class="layout"><aside><div class="cover-panel">${cover}</div></aside><section><p class="eyebrow">Maklumat koleksi</p><h1 class="title">${esc(b.title||'Nama buku tidak diisi')}</h1><p class="subtitle">Rekod katalog buku peribadi</p><h2 class="section-label">Butiran buku</h2>${rows}</section></div><div class="footer"><span>PERPUSTAKAAN MINI · REKOD BUKU</span><span>Dicetak pada ${new Date().toLocaleDateString('ms-MY')}</span></div></main><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script><script>window.addEventListener('load',()=>{try{if(window.JsBarcode)JsBarcode('#catalogBarcode',${JSON.stringify(b.bookCode||'')},{format:'CODE128',displayValue:false,margin:0,height:42,lineColor:'#182a24',width:2});}catch(e){}const imgs=[...document.images];Promise.all(imgs.map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=r;i.onerror=r;}))).then(()=>setTimeout(()=>window.print(),450));});<\/script></body></html>`);
     popup.document.close();
   }
   function deleteBook(id){const b=books.find(x=>x.id===id);if(!b||!confirm('Padam rekod buku ini? Rekod pinjaman berkaitan juga akan dipadam.'))return;books=books.filter(x=>x.id!==id);loans=loans.filter(x=>x.bookId!==id);persist();render();}
@@ -281,6 +308,50 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
     $('logoutCloudBtn').addEventListener('click',async()=>{try{if(supabaseClient)await supabaseClient.auth.signOut();cloudUser=null;cloudReady=false;cloudMessage('Log keluar. Rekod tempatan masih tersedia.');}catch(e){cloudMessage('Gagal log keluar: '+e.message);}});
     $('pullCloudBtn').addEventListener('click',pullCloud);$('pushCloudBtn').addEventListener('click',()=>{if(confirm('Hantar semua buku dan pinjaman pada peranti ini ke awan? Jika data awan sudah wujud, ia akan digantikan.')){cloudReady=true;pushCloud();}});$('syncNowBtn').addEventListener('click',syncCloud);
   }
+
+  // Pengimbas barkod: membaca ID katalog yang dicetak pada rekod buku, atau ISBN.
+  let scanControls=null, scanReader=null, scanLastValue='', scanCooldown=0;
+  function stopScanner(message='Kamera dihentikan.'){
+    try{if(scanControls&&typeof scanControls.stop==='function')scanControls.stop();}catch(e){}
+    try{if(scanReader&&typeof scanReader.reset==='function')scanReader.reset();}catch(e){}
+    scanControls=null;scanReader=null;
+    const video=$('scanVideo');if(video){try{video.pause();}catch(e){}video.srcObject=null;}
+    $('startScanBtn').disabled=false;$('stopScanBtn').disabled=true;$('scanCameraStatus').textContent=message;
+  }
+  function showScannedBook(raw){
+    const code=String(raw||'').trim();if(!code)return;
+    $('scanCodeInput').value=code;
+    const normalized=code.replace(/\s+/g,'').toUpperCase();
+    const book=books.find(b=>String(b.bookCode||'').replace(/\s+/g,'').toUpperCase()===normalized || String(b.isbn||'').replace(/[\s-]/g,'').toUpperCase()===normalized.replace(/[\s-]/g,''));
+    if(!book){$('scanResult').innerHTML=`<div class="scan-empty"><strong>Buku tidak ditemui.</strong><p>Kod <b>${esc(code)}</b> tidak sepadan dengan ID katalog atau ISBN dalam koleksi. Pastikan buku sudah didaftarkan atau cuba kod lain.</p></div>`;return;}
+    const loan=loans.find(l=>l.bookId===book.id&&l.status==='Dipinjam');
+    $('scanResult').innerHTML=`<article class="scan-found">${book.cover?`<img src="${book.cover}" alt="Kulit buku">`:'<div class="recent-placeholder">▤</div>'}<div><div class="code">${esc(book.bookCode||'—')}</div><h4>${esc(book.title||'Nama buku tidak diisi')}</h4><p class="small">${esc(book.author||'Penulis tidak dinyatakan')}</p><p class="small">${esc(book.genre||'Tanpa kategori')} · ${esc(book.reading||'Belum dibaca')}</p><p><span class="pill">${loan?'Dipinjam oleh '+esc(loan.borrower):'Dalam Simpanan'}</span></p><div class="actions"><button class="btn" type="button" id="scanEditBookBtn">Edit buku</button><button class="btn secondary" type="button" id="scanPrintBookBtn">Cetak rekod</button></div></div></article>`;
+    $('scanEditBookBtn').addEventListener('click',()=>{stopScanner('Kamera dihentikan.');editBook(book.id);});
+    $('scanPrintBookBtn').addEventListener('click',()=>printBookRecord(book.id));
+  }
+  async function startScanner(){
+    if(!navigator.mediaDevices?.getUserMedia){$('scanCameraStatus').textContent='Pelayar ini tidak menyokong kamera. Gunakan medan kod manual.';return;}
+    if(!window.isSecureContext){$('scanCameraStatus').textContent='Kamera memerlukan HTTPS atau localhost. Terbitkan sistem melalui HTTPS, atau gunakan medan kod manual.';return;}
+    try{
+      $('startScanBtn').disabled=true;$('scanCameraStatus').textContent='Meminta kebenaran kamera…';
+      if(window.ZXingBrowser?.BrowserMultiFormatReader){
+        scanReader=new window.ZXingBrowser.BrowserMultiFormatReader();
+        scanControls=await scanReader.decodeFromVideoDevice(undefined,$('scanVideo'),(result,error)=>{
+          if(result){const value=result.getText();const now=Date.now();if(value!==scanLastValue||now-scanCooldown>1800){scanLastValue=value;scanCooldown=now;showScannedBook(value);$('scanCameraStatus').textContent='Barkod dikesan: '+value;}}
+        });
+        $('stopScanBtn').disabled=false;$('scanCameraStatus').textContent='Kamera aktif. Halakan barkod ke dalam bingkai kamera.';
+      }else if('BarcodeDetector' in window){
+        const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});$('scanVideo').srcObject=stream;await $('scanVideo').play();$('stopScanBtn').disabled=false;
+        const detector=new BarcodeDetector({formats:['code_128','ean_13','ean_8','upc_a','upc_e','qr_code']});
+        const loop=async()=>{if(!$('scanVideo').srcObject)return;try{const codes=await detector.detect($('scanVideo'));if(codes.length){showScannedBook(codes[0].rawValue);$('scanCameraStatus').textContent='Barkod dikesan: '+codes[0].rawValue;}}catch(e){}requestAnimationFrame(loop);};requestAnimationFrame(loop);$('scanCameraStatus').textContent='Kamera aktif. Halakan barkod ke kamera.';
+      }else{throw Error('Pustaka pengimbas tidak dapat dimuatkan. Semak internet atau gunakan kod manual.');}
+    }catch(e){stopScanner('Kamera tidak dapat dimulakan: '+(e.message||'kebenaran ditolak')+'. Semak kebenaran kamera dan gunakan kod manual jika perlu.');}
+  }
+  $('startScanBtn').addEventListener('click',startScanner);
+  $('stopScanBtn').addEventListener('click',()=>stopScanner());
+  $('scanManualForm').addEventListener('submit',e=>{e.preventDefault();showScannedBook($('scanCodeInput').value);});
+  document.querySelector('[data-tab="scanPanel"]').addEventListener('click',()=>{if(scanControls||$('scanVideo').srcObject)stopScanner('Buka kamera apabila bersedia untuk mengimbas.');});
+  window.addEventListener('pagehide',()=>stopScanner('Kamera dihentikan.'));
 
   ['bookSearch','filterGenre','filterReading'].forEach(id=>$(id).addEventListener('input',renderBooks));$('loanSearch').addEventListener('input',renderLoans);
   function setCollectionView(view){const gallery=view==='gallery';$('bookTableView').style.display=gallery?'none':'block';$('bookGalleryView').style.display=gallery?'grid':'none';$('tableViewBtn').classList.toggle('selected',!gallery);$('galleryViewBtn').classList.toggle('selected',gallery);$('tableViewBtn').setAttribute('aria-pressed',String(!gallery));$('galleryViewBtn').setAttribute('aria-pressed',String(gallery));}
