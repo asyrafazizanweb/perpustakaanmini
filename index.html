@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#245b52">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Perpustakaan Mini Muhammad Asyraf Azizan</title>
+<style>
+:root{--ink:#203047;--muted:#66758a;--accent:#245b52;--accent2:#dcece6;--paper:#fff;--bg:#f2f5f4;--line:#dce3e1;--warn:#9b3c32}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",Arial,sans-serif}
+header{background:linear-gradient(120deg,#193f3b,#2d6c5d);color:white;padding:25px max(20px,calc((100% - 1180px)/2))}
+header h1{margin:0;font-size:clamp(24px,3vw,34px)}header p{margin:5px 0 0;color:#e2f0ec}
+main{max-width:1180px;margin:24px auto;padding:0 18px 40px}
+.notice{background:#fff8e8;border:1px solid #f0dfb7;padding:12px 15px;border-radius:10px;color:#654e1b;margin-bottom:18px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tab{border:1px solid var(--line);background:#fff;color:var(--ink);padding:11px 17px;border-radius:9px;cursor:pointer;font-weight:650}
+.tab.active{background:var(--accent);border-color:var(--accent);color:white}
+.panel{display:none;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 5px 20px #17352a0b}.panel.active{display:block}
+h2{margin:0 0 5px;font-size:23px} .sub{color:var(--muted);margin:0 0 20px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}.field[hidden]{display:none!important}.field.full{grid-column:1/-1}
+label{font-weight:650;font-size:13px;color:#35465a}
+input,select,textarea{width:100%;border:1px solid #cbd5d2;border-radius:8px;padding:10px 11px;background:#fff;color:var(--ink);font:inherit;min-height:42px}
+input:focus,select:focus{outline:2px solid #94c8b9;border-color:var(--accent)}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+button{font:inherit}.btn{border:0;border-radius:8px;padding:10px 15px;background:var(--accent);color:white;font-weight:650;cursor:pointer}.btn.secondary{background:#e8eeec;color:#203047}.btn.danger{background:#fff0ee;color:var(--warn);border:1px solid #f0d0cb}.btn:disabled{opacity:.45;cursor:not-allowed}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0}.toolbar input{max-width:330px}.toolbar select{max-width:220px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{padding:11px 12px;text-align:left;border-bottom:1px solid #e6ebe9;vertical-align:top}th{background:#f3f7f5;font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:#4b5d6b}tr:last-child td{border-bottom:0}
+.empty{text-align:center;color:var(--muted);padding:28px}.pill{display:inline-block;padding:3px 8px;border-radius:99px;background:#e5f1ec;color:#245b52;font-size:12px;font-weight:700}
+.small{font-size:12px;color:var(--muted)}.book-cover{width:42px;height:56px;object-fit:cover;border-radius:4px;border:1px solid var(--line);display:block}
+.cover-preview{display:flex;align-items:center;gap:10px}.cover-preview img{width:52px;height:68px;object-fit:cover;border:1px solid var(--line);border-radius:4px}
+.statrow{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.stat{background:#f4f8f6;border:1px solid var(--line);padding:10px 14px;border-radius:9px}.stat strong{font-size:20px;display:block}
+
+/* Dashboard and gallery */
+.dashboard-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:24px;border-radius:16px;background:linear-gradient(125deg,#183e38,#2f7565);color:#fff;margin-bottom:18px;overflow:hidden;position:relative}
+.dashboard-hero:after{content:"";position:absolute;width:220px;height:220px;border:1px solid #ffffff26;border-radius:50%;right:-35px;top:-100px;box-shadow:0 0 0 24px #ffffff09,0 0 0 48px #ffffff08}
+.dashboard-hero h2{font-size:clamp(22px,3vw,30px);margin:0 0 6px;position:relative;z-index:1}.dashboard-hero p{margin:0;color:#dcece6;position:relative;z-index:1}.hero-count{font-size:46px;font-weight:800;line-height:1;position:relative;z-index:1;white-space:nowrap}
+.dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:16px 0 22px}.dash-stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:0 4px 15px #17352a08}.dash-stat .stat-label{color:var(--muted);font-size:12px;font-weight:700}.dash-stat strong{display:block;font-size:27px;line-height:1.3;margin:4px 0}.dash-stat .stat-note{font-size:12px;color:var(--muted)}
+.dashboard-columns{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.dash-card{border:1px solid var(--line);border-radius:13px;padding:18px;background:#fff;min-width:0}.dash-card h3{margin:0 0 14px;font-size:16px}.category-row{display:grid;grid-template-columns:90px 1fr 30px;gap:9px;align-items:center;margin:11px 0;font-size:13px}.bar-track{height:8px;background:#edf2ef;border-radius:99px;overflow:hidden}.bar-fill{height:100%;background:#2f7565;border-radius:99px}.recent-list{display:grid;gap:10px}.recent-book{display:flex;gap:11px;align-items:center;padding:9px;border-radius:9px;background:#f7f9f8}.recent-book img,.recent-placeholder{width:42px;height:56px;object-fit:cover;border-radius:5px;border:1px solid var(--line);flex-shrink:0}.recent-placeholder{display:flex;align-items:center;justify-content:center;background:#e8f0ec;color:#487064;font-size:19px}.recent-book strong{display:block;font-size:13px;line-height:1.3}.recent-book .small{display:block;margin-top:3px}
+.view-switch{display:flex;gap:7px;align-items:center}.view-switch .btn{padding:9px 12px}.view-switch .btn.selected{box-shadow:inset 0 0 0 2px #b5d7ca}.gallery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:14px}.gallery-card{border:1px solid var(--line);background:#fff;border-radius:12px;overflow:hidden;min-width:0;box-shadow:0 4px 14px #17352a08;display:flex;flex-direction:column}.gallery-cover{height:205px;background:linear-gradient(145deg,#edf3f0,#dfeae5);display:flex;align-items:center;justify-content:center;overflow:hidden}.gallery-cover img{width:100%;height:100%;object-fit:contain}.gallery-cover .cover-letter{font-size:48px;font-weight:800;color:#83a99b}.gallery-info{padding:13px;display:flex;flex-direction:column;gap:7px;flex:1}.gallery-info h3{font-size:15px;line-height:1.35;margin:0;overflow-wrap:anywhere}.gallery-info .author{font-size:12px;color:var(--muted)}.gallery-meta{display:flex;flex-wrap:wrap;gap:5px}.gallery-meta span{font-size:11px;border-radius:99px;padding:3px 7px;background:#eef4f1;color:#42665a}.gallery-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:6px}.gallery-actions .btn{font-size:12px;padding:7px 9px}.collection-empty{grid-column:1/-1}
+@media(max-width:900px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery-cover{height:160px}.dashboard-columns{grid-template-columns:1fr}.dashboard-hero{padding:18px}.hero-count{font-size:36px}.category-row{grid-template-columns:78px 1fr 24px}}
+@media(max-width:380px){.gallery-grid{grid-template-columns:1fr}.gallery-cover{height:220px}}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:0 12px 28px}.panel{padding:16px}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:13px}}
+@media print{
+ @page{size:A4 landscape;margin:12mm}
+ body.single-book-print{background:#fff}
+ body.single-book-print @page{size:A4 portrait;margin:16mm}
+ body.single-book-print header, body.single-book-print main > .notice,
+ body.single-book-print main > .tabs, body.single-book-print main > section{display:none!important}
+ body.single-book-print #singleBookPrint{display:block!important}
+ body.single-book-print #singleBookPrint .print-card{display:grid;grid-template-columns:38% 1fr;gap:18px;align-items:start}
+ body.single-book-print #singleBookPrint .print-cover{width:100%;max-height:420px;object-fit:contain;object-position:top left}
+ body.single-book-print #singleBookPrint .cover-placeholder{border:1px dashed #aaa;min-height:180px;display:flex;align-items:center;justify-content:center;color:#555;padding:12px;text-align:center}
+ body.single-book-print #singleBookPrint h1{font-size:22pt;margin:0 0 14px}
+ body.single-book-print #singleBookPrint .detail{margin:0 0 9px;padding-bottom:7px;border-bottom:1px solid #ddd}
+ body.single-book-print #singleBookPrint .detail strong{display:block;font-size:9pt;color:#555;margin-bottom:2px}
+ body.single-book-print #singleBookPrint .detail span{font-size:11pt;overflow-wrap:anywhere}
+ body.single-book-print #singleBookPrint .print-record-title{font-size:16pt;margin:0 0 16px}
+ body.single-book-print #singleBookPrint .print-card{break-inside:avoid}
+
+ body{background:#fff;font-size:10pt;color:#111}#dashboardPanel{display:none!important}header{background:#fff!important;color:#111;padding:0 0 10mm;border-bottom:2px solid #333}header p{color:#333}main{max-width:none;margin:0;padding:0}.notice,.tabs,.no-print,.panel:not(.active){display:none!important}.panel.active{display:block;border:0;box-shadow:none;padding:0}.panel h2{font-size:18pt}.sub{margin-bottom:5mm}#formPanel,#loanPanel{display:none!important}#collectionPanel{display:block!important}.table-wrap{overflow:visible;border:0}table{min-width:0;width:100%;font-size:8pt;table-layout:auto}th,td{padding:5px 6px;border:1px solid #bbb;overflow-wrap:anywhere}th{background:#eee!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.book-cover{width:28px;height:38px}.print-heading{display:block!important}.print-meta{display:block!important}
+}
+.print-heading,.print-meta{display:none}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header>
+  <h1>Perpustakaan Mini Muhammad Asyraf Azizan</h1>
+  <p>Sistem rekod buku dan pinjaman peribadi · akses merentas telefon dan komputer</p>
+</header>
+<main>
+  <div class="notice"><strong>Nota akses:</strong> Rekod kekal disimpan pada peranti ini sehingga anda menyambungkan pangkalan data awan di bahagian <em>Sync & Tetapan</em>. Selepas disediakan, log masuk akaun yang sama pada telefon dan komputer untuk menyegerakkan rekod. Eksport sandaran masih disyorkan.</div>
+  <nav class="tabs no-print" aria-label="Bahagian sistem">
+    <button class="tab active" data-tab="dashboardPanel">Dashboard</button>
+    <button class="tab" data-tab="formPanel">Borang Maklumat Buku</button>
+    <button class="tab" data-tab="loanPanel">Rekod Pinjaman</button>
+    <button class="tab" data-tab="collectionPanel">Koleksi Buku</button>
+    <button class="tab" data-tab="syncPanel">Sync & Tetapan</button>
+  </nav>
+
+  <section id="dashboardPanel" class="panel active">
+    <div class="dashboard-hero"><div><h2>Selamat datang ke perpustakaan peribadi</h2><p>Ringkasan koleksi, kemajuan bacaan dan status pinjaman anda.</p></div><div class="hero-count" id="heroBookCount">0 <span style="font-size:14px;font-weight:600">buku</span></div></div>
+    <div class="dashboard-stats">
+      <div class="dash-stat"><span class="stat-label">JUMLAH KOLEKSI</span><strong id="dashTotal">0</strong><span class="stat-note">Buku direkodkan</span></div>
+      <div class="dash-stat"><span class="stat-label">SELESAI DIBACA</span><strong id="dashRead">0</strong><span class="stat-note" id="dashReadNote">0% daripada koleksi</span></div>
+      <div class="dash-stat"><span class="stat-label">SEDANG DIPINJAM</span><strong id="dashLoans">0</strong><span class="stat-note">Rekod berstatus dipinjam</span></div>
+      <div class="dash-stat"><span class="stat-label">NILAI KOLEKSI</span><strong id="dashValue">RM 0.00</strong><span class="stat-note">Berdasarkan harga direkodkan</span></div>
+    </div>
+    <div class="dashboard-columns"><div class="dash-card"><h3>Koleksi mengikut kategori</h3><div id="categoryBreakdown"><p class="small">Belum ada rekod buku.</p></div></div><div class="dash-card"><h3>Buku terkini ditambah</h3><div id="recentBooks" class="recent-list"><p class="small">Buku yang disimpan akan dipaparkan di sini.</p></div><div class="actions" style="margin-top:14px"><button class="btn" type="button" id="dashboardAddBtn">+ Daftar buku</button><button class="btn secondary" type="button" id="dashboardCollectionBtn">Lihat koleksi</button></div></div></div>
+  </section>
+
+  <section id="formPanel" class="panel">
+    <h2>Borang Maklumat Buku</h2><p class="sub">Masukkan maklumat buku. Medan bertanda * wajib diisi.</p>
+    <form id="bookForm">
+      <input type="hidden" id="bookId">
+      <div class="grid">
+        <div class="field"><label for="bookCode">ID Buku (automatik)</label><input id="bookCode" readonly placeholder="Dijana apabila buku disimpan"></div>
+        <div class="field"><label for="format">Format Buku *</label><select id="format" required><option value="">Pilih format</option><option>Hardcover</option><option>Paperback</option><option>E-book</option></select></div>
+        <div class="field"><label for="genre">Kategori / Genre *</label><select id="genre" required><option value="">Pilih kategori</option><option>Fiksyen</option><option>Biografi</option><option>Agama</option><option>Sejarah</option><option>Sains</option><option>Perniagaan</option></select></div>
+        <div class="field"><label for="isbn">Kod ISBN</label><input id="isbn" placeholder="Contoh: 978-..." autocomplete="off"></div>
+        <div class="field"><label for="title">Nama Buku *</label><input id="title" required placeholder="Masukkan tajuk buku"></div>
+        <div class="field"><label for="cover">Kulit Buku (imej)</label><input id="cover" type="file" accept="image/*"><span class="small">Imej akan disimpan dalam pelayar. Saiz disyorkan bawah 1 MB.</span><div id="coverPreview" class="cover-preview"></div></div>
+        <div class="field"><label for="publisher">Penerbit</label><input id="publisher" placeholder="Nama penerbit"></div>
+        <div class="field"><label for="author">Penulis *</label><input id="author" required placeholder="Nama penulis"></div>
+        <div class="field"><label for="reading">Status Bacaan *</label><select id="reading" required><option>Belum dibaca</option><option>Sedang dibaca</option><option>Selesai</option></select></div>
+        <div class="field"><label for="source">Sumber *</label><select id="source" required><option value="">Pilih sumber</option><option value="Beli">Beli</option><option value="Hadiah">Hadiah</option><option value="Sumbangan">Sumbangan</option></select></div>
+        <div class="field"><label for="price">Harga (RM)</label><input id="price" type="number" min="0" step="0.01" placeholder="0.00"></div>
+        <div class="field" id="purchaseField" hidden><label for="purchase">Lokasi Pembelian *</label><input id="purchase" placeholder="Kedai / laman web / lokasi"></div>
+        <div class="field"><label for="publishPlace">Lokasi Terbit</label><input id="publishPlace" placeholder="Bandar / negara"></div>
+        <div class="field"><label for="year">Tahun Terbit</label><input id="year" type="number" min="0" max="2100" placeholder="Contoh: 2024"></div>
+      </div>
+      <div class="actions"><button class="btn" type="submit" id="saveBookBtn">Simpan Buku</button><button class="btn secondary" type="button" id="resetBookBtn">Kosongkan Borang</button></div>
+    </form>
+  </section>
+
+  <section id="loanPanel" class="panel">
+    <h2>Rekod Pinjaman</h2><p class="sub">Pilih buku untuk mengaitkan rekod pinjaman dengan koleksi anda.</p>
+    <form id="loanForm">
+      <input type="hidden" id="loanId">
+      <div class="grid">
+        <div class="field"><label for="loanBook">Buku *</label><select id="loanBook" required><option value="">Pilih buku</option></select></div>
+        <div class="field"><label for="borrower">Nama Peminjam *</label><input id="borrower" required placeholder="Nama peminjam"></div>
+        <div class="field"><label for="loanStatus">Status Pinjaman *</label><select id="loanStatus" required><option>Dipinjam</option><option>Dalam Simpanan</option></select></div>
+        <div class="field"><label for="borrowDate">Tarikh Dipinjam</label><input id="borrowDate" type="date"></div>
+        <div class="field"><label for="returnDate">Tarikh Dipulangkan</label><input id="returnDate" type="date"></div>
+      </div>
+      <div class="actions"><button class="btn" type="submit" id="saveLoanBtn">Simpan Rekod Pinjaman</button><button class="btn secondary" type="button" id="resetLoanBtn">Kosongkan Borang</button></div>
+    </form>
+    <div class="toolbar no-print"><input id="loanSearch" placeholder="Cari peminjam atau tajuk buku..."></div>
+    <div class="table-wrap"><table><thead><tr><th>Buku</th><th>Nama Peminjam</th><th>Status</th><th>Tarikh Dipinjam</th><th>Tarikh Dipulangkan</th><th class="no-print">Tindakan</th></tr></thead><tbody id="loanRows"></tbody></table></div>
+  </section>
+
+  <section id="collectionPanel" class="panel">
+    <div class="print-heading"><h1>Perpustakaan Mini Muhammad Asyraf Azizan — Koleksi Buku</h1><p>Senarai koleksi peribadi</p></div>
+    <h2 class="no-print">Koleksi Buku</h2><p class="sub no-print">Semua buku yang telah disimpan dipaparkan di sini.</p>
+    <div class="statrow no-print"><div class="stat"><span>Jumlah buku</span><strong id="totalBooks">0</strong></div><div class="stat"><span>Sedang dipinjam</span><strong id="totalLoans">0</strong></div><div class="stat"><span>Jumlah harga direkodkan</span><strong id="totalValue">RM 0.00</strong></div></div>
+    <div class="toolbar no-print"><input id="bookSearch" placeholder="Cari tajuk/penulis, ISBN, penerbit..."><select id="filterGenre"><option value="">Semua kategori</option><option>Fiksyen</option><option>Biografi</option><option>Agama</option><option>Sejarah</option><option>Sains</option><option>Perniagaan</option></select><select id="filterReading"><option value="">Semua status bacaan</option><option>Belum dibaca</option><option>Sedang dibaca</option><option>Selesai</option></select><button class="btn" id="printBtn" type="button">Cetak Koleksi (A4)</button><div class="view-switch"><button type="button" class="btn secondary selected" id="tableViewBtn" aria-pressed="true">☷ Jadual</button><button type="button" class="btn secondary" id="galleryViewBtn" aria-pressed="false">▦ Galeri</button></div></div>
+    <div class="print-meta"><p id="printDate"></p></div>
+    <div id="bookTableView" class="table-wrap"><table><thead><tr><th>Kulit</th><th>ID Buku</th><th>Maklumat Buku</th><th>Format / Kategori</th><th>Status Bacaan</th><th>Harga</th><th>Lokasi / Tahun Terbit</th><th>Status Pinjaman</th><th class="no-print">Tindakan</th></tr></thead><tbody id="bookRows"></tbody></table></div>
+    <div id="bookGalleryView" class="gallery-grid" style="display:none"></div>
+    <div class="actions no-print"><button class="btn secondary" id="exportBtn" type="button">Eksport Sandaran (.json)</button><label class="btn secondary" for="importFile" style="cursor:pointer">Import Sandaran (.json)</label><input id="importFile" type="file" accept=".json,application/json" hidden></div>
+    <p class="small no-print">Untuk cetakan: pilih “Cetak Koleksi (A4)”, kemudian pilih kertas A4 dan orientasi landskap dalam dialog cetak. Anda juga boleh memilih “Save as PDF”.</p>
+  </section>
+
+  <section id="syncPanel" class="panel">
+    <h2>Sync & Tetapan Awan</h2>
+    <p class="sub">Sediakan sambungan awan sekali sahaja, kemudian gunakan akaun yang sama pada Android, iPhone dan komputer. Data tempatan sedia ada tidak akan diganti secara automatik.</p>
+    <div class="dash-card" style="margin-bottom:16px">
+      <h3>1. Sambungan pangkalan data</h3>
+      <p class="small">Masukkan URL projek Supabase dan kunci anon/publishable projek anda. Jangan masukkan service_role key. Maklumat sambungan disimpan pada pelayar ini sahaja.</p>
+      <div class="grid">
+        <div class="field full"><label for="cloudUrl">Supabase Project URL</label><input id="cloudUrl" type="url" placeholder="https://xxxxxxxx.supabase.co" autocomplete="url"></div>
+        <div class="field full"><label for="cloudKey">Publishable / anon key</label><input id="cloudKey" type="password" placeholder="sb_publishable_... atau anon key" autocomplete="off"></div>
+      </div>
+      <div class="actions"><button class="btn" id="connectCloudBtn" type="button">Simpan sambungan</button><button class="btn secondary" id="forgetCloudBtn" type="button">Padam tetapan sambungan</button></div>
+    </div>
+    <div class="dash-card" style="margin-bottom:16px">
+      <h3>2. Akaun perpustakaan</h3>
+      <div class="grid">
+        <div class="field"><label for="cloudEmail">E-mel</label><input id="cloudEmail" type="email" placeholder="nama@contoh.com" autocomplete="username"></div>
+        <div class="field"><label for="cloudPassword">Kata laluan</label><input id="cloudPassword" type="password" placeholder="Sekurang-kurangnya 6 aksara" autocomplete="current-password"></div>
+      </div>
+      <div class="actions"><button class="btn" id="signupCloudBtn" type="button">Daftar akaun</button><button class="btn secondary" id="loginCloudBtn" type="button">Log masuk</button><button class="btn secondary" id="logoutCloudBtn" type="button">Log keluar</button></div>
+      <p id="cloudStatus" class="notice" role="status" aria-live="polite" style="margin-top:14px;margin-bottom:0">Belum disambungkan. Rekod tempatan anda tidak berubah.</p>
+    </div>
+    <div class="dash-card">
+      <h3>3. Pilih cara penyegerakan</h3>
+      <p class="small">Apabila log masuk kali pertama pada peranti baharu, pilih sama ada hendak memuat turun koleksi awan atau menghantar koleksi peranti ini ke awan. Muat turun akan membuat salinan sandaran data tempatan sebelum menggantikannya.</p>
+      <div class="actions"><button class="btn" id="pullCloudBtn" type="button">Muat turun dari awan ke peranti ini</button><button class="btn secondary" id="pushCloudBtn" type="button">Hantar data peranti ini ke awan</button><button class="btn secondary" id="syncNowBtn" type="button">Segerakkan sekarang</button></div>
+      <p class="small" style="margin-top:12px">Penting: penyegerakan asas menggunakan kaedah versi terakhir disimpan. Jika beberapa peranti mengubah data pada masa yang sama, segerakkan selepas selesai menyunting. Imej kulit buku turut dihantar bersama rekod dan boleh meningkatkan penggunaan storan.</p>
+    </div>
+  </section>
+
+  <section id="singleBookPrint" style="display:none"></section>
+</main>
+<script>
+(() => {
+  const DB_KEY = 'perpustakaanMini_v1_books';
+  const LOAN_KEY = 'perpustakaanMini_v1_loans';
+  let books = read(DB_KEY, []), loans = read(LOAN_KEY, []), currentCover = '';
+  const $ = id => document.getElementById(id);
+  function read(key, fallback){ try { const x=localStorage.getItem(key); return x?JSON.parse(x):fallback; } catch(e){ return fallback; } }
+  function persist(){ try { localStorage.setItem(DB_KEY,JSON.stringify(books)); localStorage.setItem(LOAN_KEY,JSON.stringify(loans)); scheduleCloudPush(); } catch(e){ alert('Ruang storan pelayar mungkin penuh. Cuba gunakan imej kulit yang lebih kecil atau eksport sandaran.'); } }
+  function esc(v=''){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function money(v){return v!==''&&v!=null&&!Number.isNaN(Number(v))?'RM '+Number(v).toFixed(2):'—';}
+  function bookName(id){const b=books.find(x=>x.id===id);return b?`${b.title||b.author}${b.author?' — '+b.author:''}${b.isbn?' · ISBN '+b.isbn:''}`:'Buku dipadam';}
+  function resetBook(){ $('bookForm').reset();$('bookId').value='';$('bookCode').value=nextBookCode();currentCover='';$('coverPreview').innerHTML='';$('saveBookBtn').textContent='Simpan Buku';togglePurchaseField(); }
+  function resetLoan(){ $('loanForm').reset();$('loanId').value='';$('saveLoanBtn').textContent='Simpan Rekod Pinjaman'; }
+  function showTab(id){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));}
+  document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+  $('cover').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Sila pilih fail imej.');return;}if(f.size>1.5*1024*1024){alert('Imej terlalu besar. Pilih imej bawah 1.5 MB untuk mengelakkan storan penuh.');e.target.value='';return;}const r=new FileReader();r.onload=()=>{currentCover=r.result;$('coverPreview').innerHTML=`<img alt="Pratonton kulit buku" src="${currentCover}"><span class="small">Imej dipilih</span>`;};r.readAsDataURL(f);});
+  function togglePurchaseField(){const buying=$('source').value==='Beli';$('purchaseField').hidden=!buying;$('purchase').required=buying;if(!buying)$('purchase').value='';}
+  $('source').addEventListener('change',togglePurchaseField);
+  function nextBookCode(){const nums=books.map(b=>Number(String(b.bookCode||'').match(/^MAA(\d+)$/)?.[1]||0));return 'MAA'+String(Math.max(0,...nums)+1).padStart(5,'0');}
+  function ensureBookCodes(){let changed=false;let max=books.reduce((m,b)=>Math.max(m,Number(String(b.bookCode||'').match(/^MAA(\d+)$/)?.[1]||0)),0);books.forEach(b=>{if(!b.bookCode){b.bookCode='MAA'+String(++max).padStart(5,'0');changed=true;}});if(changed)persist();}
+  ensureBookCodes();
+  $('bookForm').addEventListener('submit',e=>{e.preventDefault();const id=$('bookId').value||String(Date.now())+Math.random().toString(16).slice(2,6);const old=books.find(b=>b.id===id);const source=$('source').value;const bookCode=old?.bookCode||nextBookCode();const b={id,bookCode,format:$('format').value,genre:$('genre').value,isbn:$('isbn').value.trim(),title:$('title').value.trim(),cover:currentCover||(old?.cover||''),publisher:$('publisher').value.trim(),author:$('author').value.trim(),reading:$('reading').value,price:$('price').value,source,purchase:source==='Beli'?$('purchase').value.trim():'',publishPlace:$('publishPlace').value.trim(),year:$('year').value};if(old)books=books.map(x=>x.id===id?b:x);else books.unshift(b);persist();resetBook();render();showTab('collectionPanel');});
+  $('resetBookBtn').addEventListener('click',resetBook);
+  $('loanForm').addEventListener('submit',e=>{e.preventDefault();const id=$('loanId').value||String(Date.now())+Math.random().toString(16).slice(2,6);const l={id,bookId:$('loanBook').value,borrower:$('borrower').value.trim(),status:$('loanStatus').value,borrowDate:$('borrowDate').value,returnDate:$('returnDate').value};const old=loans.find(x=>x.id===id);if(old)loans=loans.map(x=>x.id===id?l:x);else loans.unshift(l);persist();resetLoan();render();});
+  $('resetLoanBtn').addEventListener('click',resetLoan);
+  function renderBookSelect(){const sel=$('loanBook'),old=sel.value;sel.innerHTML='<option value="">Pilih buku</option>'+books.map(b=>`<option value="${esc(b.id)}">${esc(b.bookCode||'')} · ${esc(b.title||b.author)}${b.author?' — '+esc(b.author):''}</option>`).join('');if(books.some(b=>b.id===old))sel.value=old;}
+  function renderBooks(){
+    const q=$('bookSearch').value.toLowerCase(),g=$('filterGenre').value,r=$('filterReading').value;
+    const list=books.filter(b=>(!q||[b.bookCode,b.title,b.author,b.isbn,b.publisher,b.purchase,b.publishPlace].some(v=>(v||'').toLowerCase().includes(q)))&&(!g||b.genre===g)&&(!r||b.reading===r));
+    $('totalBooks').textContent=books.length;$('totalLoans').textContent=loans.filter(l=>l.status==='Dipinjam').length;$('totalValue').textContent='RM '+books.reduce((s,b)=>s+(Number(b.price)||0),0).toFixed(2);
+    $('bookRows').innerHTML=list.length?list.map(b=>{const loan=loans.find(l=>l.bookId===b.id&&l.status==='Dipinjam');return `<tr><td>${b.cover?`<img class="book-cover" src="${b.cover}" alt="Kulit buku">`:'—'}</td><td><strong>${esc(b.bookCode||'—')}</strong></td><td><strong>${esc(b.title||'Nama buku tidak diisi')}</strong><br><span class="small">Penulis: ${esc(b.author||'—')}</span><br><span class="small">${b.isbn?'ISBN: '+esc(b.isbn):'ISBN tidak diisi'}</span><br><span class="small">${esc(b.publisher||'Penerbit tidak diisi')}</span></td><td>${esc(b.format)}<br><span class="small">${esc(b.genre)}</span></td><td><span class="pill">${esc(b.reading)}</span></td><td>${money(b.price)}</td><td>${esc(b.publishPlace||'—')}<br><span class="small">${esc(b.year||'Tahun tidak diisi')}</span></td><td>${loan?`Dipinjam oleh ${esc(loan.borrower)}`:'Dalam Simpanan'}</td><td class="no-print"><button class="btn secondary" data-edit-book="${esc(b.id)}">Edit</button> <button class="btn secondary" data-print-book="${esc(b.id)}">Cetak</button> <button class="btn danger" data-delete-book="${esc(b.id)}">Padam</button></td></tr>`}).join(''):'<tr><td colspan="9" class="empty">Tiada rekod buku ditemui. Tambah buku melalui tab Borang Maklumat Buku.</td></tr>';
+    $('bookGalleryView').innerHTML=list.length?list.map(b=>{const loan=loans.find(l=>l.bookId===b.id&&l.status==='Dipinjam');return `<article class="gallery-card"><div class="gallery-cover">${b.cover?`<img src="${b.cover}" alt="Kulit buku ${esc(b.title)}">`:`<span class="cover-letter">${esc((b.title||'B').trim().charAt(0).toUpperCase())}</span>`}</div><div class="gallery-info"><div class="small">${esc(b.bookCode||'—')}</div><h3>${esc(b.title||'Nama buku tidak diisi')}</h3><div class="author">${esc(b.author||'Penulis tidak dinyatakan')}</div><div class="gallery-meta"><span>${esc(b.genre||'Tanpa kategori')}</span><span>${esc(b.reading||'Belum dibaca')}</span></div><div class="small">${esc(b.year||'Tahun tidak dinyatakan')} · ${money(b.price)}</div><div class="small">${loan?'Dipinjam: '+esc(loan.borrower):'Dalam simpanan'}</div><div class="gallery-actions"><button class="btn secondary" data-edit-book="${esc(b.id)}">Edit</button><button class="btn secondary" data-print-book="${esc(b.id)}">Cetak</button><button class="btn danger" data-delete-book="${esc(b.id)}">Padam</button></div></div></article>`}).join(''):'<div class="empty collection-empty">Tiada buku yang sepadan dengan carian atau penapis ini.</div>';
+    document.querySelectorAll('[data-edit-book]').forEach(btn=>btn.addEventListener('click',()=>editBook(btn.dataset.editBook)));
+    document.querySelectorAll('[data-print-book]').forEach(btn=>btn.addEventListener('click',()=>printBookRecord(btn.dataset.printBook)));
+    document.querySelectorAll('[data-delete-book]').forEach(btn=>btn.addEventListener('click',()=>deleteBook(btn.dataset.deleteBook)));
+  }
+  function renderDashboard(){
+    const total=books.length,read=books.filter(b=>b.reading==='Selesai').length,loanCount=loans.filter(l=>l.status==='Dipinjam').length,value=books.reduce((sum,b)=>sum+(Number(b.price)||0),0);
+    $('heroBookCount').innerHTML=`${total} <span style="font-size:14px;font-weight:600">buku</span>`;$('dashTotal').textContent=total;$('dashRead').textContent=read;$('dashReadNote').textContent=(total?Math.round(read/total*100):0)+'% daripada koleksi';$('dashLoans').textContent=loanCount;$('dashValue').textContent='RM '+value.toFixed(2);
+    const counts={};books.forEach(b=>{const k=b.genre||'Tanpa kategori';counts[k]=(counts[k]||0)+1;});const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    $('categoryBreakdown').innerHTML=entries.length?entries.map(([name,count])=>`<div class="category-row"><span>${esc(name)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3,count/total*100)}%"></div></div><strong>${count}</strong></div>`).join(''):'<p class="small">Belum ada rekod buku.</p>';
+    const recent=books.slice(0,5);$('recentBooks').innerHTML=recent.length?recent.map(b=>`<div class="recent-book">${b.cover?`<img src="${b.cover}" alt="Kulit buku">`:`<div class="recent-placeholder">▤</div>`}<div><strong>${esc(b.title||'Nama buku tidak diisi')}</strong><span class="small">${esc(b.bookCode||'')} · ${esc(b.author||'Penulis tidak dinyatakan')}</span></div></div>`).join(''):'<p class="small">Buku yang disimpan akan dipaparkan di sini.</p>';
+  }
+  function renderLoans(){const q=$('loanSearch').value.toLowerCase();const list=loans.filter(l=>(l.borrower+' '+bookName(l.bookId)).toLowerCase().includes(q));$('loanRows').innerHTML=list.length?list.map(l=>`<tr><td>${esc(bookName(l.bookId))}</td><td>${esc(l.borrower)}</td><td><span class="pill">${esc(l.status)}</span></td><td>${esc(l.borrowDate||'—')}</td><td>${esc(l.returnDate||'—')}</td><td class="no-print"><button class="btn secondary" data-edit-loan="${esc(l.id)}">Edit</button> <button class="btn danger" data-delete-loan="${esc(l.id)}">Padam</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">Tiada rekod pinjaman.</td></tr>';
+    $('loanRows').querySelectorAll('[data-edit-loan]').forEach(btn=>btn.addEventListener('click',()=>editLoan(btn.dataset.editLoan)));$('loanRows').querySelectorAll('[data-delete-loan]').forEach(btn=>btn.addEventListener('click',()=>{if(confirm('Padam rekod pinjaman ini?')){loans=loans.filter(l=>l.id!==btn.dataset.deleteLoan);persist();render();}}));
+  }
+  function render(){renderBookSelect();renderBooks();renderLoans();renderDashboard();}
+  function editBook(id){const b=books.find(x=>x.id===id);if(!b)return;showTab('formPanel');$('bookId').value=b.id;$('bookCode').value=b.bookCode||'';['format','genre','isbn','title','publisher','author','reading','price','purchase','year'].forEach(k=>$(k).value=b[k]||'');$('source').value=b.source||(b.purchase?'Beli':'Beli');togglePurchaseField();$('purchase').value=b.purchase||'';$('publishPlace').value=b.publishPlace||'';currentCover=b.cover||'';$('coverPreview').innerHTML=currentCover?`<img alt="Kulit buku" src="${currentCover}"><span class="small">Kulit buku sedia ada (pilih imej baharu jika mahu menggantikannya)</span>`:'';$('saveBookBtn').textContent='Kemaskini Buku';window.scrollTo({top:0,behavior:'smooth'});}
+  function printBookRecord(id){
+    const b=books.find(x=>x.id===id); if(!b)return;
+    const loan=loans.find(l=>l.bookId===b.id&&l.status==='Dipinjam');
+    const details=[
+      ['ID Buku',b.bookCode||'—'],['Format Buku',b.format],['Kategori / Genre',b.genre],['Kod ISBN',b.isbn],
+      ['Penulis',b.author],['Penerbit',b.publisher],['Status Bacaan',b.reading],
+      ['Sumber',b.source||'Beli'],...( (b.source||'Beli')==='Beli' ? [['Lokasi Pembelian',b.purchase]] : []),['Lokasi Terbit',b.publishPlace],
+      ['Tahun Terbit',b.year],['Harga Direkodkan',money(b.price)],['Status Pinjaman',loan?('Dipinjam — '+loan.borrower):'Dalam Simpanan']
+    ];
+    const popup=window.open('', '_blank', 'width=980,height=800');
+    if(!popup){alert('Tetingkap cetakan disekat oleh pelayar. Benarkan pop-up untuk fail ini dan cuba lagi.');return;}
+    const cover=b.cover
+      ? `<img class="cover" src="${b.cover}" alt="Kulit buku">`
+      : '<div class="no-cover"><span>TIADA IMEJ<br>KULIT BUKU</span></div>';
+    const rows=details.map(([label,value])=>`<div class="detail"><div class="label">${esc(label)}</div><div class="value">${esc(value||'—')}</div></div>`).join('');
+    popup.document.open();
+    popup.document.write(`<!doctype html><html lang="ms"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rekod Buku — ${esc(b.title||'Buku')}</title><style>
+      @page{size:A4 portrait;margin:14mm}
+      *{box-sizing:border-box}html,body{margin:0;padding:0;background:#edf2f0;color:#1d2c3a;font-family:Arial,"Segoe UI",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+      body{padding:24px}.sheet{width:100%;max-width:780px;min-height:1000px;margin:0 auto;background:#fff;border:1px solid #dce5e1;box-shadow:0 10px 34px #142e2417;padding:30px;position:relative;overflow:hidden}
+      .topline{height:7px;background:#245b52;margin:-30px -30px 25px}.brand{display:flex;justify-content:space-between;align-items:center;gap:18px;padding-bottom:17px;border-bottom:1px solid #dce5e1}.brand-name{font-size:11px;font-weight:800;letter-spacing:2px;color:#245b52;text-transform:uppercase}.doc-type{font-size:10px;color:#65766f;text-transform:uppercase;letter-spacing:1.2px}
+      .catalog-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding:11px 13px;background:#f1f6f3;border-left:4px solid #245b52;border-radius:4px}.catalog-id{font-size:16px;font-weight:800;letter-spacing:1.5px;color:#245b52}.catalog-code{height:28px;width:112px;background:repeating-linear-gradient(90deg,#24372f 0 2px,transparent 2px 4px,#24372f 4px 5px,transparent 5px 8px);opacity:.8}.layout{display:grid;grid-template-columns:36% 1fr;gap:28px;margin-top:20px;align-items:start}.cover-panel{background:#f3f7f5;border:1px solid #e0e8e4;border-radius:8px;padding:14px;min-height:350px;display:flex;align-items:flex-start;justify-content:center}.cover{display:block;width:100%;height:auto;max-height:470px;object-fit:contain;object-position:top center;border-radius:3px;box-shadow:0 5px 15px #13282020}.no-cover{width:100%;min-height:290px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed #b7c7c0;color:#7a8d85;font-size:12px;letter-spacing:1px;line-height:1.8}
+      .eyebrow{font-size:10px;letter-spacing:1.8px;color:#668177;font-weight:700;text-transform:uppercase;margin:0 0 8px}.title{font-size:25px;line-height:1.22;margin:0 0 8px;color:#1c3934;overflow-wrap:anywhere}.subtitle{font-size:12px;color:#687a73;margin:0 0 20px}.section-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.4px;color:#245b52;border-bottom:2px solid #dcece6;padding-bottom:8px;margin:0 0 10px}
+      .detail{display:grid;grid-template-columns:42% 1fr;gap:10px;padding:9px 0;border-bottom:1px solid #edf1ef;break-inside:avoid}.label{font-size:10px;color:#718078;text-transform:uppercase;letter-spacing:.35px;font-weight:700}.value{font-size:12px;color:#24372f;overflow-wrap:anywhere;white-space:pre-wrap}.status{display:inline-block;padding:4px 8px;border-radius:4px;background:#e6f1ec;color:#245b52;font-weight:700}
+      .footer{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:12px;border-top:1px solid #dce5e1;color:#7b8983;font-size:9px}.screen-actions{max-width:780px;margin:0 auto 14px;display:flex;gap:8px;justify-content:flex-end}.screen-actions button{border:0;border-radius:6px;padding:10px 15px;background:#245b52;color:#fff;font-weight:700;cursor:pointer}.screen-actions .close{background:#e4ebe8;color:#24372f}
+      @media(max-width:650px){body{padding:8px}.sheet{padding:18px;min-height:0}.topline{margin:-18px -18px 18px}.layout{grid-template-columns:34% 1fr;gap:14px}.cover-panel{min-height:220px;padding:8px}.title{font-size:20px}.detail{grid-template-columns:1fr;gap:3px}}
+      @media print{html,body{background:#fff!important;padding:0!important}.screen-actions{display:none!important}.sheet{max-width:none;width:auto;min-height:0;margin:0;border:0;box-shadow:none;padding:0;overflow:visible}.topline{margin:0 0 20px}.layout{grid-template-columns:36% 1fr;gap:24px;margin-top:22px}.cover-panel{min-height:0;padding:12px}.cover{max-height:225mm}.title{font-size:23px}.detail{grid-template-columns:42% 1fr;padding:7px 0}.footer{margin-top:20px}}
+      </style></head><body><div class="screen-actions"><button onclick="window.print()">Cetak / Simpan PDF</button><button class="close" onclick="window.close()">Tutup</button></div><main class="sheet"><div class="topline"></div><div class="brand"><div class="brand-name">Perpustakaan Mini Muhammad Asyraf Azizan</div><div class="doc-type">Rekod Maklumat Buku</div></div><div class="catalog-strip"><div><div style="font-size:9px;letter-spacing:1.4px;color:#718078;text-transform:uppercase">Nombor katalog</div><div class="catalog-id">${esc(b.bookCode||'—')}</div></div><div class="catalog-code" aria-label="Hiasan kod katalog"></div></div><div class="layout"><aside><div class="cover-panel">${cover}</div></aside><section><p class="eyebrow">Maklumat koleksi</p><h1 class="title">${esc(b.title||'Nama buku tidak diisi')}</h1><p class="subtitle">Rekod katalog buku peribadi</p><h2 class="section-label">Butiran buku</h2>${rows}</section></div><div class="footer"><span>PERPUSTAKAAN MINI · REKOD BUKU</span><span>Dicetak pada ${new Date().toLocaleDateString('ms-MY')}</span></div></main><script>window.addEventListener('load',()=>{const imgs=[...document.images];Promise.all(imgs.map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=r;i.onerror=r;}))).then(()=>setTimeout(()=>window.print(),250));});<\/script></body></html>`);
+    popup.document.close();
+  }
+  function deleteBook(id){const b=books.find(x=>x.id===id);if(!b||!confirm('Padam rekod buku ini? Rekod pinjaman berkaitan juga akan dipadam.'))return;books=books.filter(x=>x.id!==id);loans=loans.filter(x=>x.bookId!==id);persist();render();}
+  function editLoan(id){const l=loans.find(x=>x.id===id);if(!l)return;showTab('loanPanel');$('loanId').value=l.id;['bookId','borrower','status','borrowDate','returnDate'].forEach((k,i)=>{const target=['loanBook','borrower','loanStatus','borrowDate','returnDate'][i];$(target).value=l[k]||'';});$('saveLoanBtn').textContent='Kemaskini Rekod Pinjaman';window.scrollTo({top:0,behavior:'smooth'});}
+
+  // Penyegerakan awan pilihan pengguna: Supabase Auth + satu rekod JSON per pengguna.
+  const CLOUD_SETTINGS='perpustakaanMini_cloudSettings_v1', CLOUD_BACKUP='perpustakaanMini_beforeCloudPull_v1';
+  let supabaseClient=null, cloudUser=null, cloudReady=false, cloudTimer=null;
+  const cloudSettings=()=>read(CLOUD_SETTINGS,{});
+  function cloudMessage(msg){const el=$('cloudStatus');if(el)el.textContent=msg;}
+  function cloudClient(){return supabaseClient;}
+  function saveCloudSettings(){const url=$('cloudUrl').value.trim().replace(/\/$/,'');const key=$('cloudKey').value.trim();if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)||!key){cloudMessage('Sila masukkan URL projek Supabase yang sah dan publishable/anon key.');return false;}localStorage.setItem(CLOUD_SETTINGS,JSON.stringify({url,key}));supabaseClient=window.supabase?.createClient(url,key);if(!supabaseClient){cloudMessage('Pustaka sambungan tidak dapat dimuatkan. Semak sambungan internet dan cuba semula.');return false;}cloudMessage('Tetapan disimpan. Seterusnya daftar akaun atau log masuk.');return true;}
+  function scheduleCloudPush(){if(!cloudReady||!cloudUser||!supabaseClient)return;clearTimeout(cloudTimer);cloudTimer=setTimeout(()=>pushCloud(true),1400);}
+  async function readCloud(){if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const {data,error}=await supabaseClient.from('library_sync').select('payload,updated_at').eq('user_id',cloudUser.id).maybeSingle();if(error)throw error;return data;}
+  async function pushCloud(silent=false){try{if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const payload={version:1,books,loans,updatedAt:new Date().toISOString()};const {error}=await supabaseClient.from('library_sync').upsert({user_id:cloudUser.id,payload,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error)throw error;cloudReady=true;if(!silent)cloudMessage('Berjaya menghantar '+books.length+' buku dan '+loans.length+' rekod pinjaman ke awan. Penyegerakan automatik diaktifkan pada peranti ini.');else cloudMessage('Penyegerakan automatik selesai · '+new Date().toLocaleTimeString('ms-MY'));}catch(e){cloudMessage('Gagal menghantar data: '+(e.message||'ralat tidak diketahui')+'. Semak sambungan, SQL dan polisi akses.');}}
+  async function pullCloud(){try{if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const data=await readCloud();if(!data){if(confirm('Belum ada koleksi di awan. Hantar data peranti ini ke awan sekarang?'))await pushCloud();else cloudMessage('Tiada data awan ditemui. Data tempatan dikekalkan.');return;}if(!confirm('Muat turun '+(data.payload.books||[]).length+' buku dari awan? Data tempatan akan digantikan. Salinan sandaran tempatan akan disimpan dahulu.'))return;localStorage.setItem(CLOUD_BACKUP,JSON.stringify({savedAt:new Date().toISOString(),books,loans}));books=Array.isArray(data.payload.books)?data.payload.books:[];loans=Array.isArray(data.payload.loans)?data.payload.loans:[];localStorage.setItem(DB_KEY,JSON.stringify(books));localStorage.setItem(LOAN_KEY,JSON.stringify(loans));cloudReady=true;render();resetBook();cloudMessage('Data awan berjaya dimuat turun. Salinan sebelum muat turun disimpan dalam storan pelayar. Penyegerakan automatik diaktifkan.');}catch(e){cloudMessage('Gagal memuat turun data: '+(e.message||'ralat tidak diketahui')+'.');}}
+  async function syncCloud(){try{if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const remote=await readCloud();if(!remote){await pushCloud();return;}const localCount=books.length+loans.length,remoteCount=(remote.payload.books||[]).length+(remote.payload.loans||[]).length;if(localCount===0&&remoteCount>0){await pullCloud();return;}if(confirm('Segerakkan dengan menghantar data peranti ini ke awan? Tekan Batal untuk memuat turun data awan.'))await pushCloud();else await pullCloud();}catch(e){cloudMessage('Penyegerakan gagal: '+(e.message||'ralat tidak diketahui')+'.');}}
+  async function initCloudAuth(){if(!supabaseClient)return;const {data:{session}}=await supabaseClient.auth.getSession();cloudUser=session?.user||null;if(cloudUser){cloudMessage('Log masuk sebagai '+cloudUser.email+'. Pilih muat turun atau hantar data untuk menetapkan sumber utama.');}else cloudMessage('Sambungan disimpan. Daftar akaun atau log masuk untuk menyegerakkan.');supabaseClient.auth.onAuthStateChange((_event,session)=>{cloudUser=session?.user||null;cloudReady=false;cloudMessage(cloudUser?'Log masuk sebagai '+cloudUser.email+'. Pilih muat turun atau hantar data untuk menetapkan sumber utama.':'Tidak log masuk. Data tempatan masih tersedia.');});}
+  function setupCloudUI(){const cfg=cloudSettings();$('cloudUrl').value=cfg.url||'';$('cloudKey').value=cfg.key||'';if(cfg.url&&cfg.key){supabaseClient=window.supabase?.createClient(cfg.url,cfg.key);if(supabaseClient)initCloudAuth().catch(e=>cloudMessage('Ralat pengesahan: '+e.message));}
+    $('connectCloudBtn').addEventListener('click',()=>{if(saveCloudSettings())initCloudAuth().catch(e=>cloudMessage('Ralat: '+e.message));});
+    $('forgetCloudBtn').addEventListener('click',()=>{if(confirm('Padam tetapan sambungan dari pelayar ini? Rekod buku tempatan tidak dipadam.')){localStorage.removeItem(CLOUD_SETTINGS);supabaseClient=null;cloudUser=null;cloudReady=false;$('cloudUrl').value='';$('cloudKey').value='';cloudMessage('Tetapan sambungan dipadam. Rekod tempatan dikekalkan.');}});
+    $('signupCloudBtn').addEventListener('click',async()=>{try{if(!supabaseClient&&!saveCloudSettings())return;const email=$('cloudEmail').value.trim(),password=$('cloudPassword').value;if(!email||password.length<6)throw Error('Masukkan e-mel dan kata laluan sekurang-kurangnya 6 aksara.');const {data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;cloudUser=data.user;cloudMessage(data.session?'Akaun didaftarkan dan anda telah log masuk. Pilih cara penyegerakan.':'Permintaan pendaftaran dihantar. Jika pengesahan e-mel diaktifkan, sahkan e-mel dahulu sebelum log masuk.');}catch(e){cloudMessage('Pendaftaran gagal: '+e.message);}});
+    $('loginCloudBtn').addEventListener('click',async()=>{try{if(!supabaseClient&&!saveCloudSettings())return;const {data,error}=await supabaseClient.auth.signInWithPassword({email:$('cloudEmail').value.trim(),password:$('cloudPassword').value});if(error)throw error;cloudUser=data.user;cloudReady=false;cloudMessage('Log masuk berjaya. Pilih muat turun dari awan atau hantar data peranti ini untuk mengelakkan data tertindih.');}catch(e){cloudMessage('Log masuk gagal: '+e.message);}});
+    $('logoutCloudBtn').addEventListener('click',async()=>{try{if(supabaseClient)await supabaseClient.auth.signOut();cloudUser=null;cloudReady=false;cloudMessage('Log keluar. Rekod tempatan masih tersedia.');}catch(e){cloudMessage('Gagal log keluar: '+e.message);}});
+    $('pullCloudBtn').addEventListener('click',pullCloud);$('pushCloudBtn').addEventListener('click',()=>{if(confirm('Hantar semua buku dan pinjaman pada peranti ini ke awan? Jika data awan sudah wujud, ia akan digantikan.')){cloudReady=true;pushCloud();}});$('syncNowBtn').addEventListener('click',syncCloud);
+  }
+
+  ['bookSearch','filterGenre','filterReading'].forEach(id=>$(id).addEventListener('input',renderBooks));$('loanSearch').addEventListener('input',renderLoans);
+  function setCollectionView(view){const gallery=view==='gallery';$('bookTableView').style.display=gallery?'none':'block';$('bookGalleryView').style.display=gallery?'grid':'none';$('tableViewBtn').classList.toggle('selected',!gallery);$('galleryViewBtn').classList.toggle('selected',gallery);$('tableViewBtn').setAttribute('aria-pressed',String(!gallery));$('galleryViewBtn').setAttribute('aria-pressed',String(gallery));}
+  $('tableViewBtn').addEventListener('click',()=>setCollectionView('table'));$('galleryViewBtn').addEventListener('click',()=>setCollectionView('gallery'));
+  $('dashboardAddBtn').addEventListener('click',()=>showTab('formPanel'));$('dashboardCollectionBtn').addEventListener('click',()=>showTab('collectionPanel'));
+
+  $('printBtn').addEventListener('click',()=>{showTab('collectionPanel');$('printDate').textContent='Tarikh cetakan: '+new Date().toLocaleDateString('ms-MY');window.print();});
+  $('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),books,loans},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='sandaran-perpustakaan-mini.json';a.click();URL.revokeObjectURL(url);});
+  $('importFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(!Array.isArray(data.books)||!Array.isArray(data.loans))throw Error('format');if(!confirm('Import akan menggantikan rekod sedia ada. Teruskan?'))return;books=data.books;loans=data.loans;persist();render();alert('Sandaran berjaya diimport.');}catch(err){alert('Fail sandaran tidak sah atau tidak lengkap.');}finally{e.target.value='';}};r.readAsText(f);});
+  render();resetBook();setupCloudUI();
+  if (location.protocol.startsWith("http") && "serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+})();
+</script>
+</body>
+</html>
