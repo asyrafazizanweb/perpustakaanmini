@@ -176,9 +176,9 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
     </div>
     <div class="dash-card">
       <h3>3. Pilih cara penyegerakan</h3>
-      <p class="small">Apabila log masuk kali pertama pada peranti baharu, pilih sama ada hendak memuat turun koleksi awan atau menghantar koleksi peranti ini ke awan. Muat turun akan membuat salinan sandaran data tempatan sebelum menggantikannya.</p>
+      <p class="small">Selepas log masuk, sistem akan menyemak katalog awan secara automatik. Jika data wujud pada kedua-dua tempat, anda akan diminta memilih sumber utama supaya rekod tidak tertindih tanpa kebenaran. Selepas persediaan awal selesai, penambahan dan perubahan dihantar secara automatik.</p>
       <div class="actions"><button class="btn" id="pullCloudBtn" type="button">Muat turun dari awan ke peranti ini</button><button class="btn secondary" id="pushCloudBtn" type="button">Hantar data peranti ini ke awan</button><button class="btn secondary" id="syncNowBtn" type="button">Segerakkan sekarang</button></div>
-      <p class="small" style="margin-top:12px">Penting: penyegerakan asas menggunakan kaedah versi terakhir disimpan. Jika beberapa peranti mengubah data pada masa yang sama, segerakkan selepas selesai menyunting. Imej kulit buku turut dihantar bersama rekod dan boleh meningkatkan penggunaan storan.</p>
+      <p class="small" style="margin-top:12px">Penting: perubahan disegerakkan secara automatik kira-kira 1.2 saat selepas simpan. Jika mengubah data pada beberapa peranti serentak, perubahan yang dihantar kemudian boleh menggantikan versi terdahulu. Gambar kulit buku yang disimpan sebagai data imej turut dihantar bersama rekod dan menggunakan ruang pangkalan data; untuk koleksi besar, lebih baik simpan fail gambar dalam Supabase Storage.</p>
     </div>
   </section>
 
@@ -191,7 +191,7 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
   let books = read(DB_KEY, []), loans = read(LOAN_KEY, []), currentCover = '';
   const $ = id => document.getElementById(id);
   function read(key, fallback){ try { const x=localStorage.getItem(key); return x?JSON.parse(x):fallback; } catch(e){ return fallback; } }
-  function persist(){ try { localStorage.setItem(DB_KEY,JSON.stringify(books)); localStorage.setItem(LOAN_KEY,JSON.stringify(loans)); scheduleCloudPush(); } catch(e){ alert('Ruang storan pelayar mungkin penuh. Cuba gunakan imej kulit yang lebih kecil atau eksport sandaran.'); } }
+  function persist(){ try { localStorage.setItem(DB_KEY,JSON.stringify(books)); localStorage.setItem(LOAN_KEY,JSON.stringify(loans)); if(cloudReady&&cloudUser)localStorage.setItem(CLOUD_DIRTY,cloudUser.id); scheduleCloudPush(); } catch(e){ alert('Ruang storan pelayar mungkin penuh. Cuba gunakan imej kulit yang lebih kecil atau eksport sandaran.'); } }
   function esc(v=''){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function money(v){return v!==''&&v!=null&&!Number.isNaN(Number(v))?'RM '+Number(v).toFixed(2):'—';}
   function bookName(id){const b=books.find(x=>x.id===id);return b?`${b.title||b.author}${b.author?' — '+b.author:''}${b.isbn?' · ISBN '+b.isbn:''}`:'Buku dipadam';}
@@ -272,18 +272,62 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
   function editLoan(id){const l=loans.find(x=>x.id===id);if(!l)return;showTab('loanPanel');$('loanId').value=l.id;['bookId','borrower','status','borrowDate','returnDate'].forEach((k,i)=>{const target=['loanBook','borrower','loanStatus','borrowDate','returnDate'][i];$(target).value=l[k]||'';});$('saveLoanBtn').textContent='Kemaskini Rekod Pinjaman';window.scrollTo({top:0,behavior:'smooth'});}
 
   // Penyegerakan awan pilihan pengguna: Supabase Auth + satu rekod JSON per pengguna.
-  const CLOUD_SETTINGS='perpustakaanMini_cloudSettings_v1', CLOUD_BACKUP='perpustakaanMini_beforeCloudPull_v1';
+  const CLOUD_SETTINGS='perpustakaanMini_cloudSettings_v1', CLOUD_BACKUP='perpustakaanMini_beforeCloudPull_v1', CLOUD_DIRTY='perpustakaanMini_cloudDirty_v1';
   let supabaseClient=null, cloudUser=null, cloudReady=false, cloudTimer=null;
   const cloudSettings=()=>read(CLOUD_SETTINGS,{});
   function cloudMessage(msg){const el=$('cloudStatus');if(el)el.textContent=msg;}
   function cloudClient(){return supabaseClient;}
   function saveCloudSettings(){const url=$('cloudUrl').value.trim().replace(/\/$/,'');const key=$('cloudKey').value.trim();if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)||!key){cloudMessage('Sila masukkan URL projek Supabase yang sah dan publishable/anon key.');return false;}localStorage.setItem(CLOUD_SETTINGS,JSON.stringify({url,key}));supabaseClient=window.supabase?.createClient(url,key);if(!supabaseClient){cloudMessage('Pustaka sambungan tidak dapat dimuatkan. Semak sambungan internet dan cuba semula.');return false;}cloudMessage('Tetapan disimpan. Seterusnya daftar akaun atau log masuk.');return true;}
-  function scheduleCloudPush(){if(!cloudReady||!cloudUser||!supabaseClient)return;clearTimeout(cloudTimer);cloudTimer=setTimeout(()=>pushCloud(true),1400);}
+  function scheduleCloudPush(){
+    if(!cloudReady||!cloudUser||!supabaseClient)return;
+    clearTimeout(cloudTimer);
+    cloudTimer=setTimeout(()=>pushCloud(true),1200);
+  }
   async function readCloud(){if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const {data,error}=await supabaseClient.from('library_sync').select('payload,updated_at').eq('user_id',cloudUser.id).maybeSingle();if(error)throw error;return data;}
-  async function pushCloud(silent=false){try{if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const payload={version:1,books,loans,updatedAt:new Date().toISOString()};const {error}=await supabaseClient.from('library_sync').upsert({user_id:cloudUser.id,payload,updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error)throw error;cloudReady=true;if(!silent)cloudMessage('Berjaya menghantar '+books.length+' buku dan '+loans.length+' rekod pinjaman ke awan. Penyegerakan automatik diaktifkan pada peranti ini.');else cloudMessage('Penyegerakan automatik selesai · '+new Date().toLocaleTimeString('ms-MY'));}catch(e){cloudMessage('Gagal menghantar data: '+(e.message||'ralat tidak diketahui')+'. Semak sambungan, SQL dan polisi akses.');}}
-  async function pullCloud(){try{if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const data=await readCloud();if(!data){if(confirm('Belum ada koleksi di awan. Hantar data peranti ini ke awan sekarang?'))await pushCloud();else cloudMessage('Tiada data awan ditemui. Data tempatan dikekalkan.');return;}if(!confirm('Muat turun '+(data.payload.books||[]).length+' buku dari awan? Data tempatan akan digantikan. Salinan sandaran tempatan akan disimpan dahulu.'))return;localStorage.setItem(CLOUD_BACKUP,JSON.stringify({savedAt:new Date().toISOString(),books,loans}));books=Array.isArray(data.payload.books)?data.payload.books:[];loans=Array.isArray(data.payload.loans)?data.payload.loans:[];localStorage.setItem(DB_KEY,JSON.stringify(books));localStorage.setItem(LOAN_KEY,JSON.stringify(loans));cloudReady=true;render();resetBook();cloudMessage('Data awan berjaya dimuat turun. Salinan sebelum muat turun disimpan dalam storan pelayar. Penyegerakan automatik diaktifkan.');}catch(e){cloudMessage('Gagal memuat turun data: '+(e.message||'ralat tidak diketahui')+'.');}}
-  async function syncCloud(){try{if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const remote=await readCloud();if(!remote){await pushCloud();return;}const localCount=books.length+loans.length,remoteCount=(remote.payload.books||[]).length+(remote.payload.loans||[]).length;if(localCount===0&&remoteCount>0){await pullCloud();return;}if(confirm('Segerakkan dengan menghantar data peranti ini ke awan? Tekan Batal untuk memuat turun data awan.'))await pushCloud();else await pullCloud();}catch(e){cloudMessage('Penyegerakan gagal: '+(e.message||'ralat tidak diketahui')+'.');}}
-  async function initCloudAuth(){if(!supabaseClient)return;const {data:{session}}=await supabaseClient.auth.getSession();cloudUser=session?.user||null;if(cloudUser){cloudMessage('Log masuk sebagai '+cloudUser.email+'. Pilih muat turun atau hantar data untuk menetapkan sumber utama.');}else cloudMessage('Sambungan disimpan. Daftar akaun atau log masuk untuk menyegerakkan.');supabaseClient.auth.onAuthStateChange((_event,session)=>{cloudUser=session?.user||null;cloudReady=false;cloudMessage(cloudUser?'Log masuk sebagai '+cloudUser.email+'. Pilih muat turun atau hantar data untuk menetapkan sumber utama.':'Tidak log masuk. Data tempatan masih tersedia.');});}
+  let cloudPushRunning=false, bootstrapRunning=false;
+  async function pushCloud(silent=false){
+    if(cloudPushRunning)return;
+    try{
+      if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');
+      cloudPushRunning=true;
+      const payload={version:1,books,loans,updatedAt:new Date().toISOString()};
+      const {error}=await supabaseClient.from('library_sync').upsert({user_id:cloudUser.id,payload,updated_at:new Date().toISOString()},{onConflict:'user_id'});
+      if(error)throw error;
+      cloudReady=true;
+      localStorage.removeItem(CLOUD_DIRTY);
+      cloudMessage((silent?'Penyegerakan automatik berjaya · ':'Berjaya menghantar ')+(silent?new Date().toLocaleTimeString('ms-MY'):books.length+' buku dan '+loans.length+' rekod pinjaman ke awan. Penyegerakan automatik aktif.'));
+    }catch(e){cloudMessage('Penyegerakan awan gagal: '+(e.message||'ralat tidak diketahui')+'. Data kekal pada komputer. Semak polisi akses/RLS Supabase; sistem akan cuba semula apabila ada perubahan atau sambungan pulih.');}
+    finally{cloudPushRunning=false;}
+  }
+  async function applyCloudData(data){
+    localStorage.setItem(CLOUD_BACKUP,JSON.stringify({savedAt:new Date().toISOString(),books,loans}));
+    books=Array.isArray(data.payload.books)?data.payload.books:[];
+    loans=Array.isArray(data.payload.loans)?data.payload.loans:[];
+    localStorage.setItem(DB_KEY,JSON.stringify(books));localStorage.setItem(LOAN_KEY,JSON.stringify(loans));localStorage.removeItem(CLOUD_DIRTY);
+    cloudReady=true;render();resetBook();cloudMessage('Data awan dimuat turun. Sandaran data tempatan sebelum perubahan telah disimpan. Penyegerakan automatik aktif.');
+  }
+  async function bootstrapCloud(){
+    if(bootstrapRunning||!cloudUser||!supabaseClient)return;
+    bootstrapRunning=true;cloudReady=false;
+    try{
+      cloudMessage('Menyemak katalog awan dan menyediakan penyegerakan…');
+      const remote=await readCloud();
+      const localCount=books.length+loans.length;
+      const remoteCount=remote?((remote.payload?.books||[]).length+(remote.payload?.loans||[]).length):0;
+      if(!remote){
+        if(localCount===0){cloudReady=true;cloudMessage('Awan masih kosong dan peranti ini tiada rekod. Penyegerakan automatik sedia diaktifkan.');await pushCloud(true);}
+        else if(confirm('Belum ada data dalam awan. Hantar '+books.length+' buku dan '+loans.length+' rekod pinjaman dari komputer ini ke awan sebagai katalog utama?')){cloudReady=true;await pushCloud();}
+        else cloudMessage('Data tempatan dikekalkan. Untuk mengaktifkan penyegerakan, pilih “Hantar data peranti ini ke awan” selepas bersedia.');
+      }else if(localCount===0&&remoteCount>0){await applyCloudData(remote);}
+      else if(localCount===0&&remoteCount===0){cloudReady=true;cloudMessage('Akaun awan sedia. Penyegerakan automatik aktif.');}
+      else if(localStorage.getItem(CLOUD_DIRTY)===cloudUser.id){cloudReady=true;cloudMessage('Perubahan tempatan yang belum disegerakkan dikesan. Menghantar perubahan ke awan…');await pushCloud(true);}
+      else {await applyCloudData(remote);}
+    }catch(e){cloudReady=false;cloudMessage('Tidak dapat menyediakan penyegerakan: '+(e.message||'ralat tidak diketahui')+'. Data tempatan tidak diubah. Semak permission/RLS jadual library_sync di Supabase.');}
+    finally{bootstrapRunning=false;}
+  }
+  async function pullCloud(){try{if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const data=await readCloud();if(!data){if(confirm('Belum ada koleksi di awan. Hantar data peranti ini ke awan sekarang?')){cloudReady=true;await pushCloud();}else cloudMessage('Tiada data awan ditemui. Data tempatan dikekalkan.');return;}if(!confirm('Muat turun '+(data.payload.books||[]).length+' buku dari awan? Data tempatan akan digantikan. Sandaran tempatan akan disimpan dahulu.'))return;await applyCloudData(data);}catch(e){cloudMessage('Gagal memuat turun data: '+(e.message||'ralat tidak diketahui')+'. Data tempatan dikekalkan.');}}
+  async function syncCloud(){if(cloudReady){await pushCloud();return;}await bootstrapCloud();}
+  async function initCloudAuth(){if(!supabaseClient)return;const {data:{session}}=await supabaseClient.auth.getSession();cloudUser=session?.user||null;if(cloudUser){cloudMessage('Log masuk sebagai '+cloudUser.email+'. Menyediakan penyegerakan awan…');await bootstrapCloud();}else cloudMessage('Sambungan disimpan. Daftar akaun atau log masuk untuk menyegerakkan.');supabaseClient.auth.onAuthStateChange((event,session)=>{cloudUser=session?.user||null;if(!cloudUser){cloudReady=false;cloudMessage('Tidak log masuk. Data tempatan masih tersedia.');}else if(event==='SIGNED_IN'){setTimeout(()=>bootstrapCloud(),0);} });}
   function setupCloudUI(){const cfg=cloudSettings();$('cloudUrl').value=cfg.url||'';$('cloudKey').value=cfg.key||'';if(cfg.url&&cfg.key){supabaseClient=window.supabase?.createClient(cfg.url,cfg.key);if(supabaseClient)initCloudAuth().catch(e=>cloudMessage('Ralat pengesahan: '+e.message));}
     $('connectCloudBtn').addEventListener('click',()=>{if(saveCloudSettings())initCloudAuth().catch(e=>cloudMessage('Ralat: '+e.message));});
     $('forgetCloudBtn').addEventListener('click',()=>{if(confirm('Padam tetapan sambungan dari pelayar ini? Rekod buku tempatan tidak dipadam.')){localStorage.removeItem(CLOUD_SETTINGS);supabaseClient=null;cloudUser=null;cloudReady=false;$('cloudUrl').value='';$('cloudKey').value='';cloudMessage('Tetapan sambungan dipadam. Rekod tempatan dikekalkan.');}});
@@ -302,6 +346,7 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
   $('printBtn').addEventListener('click',()=>{showTab('collectionPanel');$('printDate').textContent='Tarikh cetakan: '+new Date().toLocaleDateString('ms-MY');window.print();});
   $('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),books,loans},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='sandaran-perpustakaan-mini.json';a.click();URL.revokeObjectURL(url);});
   $('importFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(!Array.isArray(data.books)||!Array.isArray(data.loans))throw Error('format');if(!confirm('Import akan menggantikan rekod sedia ada. Teruskan?'))return;books=data.books;loans=data.loans;persist();render();alert('Sandaran berjaya diimport.');}catch(err){alert('Fail sandaran tidak sah atau tidak lengkap.');}finally{e.target.value='';}};r.readAsText(f);});
+  window.addEventListener('online',()=>{if(cloudReady&&cloudUser&&supabaseClient){cloudMessage('Sambungan internet pulih. Menyegerakkan perubahan…');scheduleCloudPush();}});
   render();resetBook();setupCloudUI();
   if (location.protocol.startsWith("http") && "serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 })();
