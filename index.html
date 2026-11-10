@@ -101,7 +101,7 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
   </section>
 
   <section id="formPanel" class="panel">
-    <h2>Borang Maklumat Buku</h2><p class="sub">Masukkan maklumat buku. Medan bertanda * wajib diisi.</p>
+    <h2>Borang Maklumat Buku</h2><p class="sub">Masukkan maklumat buku. Medan bertanda * wajib diisi.</p><p id="bookDraftStatus" class="small" role="status" aria-live="polite">Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.</p>
     <form id="bookForm">
       <input type="hidden" id="bookId">
       <div class="grid">
@@ -125,7 +125,7 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
   </section>
 
   <section id="loanPanel" class="panel">
-    <h2>Rekod Pinjaman</h2><p class="sub">Pilih buku untuk mengaitkan rekod pinjaman dengan koleksi anda.</p>
+    <h2>Rekod Pinjaman</h2><p class="sub">Pilih buku untuk mengaitkan rekod pinjaman dengan koleksi anda.</p><p id="loanDraftStatus" class="small" role="status" aria-live="polite">Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.</p>
     <form id="loanForm">
       <input type="hidden" id="loanId">
       <div class="grid">
@@ -188,6 +188,10 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
 (() => {
   const DB_KEY = 'perpustakaanMini_v1_books';
   const LOAN_KEY = 'perpustakaanMini_v1_loans';
+  const BOOK_DRAFT_KEY = 'perpustakaanMini_v1_book_draft';
+  const LOAN_DRAFT_KEY = 'perpustakaanMini_v1_loan_draft';
+  let draftTimers = {};
+  let restoringDraft = false;
   let books = read(DB_KEY, []), loans = read(LOAN_KEY, []), currentCover = '';
   const $ = id => document.getElementById(id);
   function read(key, fallback){ try { const x=localStorage.getItem(key); return x?JSON.parse(x):fallback; } catch(e){ return fallback; } }
@@ -195,11 +199,19 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
   function esc(v=''){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function money(v){return v!==''&&v!=null&&!Number.isNaN(Number(v))?'RM '+Number(v).toFixed(2):'—';}
   function bookName(id){const b=books.find(x=>x.id===id);return b?`${b.title||b.author}${b.author?' — '+b.author:''}${b.isbn?' · ISBN '+b.isbn:''}`:'Buku dipadam';}
-  function resetBook(){ $('bookForm').reset();$('bookId').value='';$('bookCode').value=nextBookCode();currentCover='';$('coverPreview').innerHTML='';$('saveBookBtn').textContent='Simpan Buku';togglePurchaseField(); }
-  function resetLoan(){ $('loanForm').reset();$('loanId').value='';$('saveLoanBtn').textContent='Simpan Rekod Pinjaman'; }
-  function showTab(id){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));}
+  function resetBook(clearDraft=true){ if(clearDraft)clearDraftData('book'); $('bookForm').reset();$('bookId').value='';$('bookCode').value=nextBookCode();currentCover='';$('coverPreview').innerHTML='';$('saveBookBtn').textContent='Simpan Buku';togglePurchaseField();updateDraftStatus('book',false); }
+  function resetLoan(clearDraft=true){ if(clearDraft)clearDraftData('loan'); $('loanForm').reset();$('loanId').value='';$('saveLoanBtn').textContent='Simpan Rekod Pinjaman';updateDraftStatus('loan',false); }
+  function formValues(formId){const data={};$(formId).querySelectorAll('input:not([type="file"]),select,textarea').forEach(el=>{if(el.id)data[el.id]=el.value;});return data;}
+  function updateDraftStatus(kind,hasDraft){const el=$(kind==='book'?'bookDraftStatus':'loanDraftStatus');if(el)el.textContent=hasDraft?'Draf disimpan secara automatik pada peranti ini. Anda boleh bertukar tab dan menyambung semula kemudian.':'Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.';}
+  function clearDraftData(kind){try{localStorage.removeItem(kind==='book'?BOOK_DRAFT_KEY:LOAN_DRAFT_KEY);}catch(e){}}
+  function saveDraft(kind){if(restoringDraft)return;const isBook=kind==='book',formId=isBook?'bookForm':'loanForm',key=isBook?BOOK_DRAFT_KEY:LOAN_DRAFT_KEY;const values=formValues(formId);const hasContent=Object.entries(values).some(([k,v])=>!['bookCode'].includes(k)&&String(v||'').trim()!=='')||(isBook&&!!currentCover);if(!hasContent){clearDraftData(kind);updateDraftStatus(kind,false);return;}try{const draft={savedAt:new Date().toISOString(),values};if(isBook)draft.cover=currentCover||'';localStorage.setItem(key,JSON.stringify(draft));updateDraftStatus(kind,true);}catch(e){updateDraftStatus(kind,false);}}
+  function scheduleDraft(kind){if(restoringDraft)return;clearTimeout(draftTimers[kind]);draftTimers[kind]=setTimeout(()=>saveDraft(kind),250);}
+  function restoreDraft(kind){const isBook=kind==='book',key=isBook?BOOK_DRAFT_KEY:LOAN_DRAFT_KEY,formId=isBook?'bookForm':'loanForm';let draft;try{draft=JSON.parse(localStorage.getItem(key)||'null');}catch(e){draft=null;}if(!draft||!draft.values)return false;restoringDraft=true;try{Object.entries(draft.values).forEach(([id,value])=>{const el=$(id);if(el&&el.type!=='file')el.value=value;});if(isBook){currentCover=draft.cover||'';$('coverPreview').innerHTML=currentCover?`<img alt="Pratonton kulit buku daripada draf" src="${currentCover}"><span class="small">Kulit buku daripada draf tersimpan</span>`:'';togglePurchaseField();$('saveBookBtn').textContent=$('bookId').value?'Kemaskini Buku':'Simpan Buku';}else{$('saveLoanBtn').textContent=$('loanId').value?'Kemaskini Rekod Pinjaman':'Simpan Rekod Pinjaman';}updateDraftStatus(kind,true);return true;}finally{restoringDraft=false;}}
+  function setupDraftAutosave(){['bookForm','loanForm'].forEach(formId=>{const kind=formId==='bookForm'?'book':'loan';$(formId).querySelectorAll('input,select,textarea').forEach(el=>{if(el.type==='file')return;el.addEventListener('input',()=>scheduleDraft(kind));el.addEventListener('change',()=>scheduleDraft(kind));});});window.addEventListener('pagehide',()=>{saveDraft('book');saveDraft('loan');});}
+  
+  function showTab(id){if($('formPanel')?.classList.contains('active'))saveDraft('book');if($('loanPanel')?.classList.contains('active'))saveDraft('loan');document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));}
   document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
-  $('cover').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Sila pilih fail imej.');return;}if(f.size>1.5*1024*1024){alert('Imej terlalu besar. Pilih imej bawah 1.5 MB untuk mengelakkan storan penuh.');e.target.value='';return;}const r=new FileReader();r.onload=()=>{currentCover=r.result;$('coverPreview').innerHTML=`<img alt="Pratonton kulit buku" src="${currentCover}"><span class="small">Imej dipilih</span>`;};r.readAsDataURL(f);});
+  $('cover').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Sila pilih fail imej.');return;}if(f.size>1.5*1024*1024){alert('Imej terlalu besar. Pilih imej bawah 1.5 MB untuk mengelakkan storan penuh.');e.target.value='';return;}const r=new FileReader();r.onload=()=>{currentCover=r.result;$('coverPreview').innerHTML=`<img alt="Pratonton kulit buku" src="${currentCover}"><span class="small">Imej dipilih</span>`;scheduleDraft('book');};r.readAsDataURL(f);});
   function togglePurchaseField(){const buying=$('source').value==='Beli';$('purchaseField').hidden=!buying;$('purchase').required=buying;if(!buying)$('purchase').value='';}
   $('source').addEventListener('change',togglePurchaseField);
   function nextBookCode(){const nums=books.map(b=>Number(String(b.bookCode||'').match(/^MAA(\d+)$/)?.[1]||0));return 'MAA'+String(Math.max(0,...nums)+1).padStart(5,'0');}
@@ -211,9 +223,9 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
   }
   $('title').addEventListener('blur',()=>{$('title').value=$('title').value.toLocaleUpperCase('ms-MY').trim();});
   $('author').addEventListener('blur',()=>{$('author').value=formatAuthorName($('author').value);});
-  $('bookForm').addEventListener('submit',e=>{e.preventDefault();$('title').value=$('title').value.toLocaleUpperCase('ms-MY').trim();$('author').value=formatAuthorName($('author').value);const id=$('bookId').value||String(Date.now())+Math.random().toString(16).slice(2,6);const old=books.find(b=>b.id===id);const source=$('source').value;const bookCode=old?.bookCode||nextBookCode();const b={id,bookCode,format:$('format').value,genre:$('genre').value,isbn:$('isbn').value.trim(),title:$('title').value.trim(),cover:currentCover||(old?.cover||''),publisher:$('publisher').value.trim(),author:$('author').value.trim(),reading:$('reading').value,price:$('price').value,source,purchase:source==='Beli'?$('purchase').value.trim():'',publishPlace:$('publishPlace').value.trim(),year:$('year').value};if(old)books=books.map(x=>x.id===id?b:x);else books.unshift(b);persist();resetBook();render();showTab('collectionPanel');});
+  $('bookForm').addEventListener('submit',e=>{e.preventDefault();$('title').value=$('title').value.toLocaleUpperCase('ms-MY').trim();$('author').value=formatAuthorName($('author').value);const id=$('bookId').value||String(Date.now())+Math.random().toString(16).slice(2,6);const old=books.find(b=>b.id===id);const source=$('source').value;const bookCode=old?.bookCode||nextBookCode();const b={id,bookCode,format:$('format').value,genre:$('genre').value,isbn:$('isbn').value.trim(),title:$('title').value.trim(),cover:currentCover||(old?.cover||''),publisher:$('publisher').value.trim(),author:$('author').value.trim(),reading:$('reading').value,price:$('price').value,source,purchase:source==='Beli'?$('purchase').value.trim():'',publishPlace:$('publishPlace').value.trim(),year:$('year').value};if(old)books=books.map(x=>x.id===id?b:x);else books.unshift(b);persist();resetBook(true);render();showTab('collectionPanel');});
   $('resetBookBtn').addEventListener('click',resetBook);
-  $('loanForm').addEventListener('submit',e=>{e.preventDefault();const id=$('loanId').value||String(Date.now())+Math.random().toString(16).slice(2,6);const l={id,bookId:$('loanBook').value,borrower:$('borrower').value.trim(),status:$('loanStatus').value,borrowDate:$('borrowDate').value,returnDate:$('returnDate').value};const old=loans.find(x=>x.id===id);if(old)loans=loans.map(x=>x.id===id?l:x);else loans.unshift(l);persist();resetLoan();render();});
+  $('loanForm').addEventListener('submit',e=>{e.preventDefault();const id=$('loanId').value||String(Date.now())+Math.random().toString(16).slice(2,6);const l={id,bookId:$('loanBook').value,borrower:$('borrower').value.trim(),status:$('loanStatus').value,borrowDate:$('borrowDate').value,returnDate:$('returnDate').value};const old=loans.find(x=>x.id===id);if(old)loans=loans.map(x=>x.id===id?l:x);else loans.unshift(l);persist();resetLoan(true);render();});
   $('resetLoanBtn').addEventListener('click',resetLoan);
   function renderBookSelect(){const sel=$('loanBook'),old=sel.value;sel.innerHTML='<option value="">Pilih buku</option>'+books.map(b=>`<option value="${esc(b.id)}">${esc(b.bookCode||'')} · ${esc(b.title||b.author)}${b.author?' — '+esc(b.author):''}</option>`).join('');if(books.some(b=>b.id===old))sel.value=old;}
   function renderBooks(){
@@ -304,7 +316,7 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
     books=Array.isArray(data.payload.books)?data.payload.books:[];
     loans=Array.isArray(data.payload.loans)?data.payload.loans:[];
     localStorage.setItem(DB_KEY,JSON.stringify(books));localStorage.setItem(LOAN_KEY,JSON.stringify(loans));localStorage.removeItem(CLOUD_DIRTY);
-    cloudReady=true;render();resetBook();cloudMessage('Data awan dimuat turun. Sandaran data tempatan sebelum perubahan telah disimpan. Penyegerakan automatik aktif.');
+    cloudReady=true;render();resetBook(false);cloudMessage('Data awan dimuat turun. Sandaran data tempatan sebelum perubahan telah disimpan. Penyegerakan automatik aktif.');
   }
   async function bootstrapCloud(){
     if(bootstrapRunning||!cloudUser||!supabaseClient)return;
@@ -347,7 +359,7 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
   $('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),books,loans},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='sandaran-perpustakaan-mini.json';a.click();URL.revokeObjectURL(url);});
   $('importFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(!Array.isArray(data.books)||!Array.isArray(data.loans))throw Error('format');if(!confirm('Import akan menggantikan rekod sedia ada. Teruskan?'))return;books=data.books;loans=data.loans;persist();render();alert('Sandaran berjaya diimport.');}catch(err){alert('Fail sandaran tidak sah atau tidak lengkap.');}finally{e.target.value='';}};r.readAsText(f);});
   window.addEventListener('online',()=>{if(cloudReady&&cloudUser&&supabaseClient){cloudMessage('Sambungan internet pulih. Menyegerakkan perubahan…');scheduleCloudPush();}});
-  render();resetBook();setupCloudUI();
+  render();resetBook(false);resetLoan(false);setupDraftAutosave();restoreDraft('book');restoreDraft('loan');setupCloudUI();
   if (location.protocol.startsWith("http") && "serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 })();
 </script>
