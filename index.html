@@ -40,9 +40,26 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
 .dashboard-hero h2{font-size:clamp(22px,3vw,30px);margin:0 0 6px;position:relative;z-index:1}.dashboard-hero p{margin:0;color:#dcece6;position:relative;z-index:1}.hero-count{font-size:46px;font-weight:800;line-height:1;position:relative;z-index:1;white-space:nowrap}
 .dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:16px 0 22px}.dash-stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:0 4px 15px #17352a08}.dash-stat .stat-label{color:var(--muted);font-size:12px;font-weight:700}.dash-stat strong{display:block;font-size:27px;line-height:1.3;margin:4px 0}.dash-stat .stat-note{font-size:12px;color:var(--muted)}
 .dashboard-columns{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.dash-card{border:1px solid var(--line);border-radius:13px;padding:18px;background:#fff;min-width:0}.dash-card h3{margin:0 0 14px;font-size:16px}.category-row{display:grid;grid-template-columns:90px 1fr 30px;gap:9px;align-items:center;margin:11px 0;font-size:13px}.bar-track{height:8px;background:#edf2ef;border-radius:99px;overflow:hidden}.bar-fill{height:100%;background:#2f7565;border-radius:99px}.recent-list{display:grid;gap:10px}.recent-book{display:flex;gap:11px;align-items:center;padding:9px;border-radius:9px;background:#f7f9f8}.recent-book img,.recent-placeholder{width:42px;height:56px;object-fit:cover;border-radius:5px;border:1px solid var(--line);flex-shrink:0}.recent-placeholder{display:flex;align-items:center;justify-content:center;background:#e8f0ec;color:#487064;font-size:19px}.recent-book strong{display:block;font-size:13px;line-height:1.3}.recent-book .small{display:block;margin-top:3px}
+.dashboard-insights{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:16px;margin-top:16px}
+.dashboard-insights .dash-card{min-height:190px}
+.insight-row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:12px 0;font-size:13px}
+.insight-row strong{font-variant-numeric:tabular-nums}
+.insight-track{height:7px;background:#edf2ef;border-radius:99px;overflow:hidden;margin-top:5px}
+.insight-fill{height:100%;background:#5b8f7c;border-radius:99px}
+.progress-summary{display:flex;align-items:center;gap:10px;margin-top:18px;font-size:12px;color:var(--muted)}
+.progress-track{height:9px;background:#edf2ef;border-radius:99px;overflow:hidden;flex:1}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#2f7565,#83b59f);border-radius:99px;transition:width .25s}
+.progress-summary strong{white-space:nowrap}
+.insight-split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.insight-split h4{font-size:12px;color:var(--muted);margin:0 0 8px}
+.loan-item{padding:9px 0;border-bottom:1px solid #edf1ef;font-size:12px}
+.loan-item:last-child{border-bottom:0}
+.loan-item strong{display:block;font-size:13px}
+.insight-empty{color:var(--muted);font-size:12px;padding:8px 0}
+
 .view-switch{display:flex;gap:7px;align-items:center}.view-switch .btn{padding:9px 12px}.view-switch .btn.selected{box-shadow:inset 0 0 0 2px #b5d7ca}.gallery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:14px}.gallery-card{border:1px solid var(--line);background:#fff;border-radius:12px;overflow:hidden;min-width:0;box-shadow:0 4px 14px #17352a08;display:flex;flex-direction:column}.gallery-cover{height:205px;background:linear-gradient(145deg,#edf3f0,#dfeae5);display:flex;align-items:center;justify-content:center;overflow:hidden}.gallery-cover img{width:100%;height:100%;object-fit:contain}.gallery-cover .cover-letter{font-size:48px;font-weight:800;color:#83a99b}.gallery-info{padding:13px;display:flex;flex-direction:column;gap:7px;flex:1}.gallery-info h3{font-size:15px;line-height:1.35;margin:0;overflow-wrap:anywhere}.gallery-info .author{font-size:12px;color:var(--muted)}.gallery-meta{display:flex;flex-wrap:wrap;gap:5px}.gallery-meta span{font-size:11px;border-radius:99px;padding:3px 7px;background:#eef4f1;color:#42665a}.gallery-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:6px}.gallery-actions .btn{font-size:12px;padding:7px 9px}.collection-empty{grid-column:1/-1}
 @media(max-width:900px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery-cover{height:160px}.dashboard-columns{grid-template-columns:1fr}.dashboard-hero{padding:18px}.hero-count{font-size:36px}.category-row{grid-template-columns:78px 1fr 24px}}
+@media(max-width:900px){.dashboard-insights{grid-template-columns:1fr 1fr}.dashboard-insights .dash-card:last-child{grid-column:1/-1}}\n@media(max-width:600px){.dashboard-insights{grid-template-columns:1fr}.dashboard-insights .dash-card:last-child{grid-column:auto}.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery-cover{height:160px}.dashboard-columns{grid-template-columns:1fr}.dashboard-hero{padding:18px}.hero-count{font-size:36px}.category-row{grid-template-columns:78px 1fr 24px}}
 @media(max-width:380px){.gallery-grid{grid-template-columns:1fr}.gallery-cover{height:220px}}
 @media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:0 12px 28px}.panel{padding:16px}}
 @media(max-width:500px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:13px}}
@@ -99,6 +116,11 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
       <div class="dash-stat"><span class="stat-label">NILAI KOLEKSI</span><strong id="dashValue">RM 0.00</strong><span class="stat-note">Berdasarkan harga direkodkan</span></div>
     </div>
     <div class="dashboard-columns"><div class="dash-card"><h3>Koleksi mengikut kategori</h3><div id="categoryBreakdown"><p class="small">Belum ada rekod buku.</p></div></div><div class="dash-card"><h3>Buku terkini ditambah</h3><div id="recentBooks" class="recent-list"><p class="small">Buku yang disimpan akan dipaparkan di sini.</p></div><div class="actions" style="margin-top:14px"><button class="btn" type="button" id="dashboardAddBtn">+ Daftar buku</button><button class="btn secondary" type="button" id="dashboardCollectionBtn">Lihat koleksi</button></div></div></div>
+    <div class="dashboard-insights">
+      <div class="dash-card"><h3>Status bacaan</h3><div id="readingBreakdown"></div><div class="progress-summary"><div class="progress-track"><div id="readingProgressBar" class="progress-fill"></div></div><strong id="readingProgressText">0% selesai dibaca</strong></div></div>
+      <div class="dash-card"><h3>Komposisi koleksi</h3><div class="insight-split"><div><h4>Format buku</h4><div id="formatBreakdown"></div></div><div><h4>Sumber koleksi</h4><div id="sourceBreakdown"></div></div></div></div>
+      <div class="dash-card"><h3>Ringkasan pinjaman</h3><div id="loanBreakdown"></div></div>
+    </div>
   </section>
 
   <section id="formPanel" class="panel">
@@ -284,11 +306,46 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
     document.querySelectorAll('[data-delete-book]').forEach(btn=>btn.addEventListener('click',()=>deleteBook(btn.dataset.deleteBook)));
   }
   function renderDashboard(){
-    const total=books.length,read=books.filter(b=>b.reading==='Selesai').length,loanCount=loans.filter(l=>l.status==='Dipinjam').length,value=books.reduce((sum,b)=>sum+(Number(b.price)||0),0);
-    $('heroBookCount').innerHTML=`${total} <span style="font-size:14px;font-weight:600">buku</span>`;$('dashTotal').textContent=total;$('dashRead').textContent=read;$('dashReadNote').textContent=(total?Math.round(read/total*100):0)+'% daripada koleksi';$('dashLoans').textContent=loanCount;$('dashValue').textContent='RM '+value.toFixed(2);
-    const counts={};books.forEach(b=>{const k=b.genre||'Tanpa kategori';counts[k]=(counts[k]||0)+1;});const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-    $('categoryBreakdown').innerHTML=entries.length?entries.map(([name,count])=>`<div class="category-row"><span>${esc(name)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3,count/total*100)}%"></div></div><strong>${count}</strong></div>`).join(''):'<p class="small">Belum ada rekod buku.</p>';
-    const recent=books.slice(0,5);$('recentBooks').innerHTML=recent.length?recent.map(b=>`<div class="recent-book">${b.cover?`<img src="${b.cover}" alt="Kulit buku">`:`<div class="recent-placeholder">▤</div>`}<div><strong>${esc(b.title||'Nama buku tidak diisi')}</strong><span class="small">${esc(b.bookCode||'')} · ${esc(b.author||'Penulis tidak dinyatakan')}</span></div></div>`).join(''):'<p class="small">Buku yang disimpan akan dipaparkan di sini.</p>';
+    const total=books.length;
+    const read=books.filter(b=>b.reading==='Selesai').length;
+    const inProgress=books.filter(b=>b.reading==='Sedang dibaca').length;
+    const unread=books.filter(b=>b.reading==='Belum dibaca').length;
+    const activeLoans=loans.filter(l=>l.status==='Dipinjam');
+    const storedLoans=loans.filter(l=>l.status==='Dalam Simpanan');
+    const loanCount=activeLoans.length;
+    const value=books.reduce((sum,b)=>sum+(Number(b.price)||0),0);
+    const pct=total?Math.round(read/total*100):0;
+    $('heroBookCount').innerHTML=`${total} <span style="font-size:14px;font-weight:600">buku</span>`;
+    $('dashTotal').textContent=total;
+    $('dashRead').textContent=read;
+    $('dashReadNote').textContent=pct+'% daripada koleksi';
+    $('dashLoans').textContent=loanCount;
+    $('dashValue').textContent='RM '+value.toFixed(2);
+
+    const counts={};
+    books.forEach(b=>{const k=b.genre||'Tanpa kategori';counts[k]=(counts[k]||0)+1;});
+    const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'ms'));
+    $('categoryBreakdown').innerHTML=entries.length?entries.map(([name,count])=>`<div class="category-row"><span title="${esc(name)}">${esc(name)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3,count/total*100)}%"></div></div><strong>${count}</strong></div>`).join(''):'<p class="small">Belum ada rekod buku.</p>';
+
+    const recent=books.slice(0,5);
+    $('recentBooks').innerHTML=recent.length?recent.map(b=>`<div class="recent-book">${b.cover?`<img src="${b.cover}" alt="Kulit buku">`:`<div class="recent-placeholder">▤</div>`}<div><strong>${esc(b.title||'Nama buku tidak diisi')}</strong><span class="small">${esc(b.bookCode||'')} · ${esc(b.author||'Penulis tidak dinyatakan')}</span></div></div>`).join(''):'<p class="small">Buku yang disimpan akan dipaparkan di sini.</p>';
+
+    const readingRows=[['Belum dibaca',unread],['Sedang dibaca',inProgress],['Selesai',read]];
+    $('readingBreakdown').innerHTML=total?readingRows.map(([label,count])=>`<div class="insight-row"><span>${label}</span><strong>${count} <span class="small">(${Math.round(count/total*100)}%)</span></strong></div><div class="insight-track"><div class="insight-fill" style="width:${count/total*100}%"></div></div>`).join(''):'<p class="insight-empty">Belum ada rekod bacaan.</p>';
+    $('readingProgressBar').style.width=pct+'%';
+    $('readingProgressText').textContent=pct+'% selesai dibaca';
+
+    function renderMiniCounts(id, field, labels){
+      const tally={};books.forEach(b=>{const value=(b[field]||'Tidak dinyatakan').trim();tally[value]=(tally[value]||0)+1;});
+      const rows=Object.entries(tally).sort((a,b)=>b[1]-a[1]);
+      $(id).innerHTML=rows.length?rows.map(([name,count])=>`<div class="insight-row"><span>${esc(labels?.[name]||name)}</span><strong>${count}</strong></div>`).join(''):'<p class="insight-empty">Tiada data.</p>';
+    }
+    renderMiniCounts('formatBreakdown','format');
+    renderMiniCounts('sourceBreakdown','source');
+
+    const loanItems=activeLoans.slice(0,4);
+    $('loanBreakdown').innerHTML=`<div class="insight-row"><span>Sedang dipinjam</span><strong>${activeLoans.length}</strong></div><div class="insight-row"><span>Dalam simpanan</span><strong>${storedLoans.length}</strong></div>`+
+      (loanItems.length?'<div class="small" style="font-weight:700;margin-top:12px">Pinjaman aktif</div>'+loanItems.map(l=>`<div class="loan-item"><strong>${esc(l.borrower||'Peminjam tidak dinyatakan')}</strong><span>${esc(bookName(l.bookId))}</span>${l.borrowDate?`<div class="small">Tarikh pinjam: ${esc(l.borrowDate)}</div>`:''}</div>`).join(''):'<p class="insight-empty">Tiada buku yang sedang dipinjam.</p>');
   }
   function renderLoans(){const q=$('loanSearch').value.toLowerCase();const list=loans.filter(l=>(l.borrower+' '+bookName(l.bookId)).toLowerCase().includes(q));$('loanRows').innerHTML=list.length?list.map(l=>`<tr><td>${esc(bookName(l.bookId))}</td><td>${esc(l.borrower)}</td><td><span class="pill">${esc(l.status)}</span></td><td>${esc(l.borrowDate||'—')}</td><td>${esc(l.returnDate||'—')}</td><td class="no-print"><button class="btn secondary" data-edit-loan="${esc(l.id)}">Edit</button> <button class="btn danger" data-delete-loan="${esc(l.id)}">Padam</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">Tiada rekod pinjaman.</td></tr>';
     $('loanRows').querySelectorAll('[data-edit-loan]').forEach(btn=>btn.addEventListener('click',()=>editLoan(btn.dataset.editLoan)));$('loanRows').querySelectorAll('[data-delete-loan]').forEach(btn=>btn.addEventListener('click',()=>{if(confirm('Padam rekod pinjaman ini?')){loans=loans.filter(l=>l.id!==btn.dataset.deleteLoan);persist();render();}}));
