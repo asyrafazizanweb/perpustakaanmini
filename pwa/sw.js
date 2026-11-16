@@ -1,18 +1,20 @@
 // Tukar nombor versi ini setiap kali fail statik (ikon, manifest) dikemas kini.
-const CACHE = 'maa-pwa-v3';
-const CDN_CACHE = 'maa-cdn-v1';
+const PREFIX = 'maa-pwa-';
+const CACHE = PREFIX + 'v3';
+const CDN_CACHE = PREFIX + 'cdn-v1';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
 // Pustaka luar yang diperlukan untuk berfungsi tanpa internet (imbasan & sambungan).
 const CDN_HOSTS = ['cdn.jsdelivr.net'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE).then(c => Promise.all(CORE.map(u => c.add(u).catch(() => null)))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== CDN_CACHE).map(k => caches.delete(k))))
+      // Hanya buang cache milik PWA ini — cache sistem utama (maa-web-…) pada domain yang sama tidak disentuh.
+      .then(keys => Promise.all(keys.filter(k => (k.startsWith(PREFIX) || k === 'maa-cdn-v1') && k !== CACHE && k !== CDN_CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
