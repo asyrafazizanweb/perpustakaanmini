@@ -3,107 +3,294 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#245b52">
+<meta name="theme-color" content="#193f3b">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <title>Perpustakaan Mini Muhammad Asyraf Azizan</title>
 <style>
-:root{--ink:#203047;--muted:#66758a;--accent:#245b52;--accent2:#dcece6;--paper:#fff;--bg:#f2f5f4;--line:#dce3e1;--warn:#9b3c32}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",Arial,sans-serif}
-header{background:linear-gradient(120deg,#193f3b,#2d6c5d);color:white;padding:25px max(20px,calc((100% - 1180px)/2))}
-header h1{margin:0;font-size:clamp(24px,3vw,34px)}header p{margin:5px 0 0;color:#e2f0ec}
-main{max-width:1180px;margin:24px auto;padding:0 18px 40px}
-.notice{background:#fff8e8;border:1px solid #f0dfb7;padding:12px 15px;border-radius:10px;color:#654e1b;margin-bottom:18px}
+:root{
+--bg:#f2f5f4;--paper:#fff;--soft:#f4f8f6;--soft2:#eef4f1;--ink:#203047;--muted:#66758a;--label:#35465a;--line:#dce3e1;--line2:#e6ebe9;
+--input:#fff;--input-line:#cbd5d2;--focus:#94c8b9;--accent:#245b52;--accent-ink:#fff;--accent-soft:#e5f1ec;--accent-soft-ink:#245b52;
+--btn2:#e8eeec;--btn2-ink:#203047;--danger-bg:#fff0ee;--danger-ink:#9b3c32;--danger-line:#f0d0cb;
+--warn-bg:#fff6e6;--warn-line:#f0cf9c;--warn-ink:#6b4a10;--notice-bg:#fff8e8;--notice-line:#f0dfb7;--notice-ink:#654e1b;
+--shadow:#17352a12;--bar:#2f7565;--bar2:#5b8f7c;--track:#edf2ef;--head1:#193f3b;--head2:#2d6c5d;--th:#f3f7f5;--th-ink:#4b5d6b;--cover-bg:#e8f0ec;--cover-ink:#83a99b;
+--shelf:#b48a5f;--shelf-edge:#8d6843;--shelf-back:#f4eee6;--overlay:#0d1d1980;
+--st-grey-bg:#eceff1;--st-grey:#4a5560;--st-blue-bg:#e3eefc;--st-blue:#1f5fa8;--st-green-bg:#e2f3e8;--st-green:#1f6b3f;
+--st-amber-bg:#fff0d6;--st-amber:#8a5a00;--st-red-bg:#fde7e4;--st-red:#a3302a;--st-purple-bg:#efe8fb;--st-purple:#5b3a99;--st-teal-bg:#e0f2ef;--st-teal:#1d6a5f;
+color-scheme:light}
+html[data-theme="dark"]{
+--bg:#0f1715;--paper:#16211e;--soft:#1b2925;--soft2:#1f2f2a;--ink:#e3ece8;--muted:#9aaca5;--label:#c3d1cc;--line:#2a3a35;--line2:#24332e;
+--input:#111b18;--input-line:#33453f;--focus:#3f8f79;--accent:#5fb39b;--accent-ink:#0b1714;--accent-soft:#1d3a32;--accent-soft-ink:#9fdcc8;
+--btn2:#22322d;--btn2-ink:#dfe9e5;--danger-bg:#3a1f1c;--danger-ink:#f2a49b;--danger-line:#5a2c27;
+--warn-bg:#3a2f17;--warn-line:#6b5426;--warn-ink:#f1d39a;--notice-bg:#2c2717;--notice-line:#4d4422;--notice-ink:#eedcaa;
+--shadow:#0007;--bar:#5fb39b;--bar2:#4d9a84;--track:#24332e;--head1:#0c231f;--head2:#184339;--th:#1b2925;--th-ink:#a9bab4;--cover-bg:#1f2f2a;--cover-ink:#4f7a6d;
+--shelf:#6b4f33;--shelf-edge:#4a3522;--shelf-back:#1a1613;--overlay:#000a;
+--st-grey-bg:#27302e;--st-grey:#c2ccc8;--st-blue-bg:#1d2f47;--st-blue:#9cc3f5;--st-green-bg:#1c3527;--st-green:#93d8ad;
+--st-amber-bg:#3b2e12;--st-amber:#f0c46b;--st-red-bg:#43201d;--st-red:#f2a49b;--st-purple-bg:#2d2442;--st-purple:#c6b0f2;--st-teal-bg:#173a35;--st-teal:#8fd6c9;
+color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+html.locked header,html.locked main,html.locked .bottom-nav{visibility:hidden}
+
+/* Kepala */
+header{background:linear-gradient(120deg,var(--head1),var(--head2));color:#fff;padding:22px max(20px,calc((100% - 1180px)/2))}
+.head-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+header h1{margin:0;font-size:clamp(21px,3vw,32px);line-height:1.2}header p{margin:5px 0 0;color:#dcece6;font-size:14px}
+.head-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.sync-chip{display:inline-flex;align-items:center;gap:7px;border:1px solid #ffffff40;background:#ffffff1a;color:#fff;border-radius:99px;padding:6px 11px;font:inherit;font-size:12px;font-weight:650;cursor:pointer;white-space:nowrap}
+.sync-chip .dot{width:8px;height:8px;border-radius:50%;background:#c9d6d1;flex-shrink:0}
+.sync-chip[data-state="ok"] .dot{background:#6ee7a8}.sync-chip[data-state="syncing"] .dot,.sync-chip[data-state="pending"] .dot{background:#ffd166}
+.sync-chip[data-state="syncing"] .dot{animation:pulse 1s infinite}.sync-chip[data-state="error"] .dot{background:#ff8a7a}.sync-chip[data-state="offline"] .dot{background:#9aa5a1}
+@keyframes pulse{50%{opacity:.3}}
+.icon-btn{border:1px solid #ffffff40;background:#ffffff1a;color:#fff;border-radius:99px;width:34px;height:34px;display:inline-grid;place-items:center;cursor:pointer;padding:0}
+.icon-btn svg{width:17px;height:17px}
+main{max-width:1180px;margin:22px auto;padding:0 18px 40px}
+.notice{background:var(--notice-bg);border:1px solid var(--notice-line);padding:12px 15px;border-radius:10px;color:var(--notice-ink);margin-bottom:18px;display:flex;gap:12px;align-items:flex-start}
+.notice>div{flex:1}.notice[hidden]{display:none}
+.notice-close{border:0;background:transparent;color:inherit;font-size:16px;cursor:pointer;padding:0 4px;line-height:1}
+
+/* Tab (desktop) */
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-.tab{border:1px solid var(--line);background:#fff;color:var(--ink);padding:11px 17px;border-radius:9px;cursor:pointer;font-weight:650}
-.tab.active{background:var(--accent);border-color:var(--accent);color:white}
-.panel{display:none;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 5px 20px #17352a0b}.panel.active{display:block}
-h2{margin:0 0 5px;font-size:23px} .sub{color:var(--muted);margin:0 0 20px}
+.tab{border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 16px;border-radius:9px;cursor:pointer;font-weight:650;font:inherit;font-weight:650}
+.tab.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.panel{display:none;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 5px 20px var(--shadow)}.panel.active{display:block}
+h2{margin:0 0 5px;font-size:23px}.sub{color:var(--muted);margin:0 0 20px}
+h3{font-size:16px}
+
+/* Navigasi bawah (telefon) */
+.bottom-nav{display:none}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:45;background:var(--paper);border-top:1px solid var(--line);border-radius:18px 18px 0 0;padding:10px 14px calc(14px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px var(--shadow)}
+.sheet[hidden]{display:none}.sheet-backdrop{position:fixed;inset:0;background:var(--overlay);z-index:44}.sheet-backdrop[hidden]{display:none}
+.sheet .handle{width:40px;height:4px;border-radius:9px;background:var(--line);margin:0 auto 10px}
+.sheet button{display:flex;gap:12px;align-items:center;width:100%;border:0;background:transparent;color:var(--ink);font:inherit;font-weight:600;padding:13px 6px;border-bottom:1px solid var(--line2);cursor:pointer;text-align:left}
+.sheet button:last-child{border-bottom:0}.sheet svg{width:20px;height:20px;color:var(--accent)}
+
+/* Borang */
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .field{display:flex;flex-direction:column;gap:6px}.field[hidden]{display:none!important}.field.full{grid-column:1/-1}
-label{font-weight:650;font-size:13px;color:#35465a}
-input,select,textarea{width:100%;border:1px solid #cbd5d2;border-radius:8px;padding:10px 11px;background:#fff;color:var(--ink);font:inherit;min-height:42px}
-input:focus,select:focus{outline:2px solid #94c8b9;border-color:var(--accent)}
+label{font-weight:650;font-size:13px;color:var(--label)}
+input,select,textarea{width:100%;border:1px solid var(--input-line);border-radius:8px;padding:10px 11px;background:var(--input);color:var(--ink);font:inherit;min-height:42px}
+input[readonly]{background:var(--soft)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--focus);border-color:var(--accent)}
+fieldset.group{border:1px solid var(--line);border-radius:12px;padding:16px 16px 18px;margin:0 0 16px}
+fieldset.group legend{font-weight:750;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);padding:0 6px}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
-button{font:inherit}.btn{border:0;border-radius:8px;padding:10px 15px;background:var(--accent);color:white;font-weight:650;cursor:pointer}.btn.secondary{background:#e8eeec;color:#203047}.btn.danger{background:#fff0ee;color:var(--warn);border:1px solid #f0d0cb}.btn:disabled{opacity:.45;cursor:not-allowed}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0}.toolbar input{max-width:330px}.toolbar select{max-width:220px}
+button{font:inherit}
+.btn{border:0;border-radius:8px;padding:10px 15px;background:var(--accent);color:var(--accent-ink);font-weight:650;cursor:pointer;min-height:40px}
+.btn.secondary{background:var(--btn2);color:var(--btn2-ink)}.btn.danger{background:var(--danger-bg);color:var(--danger-ink);border:1px solid var(--danger-line)}
+.btn.small-btn{padding:6px 10px;font-size:12px;min-height:32px}.btn:disabled{opacity:.45;cursor:not-allowed}
+.linklike{border:0;background:none;padding:0;color:inherit;font:inherit;font-weight:700;cursor:pointer;text-align:left}.linklike:hover{text-decoration:underline}
+.form-actions{position:sticky;bottom:0;background:var(--paper);padding:12px 0 2px;margin-top:6px;border-top:1px solid var(--line2);z-index:3}
+.tag-box{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid var(--input-line);border-radius:8px;padding:6px 8px;background:var(--input);min-height:42px}
+.tag-box:focus-within{outline:2px solid var(--focus);border-color:var(--accent)}
+.tag-box input{border:0;outline:0!important;min-height:30px;padding:4px;flex:1;min-width:120px;background:transparent}
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--accent-soft);color:var(--accent-soft-ink);border-radius:99px;padding:3px 9px;font-size:12px;font-weight:650}
+.chip button{border:0;background:none;color:inherit;cursor:pointer;padding:0 0 0 2px;font-size:13px;line-height:1}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+
+/* Jadual & senarai */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0}
+.toolbar .search{flex:1 1 100%;max-width:none}.toolbar select{max-width:220px;flex:1 1 160px}
+.toolbar .spacer{flex:1}
 .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
-table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{padding:11px 12px;text-align:left;border-bottom:1px solid #e6ebe9;vertical-align:top}th{background:#f3f7f5;font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:#4b5d6b}tr:last-child td{border-bottom:0}
-.empty{text-align:center;color:var(--muted);padding:28px}.pill{display:inline-block;padding:3px 8px;border-radius:99px;background:#e5f1ec;color:#245b52;font-size:12px;font-weight:700}
-.small{font-size:12px;color:var(--muted)}.book-cover{width:42px;height:56px;object-fit:cover;border-radius:4px;border:1px solid var(--line);display:block}
+table{border-collapse:collapse;width:100%;min-width:850px;background:var(--paper)}
+th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line2);vertical-align:top}
+th{background:var(--th);font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--th-ink)}tr:last-child td{border-bottom:0}
+.empty{text-align:center;color:var(--muted);padding:28px}
+.pill{display:inline-block;padding:3px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent-soft-ink);font-size:12px;font-weight:700;white-space:nowrap}
+.st-grey{background:var(--st-grey-bg);color:var(--st-grey)}.st-blue{background:var(--st-blue-bg);color:var(--st-blue)}.st-green{background:var(--st-green-bg);color:var(--st-green)}
+.st-amber{background:var(--st-amber-bg);color:var(--st-amber)}.st-red{background:var(--st-red-bg);color:var(--st-red)}.st-purple{background:var(--st-purple-bg);color:var(--st-purple)}.st-teal{background:var(--st-teal-bg);color:var(--st-teal)}
+.small{font-size:12px;color:var(--muted)}
+.book-cover{width:42px;height:56px;object-fit:cover;border-radius:4px;border:1px solid var(--line);display:block}
 .cover-preview{display:flex;align-items:center;gap:10px}.cover-preview img{width:52px;height:68px;object-fit:cover;border:1px solid var(--line);border-radius:4px}
-.statrow{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.stat{background:#f4f8f6;border:1px solid var(--line);padding:10px 14px;border-radius:9px}.stat strong{font-size:20px;display:block}
+.statrow{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.stat{background:var(--soft);border:1px solid var(--line);padding:10px 14px;border-radius:9px}.stat strong{font-size:20px;display:block}
+.subtabs{display:inline-flex;background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:4px;gap:4px;margin-bottom:16px}
+.subtabs button{border:0;background:transparent;color:var(--ink);font:inherit;font-weight:650;padding:8px 14px;border-radius:7px;cursor:pointer}
+.subtabs button[aria-selected="true"]{background:var(--paper);box-shadow:0 1px 4px var(--shadow);color:var(--accent)}
+.row-late td{background:var(--st-red-bg)}
 
-/* Dashboard and gallery */
-.dashboard-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:24px;border-radius:16px;background:linear-gradient(125deg,#183e38,#2f7565);color:#fff;margin-bottom:18px;overflow:hidden;position:relative}
+/* Dashboard */
+.dashboard-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:24px;border-radius:16px;background:linear-gradient(125deg,var(--head1),var(--head2));color:#fff;margin-bottom:18px;overflow:hidden;position:relative}
 .dashboard-hero:after{content:"";position:absolute;width:220px;height:220px;border:1px solid #ffffff26;border-radius:50%;right:-35px;top:-100px;box-shadow:0 0 0 24px #ffffff09,0 0 0 48px #ffffff08}
-.dashboard-hero h2{font-size:clamp(22px,3vw,30px);margin:0 0 6px;position:relative;z-index:1}.dashboard-hero p{margin:0;color:#dcece6;position:relative;z-index:1}.hero-count{font-size:46px;font-weight:800;line-height:1;position:relative;z-index:1;white-space:nowrap}
-.dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:16px 0 22px}.dash-stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:0 4px 15px #17352a08}.dash-stat .stat-label{color:var(--muted);font-size:12px;font-weight:700}.dash-stat strong{display:block;font-size:27px;line-height:1.3;margin:4px 0}.dash-stat .stat-note{font-size:12px;color:var(--muted)}
-.dashboard-columns{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.dash-card{border:1px solid var(--line);border-radius:13px;padding:18px;background:#fff;min-width:0}.dash-card h3{margin:0 0 14px;font-size:16px}.category-row{display:grid;grid-template-columns:90px 1fr 30px;gap:9px;align-items:center;margin:11px 0;font-size:13px}.bar-track{height:8px;background:#edf2ef;border-radius:99px;overflow:hidden}.bar-fill{height:100%;background:#2f7565;border-radius:99px}.recent-list{display:grid;gap:10px}.recent-book{display:flex;gap:11px;align-items:center;padding:9px;border-radius:9px;background:#f7f9f8}.recent-book img,.recent-placeholder{width:42px;height:56px;object-fit:cover;border-radius:5px;border:1px solid var(--line);flex-shrink:0}.recent-placeholder{display:flex;align-items:center;justify-content:center;background:#e8f0ec;color:#487064;font-size:19px}.recent-book strong{display:block;font-size:13px;line-height:1.3}.recent-book .small{display:block;margin-top:3px}
-.dashboard-insights{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:16px;margin-top:16px}
-.dashboard-insights .dash-card{min-height:190px}
-.insight-row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:12px 0;font-size:13px}
-.insight-row strong{font-variant-numeric:tabular-nums}
-.insight-track{height:7px;background:#edf2ef;border-radius:99px;overflow:hidden;margin-top:5px}
-.insight-fill{height:100%;background:#5b8f7c;border-radius:99px}
+.dashboard-hero h2{font-size:clamp(20px,3vw,30px);margin:0 0 6px;position:relative;z-index:1}.dashboard-hero p{margin:0;color:#dcece6;position:relative;z-index:1}
+.hero-count{font-size:46px;font-weight:800;line-height:1;position:relative;z-index:1;white-space:nowrap}
+.dashboard-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px;margin:16px 0 22px}
+.dash-stat{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:16px;box-shadow:0 4px 15px var(--shadow)}
+.dash-stat .stat-label{color:var(--muted);font-size:12px;font-weight:700}.dash-stat strong{display:block;font-size:26px;line-height:1.3;margin:4px 0}.dash-stat .stat-note{font-size:12px;color:var(--muted)}
+.dashboard-columns{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+.dash-card{border:1px solid var(--line);border-radius:13px;padding:18px;background:var(--paper);min-width:0}.dash-card h3{margin:0 0 14px}
+.category-row{display:grid;grid-template-columns:110px 1fr 30px;gap:9px;align-items:center;margin:11px 0;font-size:13px}.category-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{height:8px;background:var(--track);border-radius:99px;overflow:hidden}.bar-fill{height:100%;background:var(--bar);border-radius:99px}
+.recent-list{display:grid;gap:10px}.recent-book{display:flex;gap:11px;align-items:center;padding:9px;border-radius:9px;background:var(--soft);cursor:pointer;border:0;color:inherit;font:inherit;text-align:left;width:100%}
+.recent-book img,.recent-placeholder{width:42px;height:56px;object-fit:cover;border-radius:5px;border:1px solid var(--line);flex-shrink:0}
+.recent-placeholder{display:flex;align-items:center;justify-content:center;background:var(--cover-bg);color:var(--cover-ink);font-size:19px}
+.recent-book strong{display:block;font-size:13px;line-height:1.3}.recent-book .small{display:block;margin-top:3px}
+.dashboard-insights{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:16px;margin-top:16px}.dashboard-insights .dash-card{min-height:190px}
+.insight-row{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:12px 0;font-size:13px}.insight-row strong{font-variant-numeric:tabular-nums}
+.insight-track{height:7px;background:var(--track);border-radius:99px;overflow:hidden;margin-top:5px}.insight-fill{height:100%;background:var(--bar2);border-radius:99px}
 .progress-summary{display:flex;align-items:center;gap:10px;margin-top:18px;font-size:12px;color:var(--muted)}
-.progress-track{height:9px;background:#edf2ef;border-radius:99px;overflow:hidden;flex:1}
-.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#2f7565,#83b59f);border-radius:99px;transition:width .25s}
-.progress-summary strong{white-space:nowrap}
-.insight-split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.insight-split h4{font-size:12px;color:var(--muted);margin:0 0 8px}
-.loan-item{padding:9px 0;border-bottom:1px solid #edf1ef;font-size:12px}
-.loan-item:last-child{border-bottom:0}
-.loan-item strong{display:block;font-size:13px}
+.progress-track{height:9px;background:var(--track);border-radius:99px;overflow:hidden;flex:1}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--bar),var(--bar2));border-radius:99px;transition:width .25s}.progress-summary strong{white-space:nowrap}
+.insight-split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.insight-split h4{font-size:12px;color:var(--muted);margin:0 0 8px}
+.loan-item{padding:9px 0;border-bottom:1px solid var(--line2);font-size:12px}.loan-item:last-child{border-bottom:0}.loan-item strong{display:block;font-size:13px}
 .insight-empty{color:var(--muted);font-size:12px;padding:8px 0}
+.value-section{margin-top:16px}.value-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.value-summary div{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:11px 13px}.value-summary span{display:block;font-size:12px;color:var(--muted);font-weight:650}.value-summary strong{font-size:18px;font-variant-numeric:tabular-nums}
+.value-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.value-table{min-width:0}.value-table td,.value-table th{padding:8px 10px;font-size:13px}.value-table td.num,.value-table th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mini-bar{height:6px;background:var(--track);border-radius:99px;margin-top:5px;overflow:hidden}.mini-bar i{display:block;height:100%;background:var(--bar)}
 
-.view-switch{display:flex;gap:7px;align-items:center}.view-switch .btn{padding:9px 12px}.view-switch .btn.selected{box-shadow:inset 0 0 0 2px #b5d7ca}.gallery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:14px}.gallery-card{border:1px solid var(--line);background:#fff;border-radius:12px;overflow:hidden;min-width:0;box-shadow:0 4px 14px #17352a08;display:flex;flex-direction:column}.gallery-cover{height:205px;background:linear-gradient(145deg,#edf3f0,#dfeae5);display:flex;align-items:center;justify-content:center;overflow:hidden}.gallery-cover img{width:100%;height:100%;object-fit:contain}.gallery-cover .cover-letter{font-size:48px;font-weight:800;color:#83a99b}.gallery-info{padding:13px;display:flex;flex-direction:column;gap:7px;flex:1}.gallery-info h3{font-size:15px;line-height:1.35;margin:0;overflow-wrap:anywhere}.gallery-info .author{font-size:12px;color:var(--muted)}.gallery-meta{display:flex;flex-wrap:wrap;gap:5px}.gallery-meta span{font-size:11px;border-radius:99px;padding:3px 7px;background:#eef4f1;color:#42665a}.gallery-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:6px}.gallery-actions .btn{font-size:12px;padding:7px 9px}.collection-empty{grid-column:1/-1}
-@media(max-width:900px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:900px){.dashboard-insights{grid-template-columns:1fr 1fr}.dashboard-insights .dash-card:last-child{grid-column:1/-1}}
-@media(max-width:600px){.dashboard-insights{grid-template-columns:1fr}.dashboard-insights .dash-card:last-child{grid-column:auto}.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery-cover{height:160px}.dashboard-columns{grid-template-columns:1fr}.dashboard-hero{padding:18px}.hero-count{font-size:36px}.category-row{grid-template-columns:78px 1fr 24px}}
+/* Galeri, senarai telefon, rak */
+.view-switch{display:flex;gap:6px;align-items:center}.view-switch .btn{padding:9px 12px}.view-switch .btn.selected{box-shadow:inset 0 0 0 2px var(--accent)}
+.lbl-mob{display:none}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:14px}
+.gallery-card{border:1px solid var(--line);background:var(--paper);border-radius:12px;overflow:hidden;min-width:0;box-shadow:0 4px 14px var(--shadow);display:flex;flex-direction:column;cursor:pointer;text-align:left;padding:0;color:inherit;font:inherit}
+.gallery-card:hover{border-color:var(--accent)}
+.gallery-cover{height:205px;background:var(--cover-bg);display:flex;align-items:center;justify-content:center;overflow:hidden;width:100%}
+.gallery-cover img{width:100%;height:100%;object-fit:contain}.cover-letter{font-size:48px;font-weight:800;color:var(--cover-ink)}
+.gallery-info{padding:13px;display:flex;flex-direction:column;gap:7px;flex:1;width:100%}.gallery-info h3{font-size:15px;line-height:1.35;margin:0;overflow-wrap:anywhere}
+.gallery-info .author{font-size:12px;color:var(--muted)}.gallery-meta{display:flex;flex-wrap:wrap;gap:5px}.gallery-meta .pill{font-size:11px;padding:3px 7px}
+.collection-empty{grid-column:1/-1}
+.list-view{display:none;gap:9px;margin-top:12px}
+.list-card{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;text-align:left;color:inherit;font:inherit;width:100%}
+.list-card img,.list-card .ph{width:48px;height:66px;border-radius:6px;object-fit:cover;background:var(--cover-bg);display:grid;place-items:center;color:var(--cover-ink);font-weight:800;border:1px solid var(--line)}
+.list-card strong{display:block;font-size:14px;line-height:1.3;overflow-wrap:anywhere}.list-card .meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.list-card .meta .pill{font-size:11px;padding:2px 7px}
+.shelf-view{display:none;margin-top:14px;border-radius:12px;padding:14px 14px 0;background:var(--shelf-back);border:1px solid var(--line)}
+.shelf-row{display:flex;flex-wrap:wrap;align-items:flex-end;column-gap:3px;padding:0 8px;margin-bottom:18px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 186px,var(--shelf) 186px,var(--shelf-edge) 200px)}
+.spine-cell{height:200px;display:flex;align-items:flex-end;padding-bottom:14px}
+.shelf-label{font-size:12px;font-weight:750;color:var(--muted);margin:0 0 6px 4px;text-transform:uppercase;letter-spacing:.05em}
+.spine{flex:0 0 auto;border:0;border-radius:3px 3px 1px 1px;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;padding:8px 0 16px;box-shadow:inset -3px 0 0 #0000002a,inset 2px 0 0 #ffffff22;transition:transform .12s}
+.spine:hover,.spine:focus-visible{transform:translateY(-8px)}
+.spine span{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;font-weight:700;letter-spacing:.03em;max-height:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.1}
+.spine i{position:absolute;bottom:5px;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;border:1px solid #0003}
+.shelf-legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--muted);margin:0 0 12px}.shelf-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+
+/* Dialog butiran buku */
+dialog.book-dialog{border:0;padding:0;margin:0 0 0 auto;height:100%;max-height:100%;width:min(520px,100%);background:var(--paper);color:var(--ink);box-shadow:-10px 0 40px var(--shadow)}
+dialog.book-dialog::backdrop{background:var(--overlay)}
+.bd-head{position:sticky;top:0;background:var(--paper);display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);z-index:2}
+.bd-body{padding:18px 18px 100px}
+.bd-top{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start}
+.bd-cover{width:120px;height:172px;object-fit:contain;background:var(--cover-bg);border-radius:8px;border:1px solid var(--line);display:grid;place-items:center;color:var(--cover-ink);font-size:44px;font-weight:800}
+.bd-top h2{font-size:20px;line-height:1.25;margin:0 0 4px;overflow-wrap:anywhere}
+.bd-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.bd-dl{display:grid;grid-template-columns:42% 1fr;gap:0;margin:18px 0 0;font-size:13px}
+.bd-dl dt{color:var(--muted);padding:7px 0;border-bottom:1px solid var(--line2)}.bd-dl dd{margin:0;padding:7px 0;border-bottom:1px solid var(--line2);overflow-wrap:anywhere}
+.bd-section{margin-top:18px}.bd-section h3{font-size:14px;margin:0 0 8px}
+.bd-actions{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom));display:flex;gap:8px;flex-wrap:wrap}
+.bd-actions .btn{flex:1 1 auto}
+
+/* Kunci PIN */
+.lock{position:fixed;inset:0;z-index:100;background:linear-gradient(140deg,var(--head1),var(--head2));display:grid;place-items:center;padding:20px}
+.lock[hidden]{display:none}
+.lock-card{background:var(--paper);color:var(--ink);border-radius:18px;padding:26px;width:min(360px,100%);text-align:center;box-shadow:0 20px 60px #0005}
+.lock-card h2{font-size:20px;margin:6px 0 4px}.lock-card input{text-align:center;font-size:22px;letter-spacing:.4em;margin:16px 0 10px}
+.lock-card .btn{width:100%}.lock-icon{width:46px;height:46px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:inline-grid;place-items:center}
+.lock-msg{min-height:20px;font-size:13px;color:var(--danger-ink);margin:8px 0 0}
+
+/* Buku berganda, toast, dialog pilihan */
+.dup-warning{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);border-radius:10px;padding:12px 14px;margin-top:4px}.dup-warning[hidden]{display:none}
+.dup-warning ul{margin:8px 0;padding-left:18px}.dup-warning li{margin:5px 0}.dup-warning .btn{padding:4px 9px;font-size:12px;margin-left:4px;min-height:0}
+.stat-btn{font:inherit;text-align:left;cursor:pointer;color:inherit}.stat-btn.has{border-color:var(--warn-line);background:var(--warn-bg)}.stat-btn[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--warn-line)}
+.check{display:flex;gap:6px;align-items:center;font-weight:600;font-size:13px;white-space:nowrap}.check input{width:auto;min-height:0;margin:0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1f332e;color:#fff;padding:11px 14px;border-radius:10px;box-shadow:0 8px 28px #0003;display:flex;gap:12px;align-items:center;z-index:60;max-width:calc(100% - 24px);font-size:14px}
+.toast[hidden]{display:none}.toast button{background:#e6f3ee;color:#1f332e;border:0;border-radius:7px;padding:7px 11px;font-weight:700;cursor:pointer;white-space:nowrap}
+dialog.choice{border:0;border-radius:14px;padding:22px;max-width:460px;width:calc(100% - 30px);box-shadow:0 18px 50px #0004;color:var(--ink);background:var(--paper)}dialog.choice::backdrop{background:var(--overlay)}
+dialog.choice p{margin:0 0 16px;white-space:pre-line}dialog.choice .actions{margin-top:0;flex-direction:column}dialog.choice .btn{width:100%;text-align:left}
+.tab:focus-visible,.btn:focus-visible,.spine:focus-visible,.gallery-card:focus-visible,.list-card:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+pre.sql{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto;font-size:12px;white-space:pre}
+details summary{cursor:pointer;font-weight:650}
+.print-heading,.print-meta{display:none}
+
+/* Responsif */
+@media(max-width:1000px){.dashboard-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.value-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-insights{grid-template-columns:1fr 1fr}.dashboard-insights .dash-card:last-child{grid-column:1/-1}.value-grid{grid-template-columns:1fr}}
+@media(max-width:760px){
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:0 12px 96px;margin-top:14px}.panel{padding:16px}
+ header{padding:14px}header p{display:none}.head-row{align-items:center}header h1{font-size:18px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+ .tabs{display:none}
+ .bottom-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--paper);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -6px 20px var(--shadow)}
+ .bottom-nav button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:11px;font-weight:650;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;min-height:52px;cursor:pointer;border-radius:10px}
+ .bottom-nav button svg{width:22px;height:22px}
+ .bottom-nav button.active{color:var(--accent)}
+ .bottom-nav button.add svg{background:var(--accent);color:var(--accent-ink);border-radius:50%;padding:4px;width:30px;height:30px;margin-top:-4px}
+ .toast{bottom:calc(78px + env(safe-area-inset-bottom))}
+ .form-actions{bottom:calc(64px + env(safe-area-inset-bottom))}
+ .form-actions .btn{flex:1}
+ body.view-table #bookTableView{display:none!important}body.view-table #bookListView{display:grid}
+ .lbl-desk{display:none}.lbl-mob{display:inline}
+ .toolbar select{max-width:none;flex:1 1 45%}
+ .dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ dialog.book-dialog{width:100%;height:92%;margin:auto 0 0;border-radius:18px 18px 0 0}
+ .btn,.tab{min-height:44px}
+}
+@media(max-width:600px){.dashboard-insights{grid-template-columns:1fr}.dashboard-insights .dash-card:last-child{grid-column:auto}.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery-cover{height:160px}.dashboard-columns{grid-template-columns:1fr}.dashboard-hero{padding:18px}.hero-count{font-size:36px}.category-row{grid-template-columns:90px 1fr 24px}.bd-top{grid-template-columns:96px 1fr}.bd-cover{width:96px;height:138px}.sync-chip span:last-child{max-width:92px;overflow:hidden;text-overflow:ellipsis}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:13px}.value-summary{grid-template-columns:1fr 1fr}}
 @media(max-width:380px){.gallery-grid{grid-template-columns:1fr}.gallery-cover{height:220px}}
-@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:0 12px 28px}.panel{padding:16px}}
-@media(max-width:500px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:13px}}
-
 
 @media print{
  @page{size:A4 landscape;margin:12mm}
-
- body{background:#fff;font-size:10pt;color:#111}#dashboardPanel{display:none!important}header{background:#fff!important;color:#111;padding:0 0 10mm;border-bottom:2px solid #333}header p{color:#333}main{max-width:none;margin:0;padding:0}.notice,.tabs,.no-print,.panel:not(.active){display:none!important}.panel.active{display:block;border:0;box-shadow:none;padding:0}.panel h2{font-size:18pt}.sub{margin-bottom:5mm}#formPanel,#loanPanel{display:none!important}#collectionPanel{display:block!important}.table-wrap{overflow:visible;border:0}table{min-width:0;width:100%;font-size:8pt;table-layout:auto}th,td{padding:5px 6px;border:1px solid #bbb;overflow-wrap:anywhere}th{background:#eee!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.book-cover{width:28px;height:38px}.print-heading{display:block!important}.print-meta{display:block!important}.toast,#syncPanel,#categoryPanel{display:none!important}
+ html[data-theme]{--paper:#fff;--ink:#111;--line:#bbb;--line2:#bbb;--th:#eee;--th-ink:#111;--muted:#444}
+ body{background:#fff;font-size:10pt;color:#111}#dashboardPanel{display:none!important}
+ header{background:#fff!important;color:#111;padding:0 0 10mm;border-bottom:2px solid #333}header p{color:#333;display:block}
+ main{max-width:none;margin:0;padding:0}.notice,.tabs,.no-print,.panel:not(.active),.bottom-nav,.sheet{display:none!important}
+ .panel.active{display:block;border:0;box-shadow:none;padding:0}.panel h2{font-size:18pt}.sub{margin-bottom:5mm}
+ #formPanel,#loanPanel,#wishlistPanel{display:none!important}#collectionPanel{display:block!important}
+ #bookTableView{display:block!important}#bookListView,#bookGalleryView,#shelfView{display:none!important}
+ .table-wrap{overflow:visible;border:0}table{min-width:0;width:100%;font-size:8pt;table-layout:auto}
+ th,td{padding:5px 6px;border:1px solid #bbb;overflow-wrap:anywhere}th{background:#eee!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+ .book-cover{width:28px;height:38px}.print-heading,.print-meta{display:block!important}.toast,#syncPanel,#categoryPanel,.lock,dialog{display:none!important}
+ .pill{border:1px solid #999;background:#fff!important;color:#111!important}
 }
-.print-heading,.print-meta{display:none}
-/* Buku berganda & isihan */
-.dup-warning{background:#fff6e6;border:1px solid #f0cf9c;color:#5f400f;border-radius:10px;padding:12px 14px;margin-top:16px}.dup-warning[hidden]{display:none}
-.dup-warning ul{margin:8px 0;padding-left:18px}.dup-warning li{margin:5px 0}.dup-warning .btn{padding:4px 9px;font-size:12px;margin-left:4px}
-.pill.dup{background:#fff0d9;color:#8a5a12;margin-left:6px}.gallery-meta span.dup{background:#fff0d9;color:#8a5a12}
-.stat-btn{font:inherit;text-align:left;cursor:pointer;color:inherit}.stat-btn.has{border-color:#f0cf9c;background:#fff8ec}.stat-btn[aria-pressed="true"]{box-shadow:inset 0 0 0 2px #e2b56b}
-.check{display:flex;gap:6px;align-items:center;font-weight:600;font-size:13px;white-space:nowrap}.check input{width:auto;min-height:0;margin:0}
-/* Toast, dialog, tetapan */
-.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1f332e;color:#fff;padding:11px 14px;border-radius:10px;box-shadow:0 8px 28px #0003;display:flex;gap:12px;align-items:center;z-index:50;max-width:calc(100% - 24px);font-size:14px}
-.toast[hidden]{display:none}.toast button{background:#e6f3ee;color:#1f332e;border:0;border-radius:7px;padding:7px 11px;font-weight:700;cursor:pointer;white-space:nowrap}
-dialog.choice{border:0;border-radius:14px;padding:22px;max-width:460px;width:calc(100% - 30px);box-shadow:0 18px 50px #0004;color:var(--ink)}dialog.choice::backdrop{background:#0d1d1980}
-dialog.choice p{margin:0 0 16px;white-space:pre-line}dialog.choice .actions{margin-top:0;flex-direction:column}dialog.choice .btn{width:100%;text-align:left}
-.tab:focus-visible,.btn:focus-visible{outline:3px solid #94c8b9;outline-offset:2px}
-pre.sql{background:#f4f7f6;border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto;font-size:12px;white-space:pre}
-details summary{cursor:pointer;font-weight:650}
-
+.spine.lent::before{content:"";position:absolute;top:5px;left:3px;right:3px;height:5px;background:#f0c46b;border-radius:2px}
 </style>
+<script>
+/* Tema & kunci digunakan sebelum halaman dilukis untuk mengelakkan kelipan */
+(function(){try{var ui=JSON.parse(localStorage.getItem('perpustakaanMini_ui_v2')||'{}');var t=ui.theme||'auto';var d=t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.setAttribute('data-theme','dark');if(localStorage.getItem('perpustakaanMini_pin_v1'))document.documentElement.classList.add('locked');}catch(e){}})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+<div id="lockScreen" class="lock" hidden>
+  <form class="lock-card" id="lockForm" autocomplete="off">
+    <span class="lock-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+    <h2>Perpustakaan dikunci</h2>
+    <p class="small" id="lockLibName">Masukkan PIN untuk membuka.</p>
+    <div id="pinStep">
+      <input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" aria-label="PIN" autocomplete="off">
+      <button class="btn" type="submit" id="unlockBtn">Buka</button>
+      <p class="lock-msg" id="lockMsg" role="alert"></p>
+      <button type="button" class="linklike small" id="forgotPinBtn">Lupa PIN?</button>
+    </div>
+    <div id="forgotStep" hidden>
+      <p class="small" id="forgotText"></p>
+      <input id="resetPassword" type="password" placeholder="Kata laluan akaun awan" aria-label="Kata laluan akaun awan" style="letter-spacing:normal;font-size:15px;text-align:left">
+      <button class="btn" type="button" id="resetPinBtn">Sahkan & buang PIN</button>
+      <p class="lock-msg" id="resetMsg" role="alert"></p>
+      <button type="button" class="linklike small" id="backToPinBtn">← Kembali</button>
+    </div>
+  </form>
+</div>
 <header>
-  <h1 id="libraryTitle">Perpustakaan Mini Muhammad Asyraf Azizan</h1>
-  <p>Sistem rekod buku dan pinjaman peribadi · akses merentas telefon dan komputer</p>
+  <div class="head-row">
+    <div><h1 id="libraryTitle">Perpustakaan Mini Muhammad Asyraf Azizan</h1><p>Sistem rekod buku dan pinjaman peribadi · akses merentas telefon dan komputer</p></div>
+    <div class="head-actions no-print">
+      <button class="sync-chip" id="syncChip" type="button" data-state="local" title="Status penyegerakan — klik untuk tetapan"><span class="dot"></span><span id="syncChipText">Tempatan sahaja</span></button>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Tukar tema cerah/gelap" title="Tukar tema"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <button class="icon-btn" id="lockNowBtn" type="button" aria-label="Kunci sekarang" title="Kunci sekarang" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></button>
+    </div>
+  </div>
 </header>
 <main>
-  <div class="notice"><strong>Nota akses:</strong> Rekod disimpan dalam pangkalan data pelayar (IndexedDB) pada peranti ini sehingga anda menyambungkan pangkalan data awan di bahagian <em>Sync & Tetapan</em>. Selepas disediakan, log masuk akaun yang sama pada telefon dan komputer untuk menyegerakkan rekod. Sandaran automatik harian disimpan pada peranti ini; eksport sandaran (.json) ke tempat lain masih disyorkan.</div>
+  <div class="notice" id="accessNotice"><div><strong>Nota akses:</strong> Rekod disimpan dalam pangkalan data pelayar (IndexedDB) pada peranti ini sehingga anda menyambungkan pangkalan data awan di bahagian <em>Tetapan</em>. Selepas disediakan, log masuk akaun yang sama pada telefon dan komputer untuk menyegerakkan rekod. Sandaran automatik harian disimpan pada peranti ini; eksport sandaran (.json) ke tempat lain masih disyorkan.</div><button type="button" class="notice-close" id="closeNoticeBtn" aria-label="Tutup nota">✕</button></div>
   <nav class="tabs no-print" role="tablist" aria-label="Bahagian sistem">
     <button class="tab active" type="button" role="tab" id="tab-dashboardPanel" aria-controls="dashboardPanel" aria-selected="true" tabindex="0" data-tab="dashboardPanel">Dashboard</button>
-    <button class="tab" type="button" role="tab" id="tab-formPanel" aria-controls="formPanel" aria-selected="false" tabindex="-1" data-tab="formPanel">Borang Maklumat Buku</button>
-    <button class="tab" type="button" role="tab" id="tab-loanPanel" aria-controls="loanPanel" aria-selected="false" tabindex="-1" data-tab="loanPanel">Rekod Pinjaman</button>
-    <button class="tab" type="button" role="tab" id="tab-collectionPanel" aria-controls="collectionPanel" aria-selected="false" tabindex="-1" data-tab="collectionPanel">Koleksi Buku</button>
-    <button class="tab" type="button" role="tab" id="tab-categoryPanel" aria-controls="categoryPanel" aria-selected="false" tabindex="-1" data-tab="categoryPanel">Pengurusan Kategori</button>
-    <button class="tab" type="button" role="tab" id="tab-syncPanel" aria-controls="syncPanel" aria-selected="false" tabindex="-1" data-tab="syncPanel">Sync & Tetapan</button>
+    <button class="tab" type="button" role="tab" id="tab-collectionPanel" aria-controls="collectionPanel" aria-selected="false" tabindex="-1" data-tab="collectionPanel">Koleksi</button>
+    <button class="tab" type="button" role="tab" id="tab-formPanel" aria-controls="formPanel" aria-selected="false" tabindex="-1" data-tab="formPanel">Tambah Buku</button>
+    <button class="tab" type="button" role="tab" id="tab-loanPanel" aria-controls="loanPanel" aria-selected="false" tabindex="-1" data-tab="loanPanel">Pinjaman</button>
+    <button class="tab" type="button" role="tab" id="tab-wishlistPanel" aria-controls="wishlistPanel" aria-selected="false" tabindex="-1" data-tab="wishlistPanel">Senarai Hajat</button>
+    <button class="tab" type="button" role="tab" id="tab-categoryPanel" aria-controls="categoryPanel" aria-selected="false" tabindex="-1" data-tab="categoryPanel">Kategori</button>
+    <button class="tab" type="button" role="tab" id="tab-syncPanel" aria-controls="syncPanel" aria-selected="false" tabindex="-1" data-tab="syncPanel">Tetapan</button>
   </nav>
 
   <section id="dashboardPanel" class="panel active" role="tabpanel" aria-labelledby="tab-dashboardPanel" tabindex="-1">
@@ -111,74 +298,164 @@ details summary{cursor:pointer;font-weight:650}
     <div class="dashboard-stats">
       <div class="dash-stat"><span class="stat-label">JUMLAH KOLEKSI</span><strong id="dashTotal">0</strong><span class="stat-note">Buku direkodkan</span></div>
       <div class="dash-stat"><span class="stat-label">SELESAI DIBACA</span><strong id="dashRead">0</strong><span class="stat-note" id="dashReadNote">0% daripada koleksi</span></div>
-      <div class="dash-stat"><span class="stat-label">SEDANG DIPINJAM</span><strong id="dashLoans">0</strong><span class="stat-note">Rekod berstatus dipinjam</span></div>
+      <div class="dash-stat"><span class="stat-label">DIPINJAMKAN</span><strong id="dashLoans">0</strong><span class="stat-note">Buku anda di tangan orang lain</span></div>
+      <div class="dash-stat"><span class="stat-label">SAYA PINJAM</span><strong id="dashBorrowed">0</strong><span class="stat-note" id="dashBorrowedNote">Buku orang lain pada anda</span></div>
       <div class="dash-stat"><span class="stat-label">NILAI KOLEKSI</span><strong id="dashValue">RM 0.00</strong><span class="stat-note">Berdasarkan harga direkodkan</span></div>
     </div>
-    <div class="dashboard-columns"><div class="dash-card"><h3>Koleksi mengikut kategori</h3><div id="categoryBreakdown"><p class="small">Belum ada rekod buku.</p></div></div><div class="dash-card"><h3>Buku terkini ditambah</h3><div id="recentBooks" class="recent-list"><p class="small">Buku yang disimpan akan dipaparkan di sini.</p></div><div class="actions" style="margin-top:14px"><button class="btn" type="button" id="dashboardAddBtn">+ Daftar buku</button><button class="btn secondary" type="button" id="dashboardCollectionBtn">Lihat koleksi</button></div></div></div>
+    <div class="dashboard-columns"><div class="dash-card"><h3>Koleksi mengikut kategori</h3><div id="categoryBreakdown"><p class="small">Belum ada rekod buku.</p></div></div><div class="dash-card"><h3>Buku terkini ditambah</h3><div id="recentBooks" class="recent-list"><p class="small">Buku yang disimpan akan dipaparkan di sini.</p></div><div class="actions" style="margin-top:14px"><button class="btn" type="button" id="dashboardAddBtn">+ Tambah buku</button><button class="btn secondary" type="button" id="dashboardCollectionBtn">Lihat koleksi</button></div></div></div>
     <div class="dashboard-insights">
       <div class="dash-card"><h3>Status bacaan</h3><div id="readingBreakdown"></div><div class="progress-summary"><div class="progress-track"><div id="readingProgressBar" class="progress-fill"></div></div><strong id="readingProgressText">0% selesai dibaca</strong></div></div>
-      <div class="dash-card"><h3>Komposisi koleksi</h3><div class="insight-split"><div><h4>Format buku</h4><div id="formatBreakdown"></div></div><div><h4>Sumber koleksi</h4><div id="sourceBreakdown"></div></div></div></div>
+      <div class="dash-card"><h3>Komposisi koleksi</h3><div class="insight-split"><div><h4>Format buku</h4><div id="formatBreakdown"></div></div><div><h4>Bahasa</h4><div id="languageBreakdown"></div></div></div></div>
       <div class="dash-card"><h3>Ringkasan pinjaman</h3><div id="loanBreakdown"></div></div>
     </div>
-  </section>
-
-  <section id="formPanel" class="panel" role="tabpanel" aria-labelledby="tab-formPanel" tabindex="-1">
-    <h2>Borang Maklumat Buku</h2><p class="sub">Masukkan maklumat buku. Medan bertanda * wajib diisi.</p><p id="bookDraftStatus" class="small" role="status" aria-live="polite">Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.</p>
-    <form id="bookForm">
-      <input type="hidden" id="bookId">
-      <div class="grid">
-        <div class="field"><label for="bookCode">ID Buku (automatik)</label><input id="bookCode" readonly placeholder="Dijana apabila buku disimpan"></div>
-        <div class="field"><label for="format">Format Buku *</label><select id="format" required><option value="">Pilih format</option><option>Hardcover</option><option>Paperback</option><option>E-book</option></select></div>
-        <div class="field"><label for="genre">Kategori / Genre *</label><select id="genre" required><option value="">Pilih kategori</option></select></div>
-        <div class="field"><label for="isbn">Kod ISBN</label><input id="isbn" placeholder="Contoh: 978-..." autocomplete="off"></div>
-        <div class="field"><label for="title">Nama Buku *</label><input id="title" required placeholder="Masukkan tajuk buku"></div>
-        <div class="field"><label for="cover">Kulit Buku (imej)</label><input id="cover" type="file" accept="image/*"><span class="small">Imej dimampatkan secara automatik (lebar maks. 600px, JPEG, ≤150 KB) sebelum disimpan.</span><div id="coverPreview" class="cover-preview"></div></div>
-        <div class="field"><label for="publisher">Penerbit</label><input id="publisher" placeholder="Nama penerbit"></div>
-        <div class="field"><label for="author">Penulis *</label><input id="author" required placeholder="Nama penulis"></div>
-        <div class="field"><label for="reading">Status Bacaan *</label><select id="reading" required><option>Belum dibaca</option><option>Sedang dibaca</option><option>Selesai</option></select></div>
-        <div class="field"><label for="source">Sumber *</label><select id="source" required><option value="">Pilih sumber</option><option value="Beli">Beli</option><option value="Hadiah">Hadiah</option><option value="Sumbangan">Sumbangan</option></select></div>
-        <div class="field"><label for="price">Harga (RM)</label><input id="price" type="number" min="0" step="0.01" placeholder="0.00"></div>
-        <div class="field" id="purchaseField" hidden><label for="purchase">Lokasi Pembelian *</label><input id="purchase" placeholder="Kedai / laman web / lokasi"></div>
-        <div class="field"><label for="publishPlace">Lokasi Terbit</label><input id="publishPlace" placeholder="Bandar / negara"></div>
-        <div class="field"><label for="year">Tahun Terbit</label><input id="year" type="number" min="0" max="2100" placeholder="Contoh: 2024"></div>
-      </div>
-      <div id="dupWarning" class="dup-warning" role="status" aria-live="polite" hidden></div>
-      <div class="actions"><button class="btn" type="submit" id="saveBookBtn">Simpan Buku</button><button class="btn secondary" type="button" id="resetBookBtn">Kosongkan Borang</button></div>
-    </form>
-  </section>
-
-  <section id="loanPanel" class="panel" role="tabpanel" aria-labelledby="tab-loanPanel" tabindex="-1">
-    <h2>Rekod Pinjaman</h2><p class="sub">Pilih buku untuk mengaitkan rekod pinjaman dengan koleksi anda.</p><p id="loanDraftStatus" class="small" role="status" aria-live="polite">Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.</p>
-    <form id="loanForm">
-      <input type="hidden" id="loanId">
-      <div class="grid">
-        <div class="field"><label for="loanBook">Buku *</label><select id="loanBook" required><option value="">Pilih buku</option></select></div>
-        <div class="field"><label for="borrower">Nama Peminjam *</label><input id="borrower" required placeholder="Nama peminjam"></div>
-        <div class="field"><label for="loanStatus">Status Pinjaman *</label><select id="loanStatus" required><option>Dipinjam</option><option>Dalam Simpanan</option></select></div>
-        <div class="field"><label for="borrowDate">Tarikh Dipinjam</label><input id="borrowDate" type="date"></div>
-        <div class="field"><label for="returnDate">Tarikh Dipulangkan</label><input id="returnDate" type="date"></div>
-      </div>
-      <div class="actions"><button class="btn" type="submit" id="saveLoanBtn">Simpan Rekod Pinjaman</button><button class="btn secondary" type="button" id="resetLoanBtn">Kosongkan Borang</button></div>
-    </form>
-    <div class="toolbar no-print"><input id="loanSearch" placeholder="Cari peminjam atau tajuk buku..."></div>
-    <div class="table-wrap"><table><thead><tr><th>Buku</th><th>Nama Peminjam</th><th>Status</th><th>Tarikh Dipinjam</th><th>Tarikh Dipulangkan</th><th class="no-print">Tindakan</th></tr></thead><tbody id="loanRows"></tbody></table></div>
+    <div class="dash-card value-section"><h3>Analisis nilai koleksi</h3><div id="valueAnalysis"><p class="small">Belum ada rekod harga.</p></div></div>
   </section>
 
   <section id="collectionPanel" class="panel" role="tabpanel" aria-labelledby="tab-collectionPanel" tabindex="-1">
     <div class="print-heading"><h1 id="printHeadingTitle">Perpustakaan Mini Muhammad Asyraf Azizan — Koleksi Buku</h1><p>Senarai koleksi peribadi</p></div>
-    <h2 class="no-print">Koleksi Buku</h2><p class="sub no-print">Semua buku yang telah disimpan dipaparkan di sini.</p>
-    <div class="statrow no-print"><div class="stat"><span>Jumlah buku</span><strong id="totalBooks">0</strong></div><div class="stat"><span>Sedang dipinjam</span><strong id="totalLoans">0</strong></div><div class="stat"><span>Jumlah harga direkodkan</span><strong id="totalValue">RM 0.00</strong></div><button type="button" class="stat stat-btn" id="dupStatBtn" aria-pressed="false" title="Tapis buku yang mungkin berganda"><span>Kemungkinan berganda</span><strong id="totalDupes">0</strong></button></div>
-    <div class="toolbar no-print"><input id="bookSearch" placeholder="Cari tajuk/penulis, ISBN, penerbit..."><select id="filterGenre"><option value="">Semua kategori</option></select><select id="filterReading"><option value="">Semua status bacaan</option><option>Belum dibaca</option><option>Sedang dibaca</option><option>Selesai</option></select><select id="sortBooks" aria-label="Isih koleksi"></select><label class="check" for="filterDupes"><input type="checkbox" id="filterDupes"> Berganda sahaja</label><button class="btn" id="printBtn" type="button">Cetak Koleksi (A4)</button><div class="view-switch"><button type="button" class="btn secondary selected" id="tableViewBtn" aria-pressed="true">☷ Jadual</button><button type="button" class="btn secondary" id="galleryViewBtn" aria-pressed="false">▦ Galeri</button></div></div>
+    <h2 class="no-print">Koleksi Buku</h2><p class="sub no-print">Klik pada mana-mana buku untuk melihat butiran penuh.</p>
+    <div class="statrow no-print"><div class="stat"><span>Jumlah buku</span><strong id="totalBooks">0</strong></div><div class="stat"><span>Sedang dipinjamkan</span><strong id="totalLoans">0</strong></div><div class="stat"><span>Jumlah harga direkodkan</span><strong id="totalValue">RM 0.00</strong></div><button type="button" class="stat stat-btn" id="dupStatBtn" aria-pressed="false" title="Tapis buku yang mungkin berganda"><span>Kemungkinan berganda</span><strong id="totalDupes">0</strong></button></div>
+    <div class="toolbar no-print">
+      <input id="bookSearch" class="search" type="search" placeholder="Cari tajuk, penulis, ISBN, penerbit, siri atau tag…">
+      <select id="filterGenre" aria-label="Tapis kategori"><option value="">Semua kategori</option></select>
+      <select id="filterReading" aria-label="Tapis status bacaan"><option value="">Semua status bacaan</option><option>Belum dibaca</option><option>Sedang dibaca</option><option>Selesai</option></select>
+      <select id="filterTag" aria-label="Tapis tag"><option value="">Semua tag</option></select>
+      <select id="sortBooks" aria-label="Isih koleksi"></select>
+      <label class="check" for="filterDupes"><input type="checkbox" id="filterDupes"> Berganda sahaja</label>
+      <span class="spacer"></span>
+      <button class="btn secondary" id="printBtn" type="button">Cetak (A4)</button>
+      <div class="view-switch" role="group" aria-label="Paparan koleksi">
+        <button type="button" class="btn secondary selected" id="tableViewBtn" aria-pressed="true">☷ <span class="lbl-desk">Jadual</span><span class="lbl-mob">Senarai</span></button>
+        <button type="button" class="btn secondary" id="galleryViewBtn" aria-pressed="false">▦ Galeri</button>
+        <button type="button" class="btn secondary" id="shelfViewBtn" aria-pressed="false">▥ Rak</button>
+      </div>
+    </div>
     <div class="print-meta"><p id="printDate"></p></div>
     <div id="bookTableView" class="table-wrap"><table><thead><tr><th>Kulit</th><th>ID Buku</th><th>Maklumat Buku</th><th>Format / Kategori</th><th>Status Bacaan</th><th>Harga</th><th>Lokasi / Tahun Terbit</th><th>Status Pinjaman</th><th class="no-print">Tindakan</th></tr></thead><tbody id="bookRows"></tbody></table></div>
+    <div id="bookListView" class="list-view"></div>
     <div id="bookGalleryView" class="gallery-grid" style="display:none"></div>
+    <div id="shelfView" class="shelf-view"></div>
     <div class="actions no-print"><button class="btn secondary" id="exportBtn" type="button">Eksport Sandaran (.json)</button><label class="btn secondary" for="importFile" style="cursor:pointer">Import Sandaran (.json)</label><input id="importFile" type="file" accept=".json,application/json" hidden></div>
-    <p class="small no-print">Untuk cetakan: pilih “Cetak Koleksi (A4)”, kemudian pilih kertas A4 dan orientasi landskap dalam dialog cetak. Anda juga boleh memilih “Save as PDF”.</p>
+    <p class="small no-print">Untuk cetakan: pilih “Cetak (A4)”, kemudian pilih kertas A4 dan orientasi landskap. Anda juga boleh memilih “Save as PDF”.</p>
+  </section>
+
+  <section id="formPanel" class="panel" role="tabpanel" aria-labelledby="tab-formPanel" tabindex="-1">
+    <h2 id="bookFormTitle">Tambah Buku</h2><p class="sub">Medan bertanda * wajib diisi.</p><p id="bookDraftStatus" class="small" role="status" aria-live="polite">Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.</p>
+    <form id="bookForm">
+      <input type="hidden" id="bookId">
+      <fieldset class="group"><legend>Maklumat asas</legend><div class="grid">
+        <div class="field"><label for="title">Nama Buku *</label><input id="title" required placeholder="Masukkan tajuk buku"></div>
+        <div class="field"><label for="author">Penulis *</label><input id="author" required placeholder="Nama penulis"></div>
+        <div class="field"><label for="isbn">Kod ISBN</label><input id="isbn" placeholder="Contoh: 978-..." autocomplete="off"></div>
+        <div class="field"><label for="genre">Kategori / Genre *</label><select id="genre" required><option value="">Pilih kategori</option></select></div>
+        <div class="field"><label for="format">Format Buku *</label><select id="format" required><option value="">Pilih format</option><option>Hardcover</option><option>Paperback</option><option>E-book</option></select></div>
+        <div class="field"><label for="bookCode">ID Buku (automatik)</label><input id="bookCode" readonly placeholder="Dijana apabila buku disimpan"></div>
+        <div class="field full"><label for="cover">Kulit Buku (imej)</label><input id="cover" type="file" accept="image/*"><span class="small">Imej dimampatkan secara automatik (lebar maks. 600px, JPEG, ≤150 KB) sebelum disimpan.</span><div id="coverPreview" class="cover-preview"></div></div>
+      </div></fieldset>
+      <div id="dupWarning" class="dup-warning" role="status" aria-live="polite" hidden></div>
+      <fieldset class="group"><legend>Penerbitan</legend><div class="grid">
+        <div class="field"><label for="publisher">Penerbit</label><input id="publisher" placeholder="Nama penerbit"></div>
+        <div class="field"><label for="publishPlace">Lokasi Terbit</label><input id="publishPlace" placeholder="Bandar / negara"></div>
+        <div class="field"><label for="year">Tahun Terbit</label><input id="year" type="number" min="0" max="2100" placeholder="Contoh: 2024"></div>
+        <div class="field"><label for="edition">Edisi / Cetakan</label><input id="edition" placeholder="Contoh: Edisi ke-2, cetakan ke-5"></div>
+        <div class="field"><label for="language">Bahasa</label><select id="language"><option value="">Pilih bahasa</option><option>Bahasa Melayu</option><option>Bahasa Inggeris</option><option>Bahasa Arab</option><option>Bahasa Indonesia</option><option>Bahasa Cina</option><option>Bahasa Tamil</option><option>Dwibahasa</option><option>Lain-lain</option></select></div>
+        <div class="field"><label for="pages">Bilangan Halaman</label><input id="pages" type="number" min="1" max="20000" placeholder="Contoh: 320"></div>
+      </div></fieldset>
+      <fieldset class="group"><legend>Siri</legend><div class="grid">
+        <div class="field"><label for="series">Nama Siri</label><input id="series" list="seriesSuggestions" placeholder="Contoh: Tetralogi Buru"><datalist id="seriesSuggestions"></datalist></div>
+        <div class="field"><label for="volume">Jilid ke-</label><input id="volume" type="number" min="0" step="any" placeholder="Contoh: 2"></div>
+        <div class="field"><label for="seriesTotal">Jumlah Jilid dalam Siri</label><input id="seriesTotal" type="number" min="1" placeholder="Jika diketahui"></div>
+      </div></fieldset>
+      <fieldset class="group"><legend>Pemerolehan &amp; keadaan</legend><div class="grid">
+        <div class="field"><label for="source">Sumber *</label><select id="source" required><option value="">Pilih sumber</option><option value="Beli">Beli</option><option value="Hadiah">Hadiah</option><option value="Sumbangan">Sumbangan</option></select></div>
+        <div class="field" id="purchaseField" hidden><label for="purchase">Lokasi Pembelian *</label><input id="purchase" placeholder="Kedai / laman web / lokasi"></div>
+        <div class="field"><label for="price">Harga (RM)</label><input id="price" type="number" min="0" step="0.01" placeholder="0.00"></div>
+        <div class="field"><label for="condition">Keadaan Buku</label><select id="condition"><option value="">Pilih keadaan</option><option>Baharu</option><option>Sangat baik</option><option>Baik</option><option>Sederhana</option><option>Rosak</option></select></div>
+      </div></fieldset>
+      <fieldset class="group"><legend>Status &amp; tag</legend><div class="grid">
+        <div class="field"><label for="reading">Status Bacaan *</label><select id="reading" required><option>Belum dibaca</option><option>Sedang dibaca</option><option>Selesai</option></select></div>
+        <div class="field" style="grid-column:span 2"><label for="tagEntry">Tag</label><div class="tag-box" id="tagBox"><span id="tagChips" class="chips"></span><input id="tagEntry" list="tagSuggestions" placeholder="Taip tag, tekan Enter atau koma" autocomplete="off"></div><datalist id="tagSuggestions"></datalist><input type="hidden" id="tags"><span class="small">Contoh: bertandatangan, hadiah ayah, edisi terhad</span></div>
+      </div></fieldset>
+      <div class="actions form-actions"><button class="btn" type="submit" id="saveBookBtn">Simpan Buku</button><button class="btn secondary" type="button" id="resetBookBtn">Kosongkan Borang</button></div>
+    </form>
+  </section>
+
+  <section id="loanPanel" class="panel" role="tabpanel" aria-labelledby="tab-loanPanel" tabindex="-1">
+    <h2>Pinjaman</h2><p class="sub">Rekod buku anda yang dipinjamkan kepada orang lain, dan buku orang lain yang anda pinjam.</p>
+    <div class="subtabs" role="tablist" aria-label="Jenis pinjaman"><button type="button" role="tab" id="lendTabBtn" aria-selected="true" data-sub="lendSection">Saya pinjamkan</button><button type="button" role="tab" id="borrowTabBtn" aria-selected="false" data-sub="borrowSection">Saya pinjam</button></div>
+    <div id="lendSection">
+      <p id="loanDraftStatus" class="small" role="status" aria-live="polite">Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.</p>
+      <form id="loanForm">
+        <input type="hidden" id="loanId">
+        <div class="grid">
+          <div class="field"><label for="loanBook">Buku *</label><select id="loanBook" required><option value="">Pilih buku</option></select></div>
+          <div class="field"><label for="borrower">Nama Peminjam *</label><input id="borrower" required placeholder="Nama peminjam"></div>
+          <div class="field"><label for="loanStatus">Status Pinjaman *</label><select id="loanStatus" required><option>Dipinjam</option><option>Dalam Simpanan</option></select></div>
+          <div class="field"><label for="borrowDate">Tarikh Dipinjam</label><input id="borrowDate" type="date"></div>
+          <div class="field"><label for="returnDate">Tarikh Dipulangkan</label><input id="returnDate" type="date"></div>
+        </div>
+        <div class="actions"><button class="btn" type="submit" id="saveLoanBtn">Simpan Rekod Pinjaman</button><button class="btn secondary" type="button" id="resetLoanBtn">Kosongkan Borang</button></div>
+      </form>
+      <div class="toolbar no-print"><input id="loanSearch" class="search" type="search" placeholder="Cari peminjam atau tajuk buku…"></div>
+      <div class="table-wrap"><table><thead><tr><th>Buku</th><th>Nama Peminjam</th><th>Status</th><th>Tarikh Dipinjam</th><th>Tarikh Dipulangkan</th><th class="no-print">Tindakan</th></tr></thead><tbody id="loanRows"></tbody></table></div>
+    </div>
+    <div id="borrowSection" hidden>
+      <form id="borrowForm">
+        <input type="hidden" id="borrowId">
+        <div class="grid">
+          <div class="field"><label for="bTitle">Tajuk Buku *</label><input id="bTitle" required placeholder="Tajuk buku yang dipinjam"></div>
+          <div class="field"><label for="bAuthor">Penulis</label><input id="bAuthor" placeholder="Nama penulis"></div>
+          <div class="field"><label for="bIsbn">ISBN</label><input id="bIsbn" placeholder="Jika ada" autocomplete="off"></div>
+          <div class="field"><label for="bLender">Dipinjam daripada *</label><input id="bLender" required list="lenderSuggestions" placeholder="Nama orang / perpustakaan"><datalist id="lenderSuggestions"></datalist></div>
+          <div class="field"><label for="bLenderType">Jenis pemilik</label><select id="bLenderType"><option>Kawan / keluarga</option><option>Perpustakaan awam</option><option>Perpustakaan sekolah / universiti</option><option>Lain-lain</option></select></div>
+          <div class="field"><label for="bDate">Tarikh Pinjam</label><input id="bDate" type="date"></div>
+          <div class="field"><label for="bDue">Perlu Dipulangkan Pada</label><input id="bDue" type="date"></div>
+          <div class="field"><label for="bReturned">Tarikh Dipulangkan</label><input id="bReturned" type="date"></div>
+          <div class="field"><label for="bNote">Nota</label><input id="bNote" placeholder="Contoh: No. kad perpustakaan, keadaan buku"></div>
+        </div>
+        <div class="actions"><button class="btn" type="submit" id="saveBorrowBtn">Simpan</button><button class="btn secondary" type="button" id="resetBorrowBtn">Kosongkan Borang</button></div>
+      </form>
+      <div class="toolbar no-print"><input id="borrowSearch" class="search" type="search" placeholder="Cari tajuk atau pemilik…"><label class="check" for="showReturned"><input type="checkbox" id="showReturned"> Papar yang telah dipulangkan</label></div>
+      <div class="table-wrap"><table><thead><tr><th>Buku</th><th>Dipinjam daripada</th><th>Tarikh Pinjam</th><th>Perlu Dipulangkan</th><th>Status</th><th class="no-print">Tindakan</th></tr></thead><tbody id="borrowRows"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="wishlistPanel" class="panel" role="tabpanel" aria-labelledby="tab-wishlistPanel" tabindex="-1">
+    <h2>Senarai Hajat</h2><p class="sub">Buku yang ingin dibeli. Buku boleh ditambah di sini atau terus dari aplikasi Semak Katalog (PWA) apabila imbasan menunjukkan "Belum ada".</p>
+    <form id="wishForm">
+      <input type="hidden" id="wishId">
+      <div class="grid">
+        <div class="field"><label for="wTitle">Tajuk *</label><input id="wTitle" required placeholder="Tajuk buku"></div>
+        <div class="field"><label for="wAuthor">Penulis</label><input id="wAuthor" placeholder="Nama penulis"></div>
+        <div class="field"><label for="wIsbn">ISBN</label><input id="wIsbn" placeholder="Jika ada" autocomplete="off"></div>
+        <div class="field"><label for="wPrice">Harga Sasaran (RM)</label><input id="wPrice" type="number" min="0" step="0.01" placeholder="0.00"></div>
+        <div class="field"><label for="wShop">Kedai / Pautan</label><input id="wShop" placeholder="Contoh: MPH, Shopee"></div>
+        <div class="field"><label for="wNote">Nota</label><input id="wNote" placeholder="Contoh: tunggu jualan PBAKL"></div>
+      </div>
+      <div class="actions"><button class="btn" type="submit" id="saveWishBtn">Tambah ke Senarai Hajat</button><button class="btn secondary" type="button" id="resetWishBtn">Kosongkan Borang</button></div>
+    </form>
+    <div class="toolbar no-print"><input id="wishSearch" class="search" type="search" placeholder="Cari dalam senarai hajat…"></div>
+    <div class="table-wrap"><table><thead><tr><th>Buku</th><th>ISBN</th><th>Harga Sasaran</th><th>Kedai / Nota</th><th>Ditambah</th><th class="no-print">Tindakan</th></tr></thead><tbody id="wishRows"></tbody></table></div>
+  </section>
+
+  <section id="categoryPanel" class="panel" role="tabpanel" aria-labelledby="tab-categoryPanel" tabindex="-1">
+    <h2>Pengurusan Kategori dan Subkategori</h2>
+    <p class="sub">Urus kategori koleksi di sini. Kategori sedia ada dikekalkan secara automatik.</p>
+    <div class="dash-card" style="margin-bottom:16px">
+      <h3 id="categoryFormTitle">Tambah kategori baharu</h3>
+      <div class="grid">
+        <div class="field"><label for="categoryName">Nama kategori *</label><input id="categoryName" maxlength="60" placeholder="Contoh: Pendidikan"></div>
+        <div class="field"><label for="categoryParent">Kategori induk (pilihan)</label><select id="categoryParent"><option value="">Tiada — kategori utama</option></select></div>
+      </div>
+      <div class="actions"><button class="btn" id="saveCategoryBtn" type="button">Simpan Kategori</button><button class="btn secondary" id="cancelCategoryBtn" type="button">Kosongkan</button></div>
+      <p class="small" id="categoryStatus" role="status" aria-live="polite">Kategori disimpan pada peranti ini dan disertakan dalam penyegerakan awan selepas log masuk.</p>
+    </div>
+    <div class="table-wrap"><table style="min-width:560px"><thead><tr><th>Kategori / Subkategori</th><th>Bilangan buku</th><th>Tindakan</th></tr></thead><tbody id="categoryRows"></tbody></table></div>
   </section>
 
   <section id="syncPanel" class="panel" role="tabpanel" aria-labelledby="tab-syncPanel" tabindex="-1">
-    <h2>Sync & Tetapan</h2>
-    <p class="sub">Tetapan perpustakaan, penyegerakan awan, storan peranti dan sandaran.</p>
+    <h2>Tetapan &amp; Sync</h2>
+    <p class="sub">Tetapan perpustakaan, paparan, keselamatan, penyegerakan awan, storan peranti dan sandaran.</p>
     <div class="dash-card" style="margin-bottom:16px">
       <h3>Tetapan perpustakaan</h3>
       <div class="grid">
@@ -186,6 +463,24 @@ details summary{cursor:pointer;font-weight:650}
       </div>
       <div class="actions"><button class="btn" id="saveLibraryNameBtn" type="button">Simpan nama</button></div>
       <p class="small" id="libraryNameStatus" role="status" aria-live="polite">Nama ini dipaparkan pada tajuk sistem, cetakan koleksi dan rekod buku. Ia turut disegerakkan ke peranti lain.</p>
+    </div>
+    <div class="dash-card" style="margin-bottom:16px">
+      <h3>Paparan</h3>
+      <div class="grid">
+        <div class="field"><label for="themeSelect">Tema</label><select id="themeSelect"><option value="auto">Ikut tetapan peranti</option><option value="light">Cerah</option><option value="dark">Gelap</option></select></div>
+      </div>
+      <p class="small">Tetapan tema disimpan pada peranti ini sahaja.</p>
+    </div>
+    <div class="dash-card" style="margin-bottom:16px">
+      <h3>Kunci PIN</h3>
+      <p class="small" id="pinStatus">Kunci PIN belum diaktifkan pada peranti ini.</p>
+      <div class="grid">
+        <div class="field"><label for="pinNew">PIN baharu (4–8 digit)</label><input id="pinNew" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="new-password"></div>
+        <div class="field"><label for="pinConfirm">Sahkan PIN</label><input id="pinConfirm" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="new-password"></div>
+        <div class="field"><label for="pinTimeout">Kunci automatik selepas tidak aktif</label><select id="pinTimeout"><option value="1">1 minit</option><option value="5" selected>5 minit</option><option value="15">15 minit</option><option value="30">30 minit</option><option value="0">Hanya apabila dibuka semula</option></select></div>
+      </div>
+      <div class="actions"><button class="btn" id="savePinBtn" type="button">Simpan PIN</button><button class="btn danger" id="removePinBtn" type="button" hidden>Buang PIN</button></div>
+      <p class="small" style="margin-top:10px">PIN menghalang orang lain membuka sistem pada peranti ini (contohnya komputer keluarga). Ia tidak menyulitkan data. Jika terlupa PIN, anda boleh membuangnya dengan kata laluan akaun awan (jika disambungkan).</p>
     </div>
     <div class="dash-card" style="margin-bottom:16px">
       <h3>1. Sambungan pangkalan data</h3>
@@ -236,34 +531,26 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       <div class="table-wrap" style="margin-top:10px"><table style="min-width:560px"><thead><tr><th>Tarikh sandaran</th><th>Sebab</th><th>Kandungan</th><th>Tindakan</th></tr></thead><tbody id="backupRows"><tr><td colspan="4" class="empty">Memuatkan…</td></tr></tbody></table></div>
     </div>
   </section>
-
-
-  <section id="categoryPanel" class="panel" role="tabpanel" aria-labelledby="tab-categoryPanel" tabindex="-1">
-    <h2>Pengurusan Kategori dan Subkategori</h2>
-    <p class="sub">Urus kategori koleksi di sini. Kategori sedia ada dikekalkan secara automatik.</p>
-    <div class="dash-card" style="margin-bottom:16px">
-      <h3 id="categoryFormTitle">Tambah kategori baharu</h3>
-      <div class="grid">
-        <div class="field"><label for="categoryName">Nama kategori *</label><input id="categoryName" maxlength="60" placeholder="Contoh: Pendidikan"></div>
-        <div class="field"><label for="categoryParent">Kategori induk (pilihan)</label><select id="categoryParent"><option value="">Tiada — kategori utama</option></select></div>
-      </div>
-      <div class="actions">
-        <button class="btn" id="saveCategoryBtn" type="button">Simpan Kategori</button>
-        <button class="btn secondary" id="cancelCategoryBtn" type="button">Kosongkan</button>
-      </div>
-      <p class="small" id="categoryStatus" role="status" aria-live="polite">Kategori disimpan pada peranti ini dan disertakan dalam penyegerakan awan selepas log masuk.</p>
-    </div>
-    <div class="table-wrap">
-      <table style="min-width:560px">
-        <thead><tr><th>Kategori / Subkategori</th><th>Bilangan buku</th><th>Tindakan</th></tr></thead>
-        <tbody id="categoryRows"></tbody>
-      </table>
-    </div>
-  </section>
-
   <div id="toast" class="toast no-print" role="status" aria-live="polite" hidden><span id="toastText"></span><button type="button" id="toastAction" hidden>Buat asal</button></div>
   <dialog id="choiceDialog" class="choice"><p id="choiceText"></p><div class="actions" id="choiceActions"></div></dialog>
+  <dialog id="bookDialog" class="book-dialog" aria-labelledby="bdTitle"><div class="bd-head"><strong class="small">Butiran buku</strong><button type="button" class="btn secondary small-btn" id="bdCloseBtn">Tutup ✕</button></div><div class="bd-body" id="bdBody"></div><div class="bd-actions" id="bdActions"></div></dialog>
 </main>
+<nav class="bottom-nav no-print" aria-label="Navigasi utama">
+  <button type="button" data-go="dashboardPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Utama</button>
+  <button type="button" data-go="collectionPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zm0 0a2 2 0 0 0 2 2h13"/></svg>Koleksi</button>
+  <button type="button" data-go="formPanel" class="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Tambah</button>
+  <button type="button" data-go="loanPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h13l-3-3M17 17H4l3 3"/></svg>Pinjaman</button>
+  <button type="button" data-go="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Lagi</button>
+</nav>
+<div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+<div class="sheet" id="moreSheet" hidden role="dialog" aria-label="Menu lain">
+  <div class="handle"></div>
+  <button type="button" data-go="wishlistPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>Senarai Hajat</button>
+  <button type="button" data-go="categoryPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h7l2 2h9v10H3z"/></svg>Kategori</button>
+  <button type="button" data-go="syncPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg>Tetapan &amp; Sync</button>
+  <button type="button" data-go="theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span id="sheetThemeLabel">Tukar tema</span></button>
+  <button type="button" data-go="lock" id="sheetLockBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Kunci sekarang</button>
+</div>
 <script>
 (() => {
   'use strict';
@@ -280,13 +567,15 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     LEGACY_LOANS: 'perpustakaanMini_v1_loans',
     LEGACY_CATS: 'perpustakaanMini_v1_categories',
     LEGACY_BACKUP: 'perpustakaanMini_beforeCloudPull_v1',
-    LEGACY_DIRTY: 'perpustakaanMini_cloudDirty_v1'
+    LEGACY_DIRTY: 'perpustakaanMini_cloudDirty_v1',
+    PIN: 'perpustakaanMini_pin_v1'
   };
   const DEFAULT_NAME = 'Perpustakaan Mini Muhammad Asyraf Azizan';
   const DEFAULT_CATEGORIES = ['Fiksyen', 'Biografi', 'Agama', 'Sejarah', 'Sains', 'Perniagaan'];
   const CODE_PREFIX = 'MAA', COVER_BUCKET = 'covers', MAX_BACKUPS = 7, TOMBSTONE_DAYS = 180;
   const EPOCH = '2000-01-01T00:00:00.000Z';
-  const TYPES = ['books', 'loans', 'categories'];
+  const TYPES = ['books', 'loans', 'categories', 'wishlist', 'borrowings'];
+  const emptyDels = () => Object.fromEntries(TYPES.map(t => [t, {}]));
 
   // ---------- Utiliti ----------
   function lsGet(k, f) { try { const x = localStorage.getItem(k); return x ? JSON.parse(x) : f; } catch (e) { return f; } }
@@ -342,15 +631,16 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   let store = null;
 
   // ---------- Keadaan ----------
-  let books = [], loans = [], categories = [];
-  let deletions = { books: {}, loans: {}, categories: {} };
+  let books = [], loans = [], categories = [], wishlist = [], borrowings = [];
+  let deletions = emptyDels();
   let settings = { libraryName: DEFAULT_NAME, updatedAt: EPOCH };
   let pendingCoverRemovals = [];
   let currentCover = '', editingCategoryId = '';
-  const list = type => (type === 'books' ? books : type === 'loans' ? loans : categories);
+  const list = type => ({ books, loans, categories, wishlist, borrowings })[type];
+  function setLists(r) { books = r.books; loans = r.loans; categories = r.categories; wishlist = r.wishlist; borrowings = r.borrowings; }
 
   let saveChain = Promise.resolve();
-  function snapshot() { return { schema: 2, books: books.map(({ cover, ...rest }) => rest), loans, categories, deletions, settings, pendingCoverRemovals }; }
+  function snapshot() { return { schema: 3, books: books.map(({ cover, ...rest }) => rest), loans, categories, wishlist, borrowings, deletions, settings, pendingCoverRemovals }; }
   function persist({ sync = true } = {}) {
     const snap = JSON.parse(JSON.stringify(snapshot()));
     saveChain = saveChain.then(() => store.put('kv', 'data', snap)).catch(e => { console.error(e); toast('Rekod tidak dapat disimpan: ' + (e.message || e) + '. Eksport sandaran segera.'); });
@@ -363,7 +653,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   }
 
   // ---------- Pembersihan & normalisasi data ----------
-  const BOOK_FIELDS = ['bookCode', 'format', 'genre', 'categoryId', 'isbn', 'title', 'publisher', 'author', 'reading', 'price', 'source', 'purchase', 'publishPlace', 'year', 'coverHash', 'coverPath', 'coverUploaded', 'dupOk', 'createdAt', 'updatedAt'];
+  const BOOK_FIELDS = ['bookCode', 'format', 'genre', 'categoryId', 'isbn', 'title', 'publisher', 'author', 'reading', 'price', 'source', 'purchase', 'publishPlace', 'year', 'coverHash', 'coverPath', 'coverUploaded', 'dupOk', 'tags', 'edition', 'language', 'pages', 'condition', 'series', 'volume', 'seriesTotal', 'createdAt', 'updatedAt'];
   const LOAN_FIELDS = ['bookId', 'borrower', 'status', 'borrowDate', 'returnDate', 'createdAt', 'updatedAt'];
   function cleanBook(raw, recomputeHash) {
     if (!raw || typeof raw !== 'object') return null;
@@ -380,6 +670,19 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     if (!l.status) l.status = 'Dipinjam';
     return normTimes(l);
   }
+  const WISH_FIELDS = ['title', 'author', 'isbn', 'targetPrice', 'shop', 'note', 'origin', 'createdAt', 'updatedAt'];
+  const BORROW_FIELDS = ['title', 'author', 'isbn', 'lender', 'lenderType', 'borrowDate', 'dueDate', 'returnDate', 'note', 'createdAt', 'updatedAt'];
+  function cleanGeneric(fields, required) {
+    return raw => {
+      if (!raw || typeof raw !== 'object') return null;
+      const r = { id: str(raw.id).trim() || newId('') };
+      fields.forEach(k => { r[k] = str(raw[k]); });
+      if (required && !r[required].trim()) return null;
+      return normTimes(r);
+    };
+  }
+  const cleanWish = cleanGeneric(WISH_FIELDS, 'title'), cleanBorrow = cleanGeneric(BORROW_FIELDS, 'title');
+  const parseTags = v => [...new Set(str(v).split(',').map(t => t.trim().replace(/\s+/g, ' ')).filter(Boolean).map(t => t.slice(0, 40)))];
   function cleanCategory(raw) {
     if (!raw || typeof raw !== 'object') return null;
     const name = str(raw.name).trim().replace(/\s+/g, ' ').slice(0, 60);
@@ -387,7 +690,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     return normTimes({ id: str(raw.id).trim() || newId('cat'), name, parent: str(raw.parent), createdAt: str(raw.createdAt), updatedAt: str(raw.updatedAt) });
   }
   function cleanDeletions(d) {
-    const out = { books: {}, loans: {}, categories: {} };
+    const out = emptyDels();
     if (d && typeof d === 'object') TYPES.forEach(t => { const src = d[t]; if (src && typeof src === 'object') Object.entries(src).forEach(([id, ts]) => { if (typeof ts === 'string') out[t][id] = ts; }); });
     return out;
   }
@@ -402,6 +705,9 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       books: arr(p.books).map(b => cleanBook(b, recomputeHash)).filter(Boolean),
       loans: arr(p.loans).map(cleanLoan).filter(Boolean),
       categories: Array.isArray(p.categories) ? p.categories.map(cleanCategory).filter(Boolean) : null,
+      wishlist: arr(p.wishlist).map(cleanWish).filter(Boolean),
+      borrowings: arr(p.borrowings).map(cleanBorrow).filter(Boolean),
+      hasWishlist: Array.isArray(p.wishlist), hasBorrowings: Array.isArray(p.borrowings),
       deletions: cleanDeletions(p.deletions),
       settings: null
     };
@@ -467,7 +773,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     return [...m.values()].filter(x => { const d = dels[x.id]; return !d || d < str(x.updatedAt); });
   }
   function mergeDeletions(a, b) {
-    const out = { books: {}, loans: {}, categories: {} };
+    const out = emptyDels();
     TYPES.forEach(t => [a[t] || {}, b[t] || {}].forEach(src => Object.entries(src).forEach(([id, ts]) => { if (!out[t][id] || ts > out[t][id]) out[t][id] = ts; })));
     return out;
   }
@@ -488,6 +794,8 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       books = mergeById(books, r.books, deletions.books);
       loans = mergeById(loans, r.loans, deletions.loans);
       categories = mergeById(categories, r.categories, deletions.categories);
+      wishlist = mergeById(wishlist, r.wishlist, deletions.wishlist);
+      borrowings = mergeById(borrowings, r.borrowings, deletions.borrowings);
       if (r.settings && str(r.settings.updatedAt) > str(settings.updatedAt)) settings = r.settings;
     }
     const notes = fixIntegrity();
@@ -521,14 +829,19 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   const ui = lsGet(LS.UI, {}) || {};
   function saveUi(patch) { Object.assign(ui, patch); lsSet(LS.UI, ui); }
   const tabs = [...document.querySelectorAll('.tab')];
+  const bottomBtns = [...document.querySelectorAll('.bottom-nav [data-go]')];
   function showTab(id, { focus = false } = {}) {
     if (!tabs.some(t => t.dataset.tab === id)) id = 'dashboardPanel';
     if ($('formPanel').classList.contains('active')) saveDraft('book');
     if ($('loanPanel').classList.contains('active')) saveDraft('loan');
     tabs.forEach(b => { const on = b.dataset.tab === id; b.classList.toggle('active', on); b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
     document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+    const inMore = ['wishlistPanel', 'categoryPanel', 'syncPanel'].includes(id);
+    bottomBtns.forEach(b => b.classList.toggle('active', b.dataset.go === id || (inMore && b.dataset.go === 'more')));
+    closeSheet();
     saveUi({ tab: id });
     if (id === 'syncPanel') { refreshStorageInfo(); renderBackups(); }
+    if (window.matchMedia('(max-width:760px)').matches) window.scrollTo({ top: 0 });
   }
   tabs.forEach((b, i) => {
     b.addEventListener('click', () => showTab(b.dataset.tab));
@@ -540,15 +853,61 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       showTab(next.dataset.tab, { focus: true });
     });
   });
-  function setCollectionView(view) {
-    const gallery = view === 'gallery';
-    $('bookTableView').style.display = gallery ? 'none' : 'block'; $('bookGalleryView').style.display = gallery ? 'grid' : 'none';
-    $('tableViewBtn').classList.toggle('selected', !gallery); $('galleryViewBtn').classList.toggle('selected', gallery);
-    $('tableViewBtn').setAttribute('aria-pressed', String(!gallery)); $('galleryViewBtn').setAttribute('aria-pressed', String(gallery));
-    saveUi({ view: gallery ? 'gallery' : 'table' });
+  // Navigasi bawah & menu "Lagi" (telefon)
+  function openSheet() { $('moreSheet').hidden = false; $('sheetBackdrop').hidden = false; $('moreSheet').querySelector('button')?.focus(); }
+  function closeSheet() { $('moreSheet').hidden = true; $('sheetBackdrop').hidden = true; }
+  function goTo(target) {
+    if (target === 'more') return $('moreSheet').hidden ? openSheet() : closeSheet();
+    if (target === 'theme') { cycleTheme(); return; }
+    if (target === 'lock') { closeSheet(); lockNow(); return; }
+    if (target === 'formPanel' && !$('bookId').value) $('bookFormTitle').textContent = 'Tambah Buku';
+    showTab(target);
   }
-  $('tableViewBtn').addEventListener('click', () => setCollectionView('table'));
-  $('galleryViewBtn').addEventListener('click', () => setCollectionView('gallery'));
+  document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => goTo(b.dataset.go)));
+  $('sheetBackdrop').addEventListener('click', closeSheet);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('moreSheet').hidden) closeSheet(); });
+
+  // Paparan koleksi: jadual (senarai di telefon) / galeri / rak
+  const VIEWS = { table: 'tableViewBtn', gallery: 'galleryViewBtn', shelf: 'shelfViewBtn' };
+  function setCollectionView(view) {
+    if (!VIEWS[view]) view = 'table';
+    $('bookTableView').style.display = view === 'table' ? '' : 'none';
+    $('bookListView').style.display = ''; // dikawal oleh CSS (telefon sahaja)
+    $('bookGalleryView').style.display = view === 'gallery' ? 'grid' : 'none';
+    $('shelfView').style.display = view === 'shelf' ? 'block' : 'none';
+    document.body.classList.remove('view-table', 'view-gallery', 'view-shelf'); document.body.classList.add('view-' + view);
+    Object.entries(VIEWS).forEach(([v, id]) => { $(id).classList.toggle('selected', v === view); $(id).setAttribute('aria-pressed', String(v === view)); });
+    saveUi({ view });
+    if (view === 'shelf') renderShelf();
+  }
+  Object.entries(VIEWS).forEach(([v, id]) => $(id).addEventListener('click', () => setCollectionView(v)));
+
+  // Tema
+  const darkMq = window.matchMedia('(prefers-color-scheme: dark)');
+  function applyTheme() {
+    const t = ui.theme || 'auto', dark = t === 'dark' || (t === 'auto' && darkMq.matches);
+    document.documentElement.toggleAttribute('data-theme', dark);
+    if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#0c231f' : '#193f3b');
+    if ($('themeSelect')) $('themeSelect').value = t;
+    $('sheetThemeLabel').textContent = 'Tema: ' + ({ auto: 'ikut peranti', light: 'cerah', dark: 'gelap' })[t];
+    if (document.body.classList.contains('view-shelf')) renderShelf();
+  }
+  function cycleTheme() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    saveUi({ theme: dark ? 'light' : 'dark' }); applyTheme();
+  }
+  darkMq.addEventListener?.('change', applyTheme);
+  $('themeBtn').addEventListener('click', cycleTheme);
+  $('themeSelect').addEventListener('change', () => { saveUi({ theme: $('themeSelect').value }); applyTheme(); });
+
+  // Nota akses boleh ditutup
+  if (ui.noticeClosed) $('accessNotice').hidden = true;
+  $('closeNoticeBtn').addEventListener('click', () => { $('accessNotice').hidden = true; saveUi({ noticeClosed: true }); });
+
+  // Cip status penyegerakan
+  function setSyncChip(state, text) { const c = $('syncChip'); c.dataset.state = state; $('syncChipText').textContent = text; c.title = text + ' — klik untuk tetapan penyegerakan'; }
+  $('syncChip').addEventListener('click', () => showTab('syncPanel'));
 
   const libraryName = () => settings.libraryName || DEFAULT_NAME;
   function applyLibraryName() {
@@ -582,7 +941,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       if (isBook) {
         currentCover = safeImg(draft.cover);
         $('coverPreview').innerHTML = currentCover ? `<img alt="Pratonton kulit buku daripada draf" src="${esc(currentCover)}"><span class="small">Kulit buku daripada draf tersimpan</span>` : '';
-        togglePurchaseField(); renderDupWarning(); $('saveBookBtn').textContent = $('bookId').value ? 'Kemaskini Buku' : 'Simpan Buku';
+        togglePurchaseField(); renderTagChips(); renderDupWarning(); $('saveBookBtn').textContent = $('bookId').value ? 'Kemaskini Buku' : 'Simpan Buku'; $('bookFormTitle').textContent = $('bookId').value ? 'Kemaskini Buku · ' + $('bookCode').value : 'Tambah Buku';
       } else $('saveLoanBtn').textContent = $('loanId').value ? 'Kemaskini Rekod Pinjaman' : 'Simpan Rekod Pinjaman';
       updateDraftStatus(kind, true); return true;
     } finally { restoringDraft = false; }
@@ -631,12 +990,37 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   function formatAuthorName(value) { return String(value || '').trim().toLocaleLowerCase('ms-MY').replace(/(^|[\s\-’'])\p{L}/gu, m => m.toLocaleUpperCase('ms-MY')); }
   $('title').addEventListener('blur', () => { $('title').value = $('title').value.toLocaleUpperCase('ms-MY').trim(); });
   $('author').addEventListener('blur', () => { $('author').value = formatAuthorName($('author').value); });
-  function resetBook(clearDraft = true) { if (clearDraft) clearDraftData('book'); $('bookForm').reset(); $('bookId').value = ''; $('bookCode').value = nextBookCode(); currentCover = ''; $('coverPreview').innerHTML = ''; $('saveBookBtn').textContent = 'Simpan Buku'; togglePurchaseField(); updateDraftStatus('book', false); renderDupWarning(); }
+  function resetBook(clearDraft = true) { if (clearDraft) clearDraftData('book'); $('bookForm').reset(); $('bookId').value = ''; $('bookCode').value = nextBookCode(); currentCover = ''; $('coverPreview').innerHTML = ''; $('saveBookBtn').textContent = 'Simpan Buku'; $('bookFormTitle').textContent = 'Tambah Buku'; $('tags').value = ''; $('tagEntry').value = ''; renderTagChips(); pendingWishId = ''; togglePurchaseField(); updateDraftStatus('book', false); renderDupWarning(); }
   function resetLoan(clearDraft = true) { if (clearDraft) clearDraftData('loan'); $('loanForm').reset(); $('loanId').value = ''; $('saveLoanBtn').textContent = 'Simpan Rekod Pinjaman'; updateDraftStatus('loan', false); }
-  let savingBook = false;
+  // ---------- Tag ----------
+  const currentTags = () => parseTags($('tags').value);
+  function setTags(list) {
+    const seen = new Set(), out = [];
+    list.forEach(t => { const k = lc(t); if (k && !seen.has(k)) { seen.add(k); out.push(t); } });
+    $('tags').value = out.join(', '); renderTagChips(); scheduleDraft('book');
+  }
+  function renderTagChips() { $('tagChips').innerHTML = currentTags().map(t => `<span class="chip">${esc(t)}<button type="button" data-remove-tag="${esc(t)}" aria-label="Buang tag ${esc(t)}">×</button></span>`).join(''); }
+  function commitTagEntry() { const v = $('tagEntry').value; if (!v.trim()) return; setTags([...currentTags(), ...parseTags(v)]); $('tagEntry').value = ''; }
+  $('tagEntry').addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); commitTagEntry(); }
+    else if (e.key === 'Backspace' && !$('tagEntry').value) { const t = currentTags(); t.pop(); setTags(t); }
+  });
+  // Koma (papan kekunci telefon) atau pilihan daripada cadangan (datalist) terus menjadi tag
+  $('tagEntry').addEventListener('input', e => { if ($('tagEntry').value.includes(',') || e.inputType === 'insertReplacementText' || !e.inputType) commitTagEntry(); });
+  $('tagEntry').addEventListener('blur', commitTagEntry);
+  $('tagChips').addEventListener('click', e => { const b = e.target.closest('[data-remove-tag]'); if (b) setTags(currentTags().filter(t => t !== b.dataset.removeTag)); });
+  $('tagBox').addEventListener('click', e => { if (e.target === $('tagBox') || e.target === $('tagChips')) $('tagEntry').focus(); });
+  function allTags() {
+    const m = new Map();
+    books.forEach(b => parseTags(b.tags).forEach(t => { const k = lc(t); if (!m.has(k)) m.set(k, { name: t, count: 0 }); m.get(k).count++; }));
+    return [...m.values()].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'ms'));
+  }
+
+  let savingBook = false, pendingWishId = '';
   $('bookForm').addEventListener('submit', async e => {
     e.preventDefault();
     if (savingBook) return;
+    commitTagEntry();
     $('title').value = $('title').value.toLocaleUpperCase('ms-MY').trim();
     $('author').value = formatAuthorName($('author').value);
     const id = $('bookId').value || newId('');
@@ -663,15 +1047,21 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       categoryId: cat ? cat.id : '', genre: cat ? cat.name : '',
       isbn: $('isbn').value.trim(), title: $('title').value.trim(), publisher: $('publisher').value.trim(), author: $('author').value.trim(),
       reading: $('reading').value, price: $('price').value, source, purchase: source === 'Beli' ? $('purchase').value.trim() : '',
-      publishPlace: $('publishPlace').value.trim(), year: $('year').value, dupOk
+      publishPlace: $('publishPlace').value.trim(), year: $('year').value, dupOk,
+      tags: currentTags().join(', '), edition: $('edition').value.trim(), language: $('language').value, pages: $('pages').value,
+      condition: $('condition').value, series: $('series').value.trim().replace(/\s+/g, ' '), volume: $('volume').value, seriesTotal: $('seriesTotal').value
     });
     const cover = safeImg(currentCover) || old?.cover || '';
     if (cover !== (old?.cover || '')) { b.cover = cover; b.coverHash = cover ? hashStr(cover) : ''; b.coverUploaded = ''; saveCover(id, cover); }
     else b.cover = cover;
     touch(b);
     if (old) books = books.map(x => (x.id === id ? b : x)); else books.unshift(b);
+    // Buku yang baru dibeli: buang daripada senarai hajat
+    const wished = old ? [] : wishlist.filter(w => w.id === pendingWishId || (isbnKey(w.isbn) && isbnKey(w.isbn) === isbnKey(b.isbn)) || (textKey(w.title) === textKey(b.title) && (!textKey(w.author) || textKey(w.author) === textKey(b.author))));
+    if (wished.length) { const t = nowIso(); wishlist = wishlist.filter(w => !wished.includes(w)); wished.forEach(w => { deletions.wishlist[w.id] = t; }); }
     persist(); resetBook(true); render(); showTab('collectionPanel');
-    toast(old ? 'Buku dikemaskini.' : 'Buku ' + b.bookCode + ' disimpan.');
+    const msg = (old ? 'Buku dikemaskini.' : 'Buku ' + b.bookCode + ' disimpan.') + (wished.length ? ` Dibuang daripada senarai hajat: ${wished.map(w => w.title).join(', ')}.` : '');
+    toast(msg, wished.length ? { undo: () => { wished.forEach(w => { delete deletions.wishlist[w.id]; touch(w); wishlist.push(w); }); persist(); render(); toast('Senarai hajat dipulihkan.'); } } : {});
   });
   $('resetBookBtn').addEventListener('click', () => resetBook(true));
 
@@ -824,7 +1214,9 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     yearDesc: ['Tahun terbit (terbaru)', cmpBy(b => numOrBlank(b.year), { dir: -1, num: true })],
     yearAsc: ['Tahun terbit (terlama)', cmpBy(b => numOrBlank(b.year), { num: true })],
     priceDesc: ['Harga (tertinggi)', cmpBy(b => numOrBlank(b.price), { dir: -1, num: true })],
-    priceAsc: ['Harga (terendah)', cmpBy(b => numOrBlank(b.price), { num: true })]
+    priceAsc: ['Harga (terendah)', cmpBy(b => numOrBlank(b.price), { num: true })],
+    seriesAsc: ['Siri & jilid', (a, b) => cmpBy(x => x.series)(a, b) || cmpBy(x => numOrBlank(x.volume), { num: true })(a, b)],
+    pagesDesc: ['Bilangan halaman (terbanyak)', cmpBy(b => numOrBlank(b.pages), { dir: -1, num: true })]
   };
   $('sortBooks').innerHTML = Object.entries(SORTS).map(([k, [label]]) => `<option value="${k}">Isih: ${esc(label)}</option>`).join('');
   $('sortBooks').value = SORTS[ui.sort] ? ui.sort : 'newest';
@@ -834,50 +1226,188 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     return [...books].sort((a, b) => primary(a, b) || collator.compare(str(a.title), str(b.title)) || byNewest(a, b));
   }
   function bookName(id) { const b = books.find(x => x.id === id); return b ? `${b.title || b.author}${b.author ? ' — ' + b.author : ''}${b.isbn ? ' · ISBN ' + b.isbn : ''}` : 'Buku dipadam'; }
-  function coverImg(b, cls, alt) { const src = safeImg(b.cover); return src ? `<img${cls ? ` class="${cls}"` : ''} src="${esc(src)}" alt="${esc(alt)}">` : ''; }
+  function coverImg(b, cls, alt) { const src = safeImg(b.cover); return src ? `<img${cls ? ` class="${cls}"` : ''} src="${esc(src)}" alt="${esc(alt)}" loading="lazy">` : ''; }
   function renderBookSelect() { const sel = $('loanBook'), old = sel.value; sel.innerHTML = '<option value="">Pilih buku</option>' + [...books].sort((a, b) => str(a.bookCode).localeCompare(str(b.bookCode))).map(b => `<option value="${esc(b.id)}">${esc(b.bookCode || '')} · ${esc(b.title || b.author)}${b.author ? ' — ' + esc(b.author) : ''}</option>`).join(''); if (books.some(b => b.id === old)) sel.value = old; }
-  function renderBooks() {
-    const q = $('bookSearch').value.toLowerCase(), g = $('filterGenre').value, r = $('filterReading').value, dupOnly = $('filterDupes').checked;
-    const dupIds = duplicateIds();
-    $('totalDupes').textContent = dupIds.size; $('dupStatBtn').classList.toggle('has', dupIds.size > 0); $('dupStatBtn').setAttribute('aria-pressed', String(dupOnly));
-    const shown = sortedBooks().filter(b => (!dupOnly || dupIds.has(b.id)) && (!q || [b.bookCode, b.title, b.author, b.isbn, b.publisher, b.purchase, b.publishPlace].some(v => (v || '').toLowerCase().includes(q))) && (!g || b.categoryId === g) && (!r || b.reading === r));
-    $('totalBooks').textContent = books.length; $('totalLoans').textContent = loans.filter(l => l.status === 'Dipinjam').length; $('totalValue').textContent = 'RM ' + books.reduce((s, b) => s + (Number(b.price) || 0), 0).toFixed(2);
-    $('bookRows').innerHTML = shown.length ? shown.map(b => { const loan = loans.find(l => l.bookId === b.id && l.status === 'Dipinjam'); return `<tr><td>${coverImg(b, 'book-cover', 'Kulit buku') || '—'}</td><td><strong>${esc(b.bookCode || '—')}</strong></td><td><strong>${esc(b.title || 'Nama buku tidak diisi')}</strong>${dupIds.has(b.id) ? '<span class="pill dup">Berganda?</span>' : ''}<br><span class="small">Penulis: ${esc(b.author || '—')}</span><br><span class="small">${b.isbn ? 'ISBN: ' + esc(b.isbn) : 'ISBN tidak diisi'}</span><br><span class="small">${esc(b.publisher || 'Penerbit tidak diisi')}</span></td><td>${esc(b.format)}<br><span class="small">${esc(bookCategoryLabel(b))}</span></td><td><span class="pill">${esc(b.reading)}</span></td><td>${money(b.price)}</td><td>${esc(b.publishPlace || '—')}<br><span class="small">${esc(b.year || 'Tahun tidak diisi')}</span></td><td>${loan ? `Dipinjam oleh ${esc(loan.borrower)}` : 'Dalam Simpanan'}</td><td class="no-print"><button class="btn secondary" type="button" data-edit-book="${esc(b.id)}">Edit</button> <button class="btn secondary" type="button" data-print-book="${esc(b.id)}">Cetak</button> <button class="btn danger" type="button" data-delete-book="${esc(b.id)}">Padam</button></td></tr>`; }).join('') : '<tr><td colspan="9" class="empty">Tiada rekod buku ditemui. Tambah buku melalui tab Borang Maklumat Buku.</td></tr>';
-    $('bookGalleryView').innerHTML = shown.length ? shown.map(b => { const loan = loans.find(l => l.bookId === b.id && l.status === 'Dipinjam'); return `<article class="gallery-card"><div class="gallery-cover">${coverImg(b, '', 'Kulit buku ' + (b.title || '')) || `<span class="cover-letter">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</span>`}</div><div class="gallery-info"><div class="small">${esc(b.bookCode || '—')}</div><h3>${esc(b.title || 'Nama buku tidak diisi')}</h3><div class="author">${esc(b.author || 'Penulis tidak dinyatakan')}</div><div class="gallery-meta"><span>${esc(bookCategoryLabel(b) || 'Tanpa kategori')}</span><span>${esc(b.reading || 'Belum dibaca')}</span>${dupIds.has(b.id) ? '<span class="dup">Berganda?</span>' : ''}</div><div class="small">${esc(b.year || 'Tahun tidak dinyatakan')} · ${money(b.price)}</div><div class="small">${loan ? 'Dipinjam: ' + esc(loan.borrower) : 'Dalam simpanan'}</div><div class="gallery-actions"><button class="btn secondary" type="button" data-edit-book="${esc(b.id)}">Edit</button><button class="btn secondary" type="button" data-print-book="${esc(b.id)}">Cetak</button><button class="btn danger" type="button" data-delete-book="${esc(b.id)}">Padam</button></div></div></article>`; }).join('') : '<div class="empty collection-empty">Tiada buku yang sepadan dengan carian atau penapis ini.</div>';
-    if (!shown.length && books.length) $('bookRows').innerHTML = '<tr><td colspan="9" class="empty">Tiada buku yang sepadan dengan carian atau penapis ini.</td></tr>';
+
+  // ---------- Warna status ----------
+  const READING_CLS = { 'Belum dibaca': 'st-grey', 'Sedang dibaca': 'st-blue', 'Selesai': 'st-green' };
+  const readingPill = r => `<span class="pill ${READING_CLS[r] || 'st-grey'}">${esc(r || 'Belum dibaca')}</span>`;
+  const activeLoan = id => loans.find(l => l.bookId === id && l.status === 'Dipinjam');
+  function loanPill(b) { const l = activeLoan(b.id); return l ? `<span class="pill st-amber">Dipinjam: ${esc(l.borrower || '—')}</span>` : '<span class="pill st-teal">Dalam simpanan</span>'; }
+  const todayStr = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10); };
+  function borrowStatus(x) {
+    if (x.returnDate) return { label: 'Dipulangkan', cls: 'st-grey', late: false, active: false };
+    if (x.dueDate && x.dueDate < todayStr()) return { label: 'Lewat dipulangkan', cls: 'st-red', late: true, active: true };
+    return { label: 'Sedang saya pinjam', cls: 'st-purple', late: false, active: true };
   }
-  ['bookRows', 'bookGalleryView'].forEach(id => $(id).addEventListener('click', e => {
-    const t = e.target.closest('[data-edit-book],[data-print-book],[data-delete-book]'); if (!t) return;
-    if (t.dataset.editBook) editBook(t.dataset.editBook);
+  const tagChips = b => { const t = parseTags(b.tags); return t.length ? `<div class="chips" style="margin-top:5px">${t.map(x => `<span class="chip">${esc(x)}</span>`).join('')}</div>` : ''; };
+  const seriesLine = b => (b.series ? `${esc(b.series)}${b.volume ? ' #' + esc(b.volume) : ''}` : '');
+
+  // ---------- Koleksi ----------
+  let lastShown = [];
+  function filteredBooks() {
+    const q = $('bookSearch').value.toLowerCase().trim(), g = $('filterGenre').value, r = $('filterReading').value, tg = $('filterTag').value, dupOnly = $('filterDupes').checked;
+    const dupIds = duplicateIds();
+    const shown = sortedBooks().filter(b => (!dupOnly || dupIds.has(b.id)) && (!q || [b.bookCode, b.title, b.author, b.isbn, b.publisher, b.purchase, b.publishPlace, b.series, b.tags, b.edition, b.language].some(v => (v || '').toLowerCase().includes(q))) && (!g || b.categoryId === g) && (!r || b.reading === r) && (!tg || parseTags(b.tags).some(t => lc(t) === tg)));
+    return { shown, dupIds, dupOnly };
+  }
+  function renderBooks() {
+    const { shown, dupIds, dupOnly } = filteredBooks();
+    lastShown = shown;
+    $('totalDupes').textContent = dupIds.size; $('dupStatBtn').classList.toggle('has', dupIds.size > 0); $('dupStatBtn').setAttribute('aria-pressed', String(dupOnly));
+    $('totalBooks').textContent = books.length; $('totalLoans').textContent = loans.filter(l => l.status === 'Dipinjam').length; $('totalValue').textContent = 'RM ' + books.reduce((s, b) => s + (Number(b.price) || 0), 0).toFixed(2);
+    const dupBadge = b => (dupIds.has(b.id) ? ' <span class="pill st-amber">Berganda?</span>' : '');
+    const emptyMsg = books.length ? 'Tiada buku yang sepadan dengan carian atau penapis ini.' : 'Belum ada buku. Tekan "Tambah Buku" untuk mendaftar buku pertama.';
+    $('bookRows').innerHTML = shown.length ? shown.map(b => `<tr><td>${coverImg(b, 'book-cover', 'Kulit buku') || '—'}</td><td><strong>${esc(b.bookCode || '—')}</strong></td><td><button type="button" class="linklike" data-open-book="${esc(b.id)}">${esc(b.title || 'Nama buku tidak diisi')}</button>${dupBadge(b)}<br><span class="small">Penulis: ${esc(b.author || '—')}</span><br><span class="small">${b.isbn ? 'ISBN: ' + esc(b.isbn) : 'ISBN tidak diisi'}</span>${b.series ? `<br><span class="small">Siri: ${seriesLine(b)}</span>` : ''}${tagChips(b)}</td><td>${esc(b.format)}<br><span class="small">${esc(bookCategoryLabel(b))}</span>${b.language ? `<br><span class="small">${esc(b.language)}</span>` : ''}</td><td>${readingPill(b.reading)}</td><td>${money(b.price)}</td><td>${esc(b.publishPlace || '—')}<br><span class="small">${esc(b.year || 'Tahun tidak diisi')}</span></td><td>${loanPill(b)}</td><td class="no-print"><button class="btn secondary small-btn" type="button" data-edit-book="${esc(b.id)}">Edit</button> <button class="btn secondary small-btn" type="button" data-print-book="${esc(b.id)}">Cetak</button> <button class="btn danger small-btn" type="button" data-delete-book="${esc(b.id)}">Padam</button></td></tr>`).join('') : `<tr><td colspan="9" class="empty">${emptyMsg}</td></tr>`;
+    $('bookListView').innerHTML = shown.length ? shown.map(b => `<button type="button" class="list-card" data-open-book="${esc(b.id)}">${coverImg(b, '', '') || `<span class="ph">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</span>`}<span><strong>${esc(b.title || 'Nama buku tidak diisi')}</strong><span class="small">${esc(b.author || '—')} · ${esc(b.bookCode || '')}</span><span class="meta">${readingPill(b.reading)}${activeLoan(b.id) ? loanPill(b) : ''}${dupBadge(b)}</span></span></button>`).join('') : `<div class="empty">${emptyMsg}</div>`;
+    $('bookGalleryView').innerHTML = shown.length ? shown.map(b => `<button type="button" class="gallery-card" data-open-book="${esc(b.id)}"><div class="gallery-cover">${coverImg(b, '', 'Kulit buku ' + (b.title || '')) || `<span class="cover-letter">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</span>`}</div><div class="gallery-info"><div class="small">${esc(b.bookCode || '—')}${b.series ? ' · ' + seriesLine(b) : ''}</div><h3>${esc(b.title || 'Nama buku tidak diisi')}</h3><div class="author">${esc(b.author || 'Penulis tidak dinyatakan')}</div><div class="gallery-meta">${readingPill(b.reading)}${activeLoan(b.id) ? loanPill(b) : ''}${dupBadge(b)}</div><div class="small">${esc(bookCategoryLabel(b) || 'Tanpa kategori')} · ${money(b.price)}</div></div></button>`).join('') : `<div class="empty collection-empty">${emptyMsg}</div>`;
+    if (document.body.classList.contains('view-shelf')) renderShelf();
+  }
+  ['bookRows', 'bookListView', 'bookGalleryView', 'shelfView', 'recentBooks'].forEach(id => $(id).addEventListener('click', e => {
+    const t = e.target.closest('[data-open-book],[data-edit-book],[data-print-book],[data-delete-book]'); if (!t) return;
+    if (t.dataset.openBook) openBookDetail(t.dataset.openBook);
+    else if (t.dataset.editBook) editBook(t.dataset.editBook);
     else if (t.dataset.printBook) printBookRecord(t.dataset.printBook);
     else if (t.dataset.deleteBook) deleteBook(t.dataset.deleteBook);
   }));
+
+  // ---------- Rak maya ----------
+  const spineColors = new Map(), colorQueue = [];
+  let colorBusy = false;
+  const hueColor = s => `hsl(${Math.round((parseInt(hashStr(lc(s)).split('-')[0], 16) * 137.508) % 360)} 36% 36%)`; // sudut emas: warna bersebelahan lebih berbeza
+  function spineColor(b) {
+    const k = b.id + '|' + b.coverHash;
+    if (spineColors.has(k)) return spineColors.get(k);
+    if (b.cover && !colorQueue.some(x => x.k === k)) { colorQueue.push({ b, k }); if (!colorBusy) processColors(); }
+    return hueColor(b.title || b.id);
+  }
+  async function processColors() {
+    colorBusy = true; let changed = false;
+    while (colorQueue.length) {
+      const { b, k } = colorQueue.shift();
+      try {
+        const img = await loadImage(b.cover), c = document.createElement('canvas'); c.width = c.height = 10;
+        const x = c.getContext('2d'); x.drawImage(img, 0, 0, 10, 10);
+        const d = x.getImageData(0, 0, 10, 10).data; let r = 0, g = 0, bl = 0;
+        for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; bl += d[i + 2]; }
+        const n = d.length / 4; spineColors.set(k, `rgb(${Math.round(r / n)},${Math.round(g / n)},${Math.round(bl / n)})`); changed = true;
+      } catch (e) { spineColors.set(k, hueColor(b.title || b.id)); }
+    }
+    colorBusy = false;
+    if (changed && document.body.classList.contains('view-shelf')) renderShelf();
+  }
+  function textOn(color) { const m = color.match(/rgb\((\d+),(\d+),(\d+)\)/); if (!m) return '#fff'; return 0.299 * m[1] + 0.587 * m[2] + 0.114 * m[3] > 150 ? '#1b1b1b' : '#fff'; }
+  function renderShelf() {
+    const sortKey = $('sortBooks').value, groups = new Map();
+    const groupOf = b => (sortKey === 'categoryAsc' ? (bookCategoryLabel(b) || 'Tanpa kategori') : sortKey === 'seriesAsc' ? (b.series || 'Bukan siri') : sortKey === 'readingAsc' ? (b.reading || 'Belum dibaca') : '');
+    lastShown.forEach(b => { const g = groupOf(b); if (!groups.has(g)) groups.set(g, []); groups.get(g).push(b); });
+    const legend = `<div class="shelf-legend"><span><i style="background:var(--st-grey)"></i>Belum dibaca</span><span><i style="background:var(--st-blue)"></i>Sedang dibaca</span><span><i style="background:var(--st-green)"></i>Selesai</span><span><i style="background:#f0c46b;border-radius:2px"></i>Dipinjamkan</span><span>· Isih "Kategori", "Siri" atau "Status bacaan" untuk rak berkumpulan</span></div>`;
+    if (!lastShown.length) { $('shelfView').innerHTML = legend + `<div class="empty">${books.length ? 'Tiada buku yang sepadan dengan carian atau penapis ini.' : 'Rak masih kosong.'}</div>`; return; }
+    const dotColor = { 'Sedang dibaca': 'var(--st-blue)', 'Selesai': 'var(--st-green)' };
+    $('shelfView').innerHTML = legend + [...groups.entries()].map(([g, list]) => `${g ? `<div class="shelf-label">${esc(g)} · ${list.length}</div>` : ''}<div class="shelf-row">${list.map(b => {
+      const h = parseInt(hashStr(b.id).slice(0, 4), 16), pages = Number(b.pages) || 0;
+      const w = pages ? Math.max(22, Math.min(58, Math.round(pages / 14))) : 26 + (h % 12), ht = 138 + (h % 40);
+      const bg = spineColor(b), lent = !!activeLoan(b.id);
+      return `<span class="spine-cell"><button type="button" class="spine${lent ? ' lent' : ''}" data-open-book="${esc(b.id)}" title="${esc((b.title || '') + (b.author ? ' — ' + b.author : '') + (lent ? ' (dipinjamkan)' : ''))}" style="width:${w}px;height:${ht}px;background:${bg};color:${textOn(bg)}"><span>${esc(b.title || '—')}</span><i style="background:${dotColor[b.reading] || 'var(--st-grey)'}"></i></button></span>`;
+    }).join('')}</div>`).join('');
+  }
+
+  // ---------- Panel butiran buku ----------
+  function seriesInfo(b) {
+    if (!b.series) return null;
+    const same = books.filter(x => textKey(x.series) === textKey(b.series)).sort(cmpBy(x => numOrBlank(x.volume), { num: true }));
+    const owned = new Set(same.map(x => Number(x.volume)).filter(n => Number.isInteger(n) && n > 0));
+    const total = Math.max(0, ...same.map(x => Number(x.seriesTotal) || 0));
+    const upto = Math.max(total, ...owned, 0), missing = [];
+    for (let i = 1; i <= upto; i++) if (!owned.has(i)) missing.push(i);
+    return { same, missing, total };
+  }
+  let detailId = '';
+  function openBookDetail(id) {
+    const b = books.find(x => x.id === id); if (!b) return;
+    detailId = id;
+    const loan = activeLoan(id), history = loans.filter(l => l.bookId === id).sort(byNewest), si = seriesInfo(b), dup = duplicateIds().has(id);
+    const src = safeImg(b.cover);
+    const rows = [['ID Buku', b.bookCode], ['Kategori', bookCategoryLabel(b)], ['Format', b.format], ['ISBN', b.isbn], ['Penerbit', b.publisher], ['Lokasi terbit', b.publishPlace], ['Tahun terbit', b.year], ['Edisi / cetakan', b.edition], ['Bahasa', b.language], ['Bilangan halaman', b.pages], ['Siri', b.series ? `${b.series}${b.volume ? ' · jilid ' + b.volume : ''}${b.seriesTotal ? ' daripada ' + b.seriesTotal : ''}` : ''], ['Sumber', b.source], ['Lokasi pembelian', b.purchase], ['Harga', b.price !== '' ? money(b.price) : ''], ['Keadaan', b.condition], ['Ditambah pada', b.createdAt && b.createdAt > EPOCH ? new Date(b.createdAt).toLocaleDateString('ms-MY') : '']].filter(([, v]) => str(v).trim());
+    $('bdBody').innerHTML = `<div class="bd-top">${src ? `<img class="bd-cover" src="${esc(src)}" alt="Kulit buku">` : `<div class="bd-cover">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</div>`}<div><h2 id="bdTitle">${esc(b.title || 'Nama buku tidak diisi')}</h2><div class="small">${esc(b.author || 'Penulis tidak dinyatakan')}</div><div class="bd-pills">${readingPill(b.reading)}${loanPill(b)}${dup ? '<span class="pill st-amber">Berganda?</span>' : ''}${b.dupOk ? '<span class="pill st-grey">Naskhah tambahan</span>' : ''}</div>${tagChips(b)}</div></div>
+      <dl class="bd-dl">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
+      ${si ? `<div class="bd-section"><h3>Siri: ${esc(b.series)}</h3><p class="small" style="margin:0 0 6px">Anda ada ${si.same.length} buku dalam siri ini${si.total ? ' (daripada ' + si.total + ' jilid)' : ''}.${si.missing.length ? ' <strong>Belum ada jilid: ' + si.missing.join(', ') + '</strong>' : ''}</p>${si.same.map(x => `<div class="loan-item">${x.id === id ? '<strong>' : '<button type="button" class="linklike" data-open-book="' + esc(x.id) + '">'}${x.volume ? 'Jilid ' + esc(x.volume) + ' · ' : ''}${esc(x.title)}${x.id === id ? ' (buku ini)</strong>' : '</button>'}</div>`).join('')}</div>` : ''}
+      <div class="bd-section"><h3>Rekod pinjaman</h3>${history.length ? history.map(l => `<div class="loan-item"><strong>${esc(l.borrower || '—')}</strong> <span class="pill ${l.status === 'Dipinjam' ? 'st-amber' : 'st-teal'}">${esc(l.status)}</span><div class="small">${l.borrowDate ? 'Dipinjam ' + esc(l.borrowDate) : ''}${l.returnDate ? ' · dipulangkan ' + esc(l.returnDate) : ''}</div></div>`).join('') : '<p class="small">Buku ini belum pernah dipinjamkan.</p>'}</div>`;
+    $('bdActions').innerHTML = `<button class="btn" type="button" data-bd="edit">Edit</button>${loan ? `<button class="btn secondary" type="button" data-bd="loan">Lihat pinjaman</button>` : `<button class="btn secondary" type="button" data-bd="lend">Pinjamkan</button>`}<button class="btn secondary" type="button" data-bd="print">Cetak</button><button class="btn danger" type="button" data-bd="delete">Padam</button>`;
+    const dlg = $('bookDialog');
+    if (!dlg.open) { if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', ''); }
+    $('bdBody').scrollTop = 0; dlg.scrollTop = 0;
+  }
+  function closeBookDetail() { const d = $('bookDialog'); if (d.open) { if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); } }
+  $('bdCloseBtn').addEventListener('click', closeBookDetail);
+  $('bookDialog').addEventListener('click', e => { if (e.target === $('bookDialog')) closeBookDetail(); });
+  $('bdBody').addEventListener('click', e => { const t = e.target.closest('[data-open-book]'); if (t) openBookDetail(t.dataset.openBook); });
+  $('bdActions').addEventListener('click', e => {
+    const a = e.target.closest('[data-bd]')?.dataset.bd, id = detailId; if (!a) return;
+    if (a === 'print') { printBookRecord(id); return; }
+    closeBookDetail();
+    if (a === 'edit') editBook(id);
+    else if (a === 'delete') deleteBook(id);
+    else if (a === 'lend' || a === 'loan') {
+      showTab('loanPanel'); showLoanSub('lendSection');
+      if (a === 'lend') { resetLoan(true); $('loanBook').value = id; $('borrowDate').value = todayStr(); $('borrower').focus(); }
+      else { const l = activeLoan(id); if (l) editLoan(l.id); }
+    }
+  });
+
+  // ---------- Dashboard & analisis nilai ----------
+  function renderValueAnalysis() {
+    const priced = books.filter(b => numOrBlank(b.price) !== '');
+    if (!priced.length) { $('valueAnalysis').innerHTML = '<p class="small">Belum ada buku yang mempunyai harga. Isi medan Harga dalam borang buku untuk melihat analisis.</p>'; return; }
+    const total = priced.reduce((s, b) => s + Number(b.price), 0), avg = total / priced.length;
+    const top = [...priced].sort((a, b) => Number(b.price) - Number(a.price))[0];
+    const byCat = new Map(), bySrc = new Map();
+    books.forEach(b => {
+      const p = numOrBlank(b.price);
+      [[byCat, bookCategoryLabel(b) || 'Tanpa kategori'], [bySrc, b.source || 'Tidak dinyatakan']].forEach(([m, k]) => {
+        if (!m.has(k)) m.set(k, { count: 0, priced: 0, total: 0 });
+        const r = m.get(k); r.count++; if (p !== '') { r.priced++; r.total += p; }
+      });
+    });
+    const catRows = [...byCat.entries()].sort((a, b) => b[1].total - a[1].total || b[1].count - a[1].count);
+    const maxCat = Math.max(...catRows.map(([, r]) => r.total), 1);
+    const srcRows = [...bySrc.entries()].sort((a, b) => b[1].total - a[1].total);
+    const rm = v => 'RM ' + v.toFixed(2);
+    $('valueAnalysis').innerHTML = `<div class="value-summary"><div><span>Jumlah nilai</span><strong>${rm(total)}</strong></div><div><span>Purata harga sebuah</span><strong>${rm(avg)}</strong></div><div><span>Buku tanpa harga</span><strong>${books.length - priced.length}</strong></div><div><span>Paling mahal</span><strong>${rm(Number(top.price))}</strong><span class="small" style="font-weight:500">${esc(top.title)}</span></div></div>
+      <div class="value-grid"><div class="table-wrap"><table class="value-table"><thead><tr><th>Kategori</th><th class="num">Buku</th><th class="num">Jumlah nilai</th><th class="num">Purata</th></tr></thead><tbody>${catRows.map(([k, r]) => `<tr><td>${esc(k)}<div class="mini-bar"><i style="width:${(r.total / maxCat * 100).toFixed(1)}%"></i></div></td><td class="num">${r.count}${r.priced < r.count ? `<span class="small"> (${r.priced} berharga)</span>` : ''}</td><td class="num">${rm(r.total)}</td><td class="num">${r.priced ? rm(r.total / r.priced) : '—'}</td></tr>`).join('')}</tbody></table></div>
+      <div class="table-wrap"><table class="value-table"><thead><tr><th>Sumber</th><th class="num">Buku</th><th class="num">Nilai</th><th class="num">% nilai</th></tr></thead><tbody>${srcRows.map(([k, r]) => `<tr><td>${esc(k)}</td><td class="num">${r.count}</td><td class="num">${rm(r.total)}</td><td class="num">${total ? Math.round(r.total / total * 100) : 0}%</td></tr>`).join('')}</tbody></table></div></div>`;
+  }
   function renderDashboard() {
     const total = books.length;
     const read = books.filter(b => b.reading === 'Selesai').length, inProgress = books.filter(b => b.reading === 'Sedang dibaca').length, unread = books.filter(b => b.reading === 'Belum dibaca').length;
-    const activeLoans = loans.filter(l => l.status === 'Dipinjam'), storedLoans = loans.filter(l => l.status === 'Dalam Simpanan');
+    const activeLoans = loans.filter(l => l.status === 'Dipinjam');
+    const activeBorrows = borrowings.filter(x => borrowStatus(x).active), lateBorrows = activeBorrows.filter(x => borrowStatus(x).late);
     const value = books.reduce((s, b) => s + (Number(b.price) || 0), 0), pct = total ? Math.round(read / total * 100) : 0;
     $('heroBookCount').innerHTML = `${total} <span style="font-size:14px;font-weight:600">buku</span>`;
     $('dashTotal').textContent = total; $('dashRead').textContent = read; $('dashReadNote').textContent = pct + '% daripada koleksi';
     $('dashLoans').textContent = activeLoans.length; $('dashValue').textContent = 'RM ' + value.toFixed(2);
+    $('dashBorrowed').textContent = activeBorrows.length; $('dashBorrowedNote').innerHTML = lateBorrows.length ? `<span class="pill st-red">${lateBorrows.length} lewat dipulangkan</span>` : 'Buku orang lain pada anda';
     const counts = {}; books.forEach(b => { const k = bookCategoryLabel(b) || 'Tanpa kategori'; counts[k] = (counts[k] || 0) + 1; });
     const entries = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ms'));
     $('categoryBreakdown').innerHTML = entries.length ? entries.map(([name, count]) => `<div class="category-row"><span title="${esc(name)}">${esc(name)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3, count / total * 100)}%"></div></div><strong>${count}</strong></div>`).join('') : '<p class="small">Belum ada rekod buku.</p>';
     const recent = [...books].sort(byNewest).slice(0, 5);
-    $('recentBooks').innerHTML = recent.length ? recent.map(b => `<div class="recent-book">${coverImg(b, '', 'Kulit buku') || '<div class="recent-placeholder">▤</div>'}<div><strong>${esc(b.title || 'Nama buku tidak diisi')}</strong><span class="small">${esc(b.bookCode || '')} · ${esc(b.author || 'Penulis tidak dinyatakan')}</span></div></div>`).join('') : '<p class="small">Buku yang disimpan akan dipaparkan di sini.</p>';
+    $('recentBooks').innerHTML = recent.length ? recent.map(b => `<button type="button" class="recent-book" data-open-book="${esc(b.id)}">${coverImg(b, '', 'Kulit buku') || '<div class="recent-placeholder">▤</div>'}<div><strong>${esc(b.title || 'Nama buku tidak diisi')}</strong><span class="small">${esc(b.bookCode || '')} · ${esc(b.author || 'Penulis tidak dinyatakan')}</span></div></button>`).join('') : '<p class="small">Buku yang disimpan akan dipaparkan di sini.</p>';
     const readingRows = [['Belum dibaca', unread], ['Sedang dibaca', inProgress], ['Selesai', read]];
-    $('readingBreakdown').innerHTML = total ? readingRows.map(([label, count]) => `<div class="insight-row"><span>${label}</span><strong>${count} <span class="small">(${Math.round(count / total * 100)}%)</span></strong></div><div class="insight-track"><div class="insight-fill" style="width:${count / total * 100}%"></div></div>`).join('') : '<p class="insight-empty">Belum ada rekod bacaan.</p>';
+    const fillVar = { 'Belum dibaca': 'var(--st-grey)', 'Sedang dibaca': 'var(--st-blue)', 'Selesai': 'var(--st-green)' };
+    $('readingBreakdown').innerHTML = total ? readingRows.map(([label, count]) => `<div class="insight-row"><span>${readingPill(label)}</span><strong>${count} <span class="small">(${Math.round(count / total * 100)}%)</span></strong></div><div class="insight-track"><div class="insight-fill" style="width:${count / total * 100}%;background:${fillVar[label]}"></div></div>`).join('') : '<p class="insight-empty">Belum ada rekod bacaan.</p>';
     $('readingProgressBar').style.width = pct + '%'; $('readingProgressText').textContent = pct + '% selesai dibaca';
     const miniCounts = (id, field) => { const tally = {}; books.forEach(b => { const v = (b[field] || 'Tidak dinyatakan').trim(); tally[v] = (tally[v] || 0) + 1; }); const rows = Object.entries(tally).sort((a, b) => b[1] - a[1]); $(id).innerHTML = rows.length ? rows.map(([n, c]) => `<div class="insight-row"><span>${esc(n)}</span><strong>${c}</strong></div>`).join('') : '<p class="insight-empty">Tiada data.</p>'; };
-    miniCounts('formatBreakdown', 'format'); miniCounts('sourceBreakdown', 'source');
-    const loanItems = activeLoans.slice(0, 4);
-    $('loanBreakdown').innerHTML = `<div class="insight-row"><span>Sedang dipinjam</span><strong>${activeLoans.length}</strong></div><div class="insight-row"><span>Dalam simpanan</span><strong>${storedLoans.length}</strong></div>` +
-      (loanItems.length ? '<div class="small" style="font-weight:700;margin-top:12px">Pinjaman aktif</div>' + loanItems.map(l => `<div class="loan-item"><strong>${esc(l.borrower || 'Peminjam tidak dinyatakan')}</strong><span>${esc(bookName(l.bookId))}</span>${l.borrowDate ? `<div class="small">Tarikh pinjam: ${esc(l.borrowDate)}</div>` : ''}</div>`).join('') : '<p class="insight-empty">Tiada buku yang sedang dipinjam.</p>');
+    miniCounts('formatBreakdown', 'format'); miniCounts('languageBreakdown', 'language');
+    $('loanBreakdown').innerHTML = `<div class="insight-row"><span><span class="pill st-amber">Dipinjamkan</span></span><strong>${activeLoans.length}</strong></div><div class="insight-row"><span><span class="pill st-purple">Saya pinjam</span></span><strong>${activeBorrows.length}</strong></div>` +
+      (activeLoans.length ? '<div class="small" style="font-weight:700;margin-top:12px">Buku anda di tangan orang lain</div>' + activeLoans.slice(0, 3).map(l => `<div class="loan-item"><strong>${esc(l.borrower || 'Peminjam tidak dinyatakan')}</strong><span>${esc(bookName(l.bookId))}</span>${l.borrowDate ? `<div class="small">Sejak ${esc(l.borrowDate)}</div>` : ''}</div>`).join('') : '') +
+      (activeBorrows.length ? '<div class="small" style="font-weight:700;margin-top:12px">Perlu dipulangkan</div>' + [...activeBorrows].sort(cmpBy(x => x.dueDate)).slice(0, 3).map(x => { const st = borrowStatus(x); return `<div class="loan-item"><strong>${esc(x.title)}</strong><span>daripada ${esc(x.lender || '—')}</span><div class="small">${x.dueDate ? 'Sebelum ' + esc(x.dueDate) : 'Tiada tarikh akhir'} ${st.late ? '<span class="pill st-red">Lewat</span>' : ''}</div></div>`; }).join('') : '') +
+      (!activeLoans.length && !activeBorrows.length ? '<p class="insight-empty">Tiada pinjaman aktif.</p>' : '');
+    renderValueAnalysis();
   }
   function renderLoans() {
     const q = $('loanSearch').value.toLowerCase();
     const shown = [...loans].sort(byNewest).filter(l => (l.borrower + ' ' + bookName(l.bookId)).toLowerCase().includes(q));
-    $('loanRows').innerHTML = shown.length ? shown.map(l => `<tr><td>${esc(bookName(l.bookId))}</td><td>${esc(l.borrower)}</td><td><span class="pill">${esc(l.status)}</span></td><td>${esc(l.borrowDate || '—')}</td><td>${esc(l.returnDate || '—')}</td><td class="no-print"><button class="btn secondary" type="button" data-edit-loan="${esc(l.id)}">Edit</button> <button class="btn danger" type="button" data-delete-loan="${esc(l.id)}">Padam</button></td></tr>`).join('') : '<tr><td colspan="6" class="empty">Tiada rekod pinjaman.</td></tr>';
+    $('loanRows').innerHTML = shown.length ? shown.map(l => `<tr><td>${esc(bookName(l.bookId))}</td><td>${esc(l.borrower)}</td><td><span class="pill ${l.status === 'Dipinjam' ? 'st-amber' : 'st-teal'}">${esc(l.status)}</span></td><td>${esc(l.borrowDate || '—')}</td><td>${esc(l.returnDate || '—')}</td><td class="no-print"><button class="btn secondary small-btn" type="button" data-edit-loan="${esc(l.id)}">Edit</button> <button class="btn danger small-btn" type="button" data-delete-loan="${esc(l.id)}">Padam</button></td></tr>`).join('') : '<tr><td colspan="6" class="empty">Tiada rekod pinjaman.</td></tr>';
   }
   $('loanRows').addEventListener('click', e => {
     const ed = e.target.closest('[data-edit-loan]'), del = e.target.closest('[data-delete-loan]');
@@ -888,13 +1418,26 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       toast('Rekod pinjaman ' + (l.borrower || '') + ' dipadam.', { undo: () => { delete deletions.loans[l.id]; touch(l); loans.push(l); persist(); render(); toast('Rekod pinjaman dipulihkan.'); } });
     }
   });
-  function render() { renderBookSelect(); renderBooks(); renderLoans(); renderDashboard(); renderCategories(); applyLibraryName(); }
+  function renderSuggestions() {
+    const tags = allTags(), sel = $('filterTag'), old = sel.value;
+    sel.innerHTML = '<option value="">Semua tag</option>' + tags.map(t => `<option value="${esc(lc(t.name))}">${esc(t.name)} (${t.count})</option>`).join('');
+    sel.value = tags.some(t => lc(t.name) === old) ? old : '';
+    sel.hidden = !tags.length;
+    $('tagSuggestions').innerHTML = tags.map(t => `<option value="${esc(t.name)}">`).join('');
+    const series = [...new Set(books.map(b => b.series).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ms'));
+    $('seriesSuggestions').innerHTML = series.map(x => `<option value="${esc(x)}">`).join('');
+    const lenders = [...new Set(borrowings.map(b => b.lender).filter(Boolean))];
+    $('lenderSuggestions').innerHTML = lenders.map(x => `<option value="${esc(x)}">`).join('');
+  }
+  function render() { renderBookSelect(); renderSuggestions(); renderBooks(); renderLoans(); renderBorrowings(); renderWishlist(); renderDashboard(); renderCategories(); applyLibraryName(); }
 
   function editBook(id) {
     const b = books.find(x => x.id === id); if (!b) return;
     showTab('formPanel');
     $('bookId').value = b.id; $('bookCode').value = b.bookCode || '';
-    ['format', 'isbn', 'title', 'publisher', 'author', 'reading', 'price', 'year'].forEach(k => { $(k).value = b[k] || ''; });
+    ['format', 'isbn', 'title', 'publisher', 'author', 'reading', 'price', 'year', 'edition', 'language', 'pages', 'condition', 'series', 'volume', 'seriesTotal'].forEach(k => { $(k).value = b[k] || ''; });
+    $('tags').value = parseTags(b.tags).join(', '); $('tagEntry').value = ''; renderTagChips(); pendingWishId = '';
+    $('bookFormTitle').textContent = 'Kemaskini Buku · ' + (b.bookCode || '');
     $('genre').value = b.categoryId || '';
     $('source').value = b.source || 'Beli'; togglePurchaseField(); $('purchase').value = b.purchase || ''; $('publishPlace').value = b.publishPlace || '';
     currentCover = '';
@@ -936,8 +1479,10 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       ['ID Buku',b.bookCode||'—'],['Format Buku',b.format],['Kategori / Genre',bookCategoryLabel(b)],['Kod ISBN',b.isbn],
       ['Penulis',b.author],['Penerbit',b.publisher],['Status Bacaan',b.reading],
       ['Sumber',b.source||'Beli'],...( (b.source||'Beli')==='Beli' ? [['Lokasi Pembelian',b.purchase]] : []),['Lokasi Terbit',b.publishPlace],
-      ['Tahun Terbit',b.year],['Harga Direkodkan',money(b.price)],['Status Pinjaman',loan?('Dipinjam — '+loan.borrower):'Dalam Simpanan']
-    ];
+      ['Tahun Terbit',b.year],['Edisi / Cetakan',b.edition],['Bahasa',b.language],['Bilangan Halaman',b.pages],
+      ['Siri',b.series?(b.series+(b.volume?' · jilid '+b.volume:'')+(b.seriesTotal?' daripada '+b.seriesTotal:'')):''],['Keadaan Buku',b.condition],['Tag',parseTags(b.tags).join(', ')],
+      ['Harga Direkodkan',money(b.price)],['Status Pinjaman',loan?('Dipinjam — '+loan.borrower):'Dalam Simpanan']
+    ].filter(([k,v])=>['ID Buku','Format Buku','Kategori / Genre','Kod ISBN','Penulis','Penerbit','Status Bacaan','Sumber','Lokasi Terbit','Tahun Terbit','Harga Direkodkan','Status Pinjaman'].includes(k)||String(v||'').trim());
     const popup=window.open('', '_blank', 'width=980,height=800');
     if(!popup){toast('Tetingkap cetakan disekat oleh pelayar. Benarkan pop-up untuk laman ini dan cuba lagi.');return;}
     const coverSrc=safeImg(b.cover);
@@ -961,9 +1506,176 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     popup.document.close();
   }
 
+  // ---------- Pinjaman: sub-tab ----------
+  function showLoanSub(id) {
+    ['lendSection', 'borrowSection'].forEach(s => { $(s).hidden = s !== id; });
+    document.querySelectorAll('.subtabs [data-sub]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.sub === id)));
+    saveUi({ loanSub: id });
+  }
+  document.querySelectorAll('.subtabs [data-sub]').forEach(b => b.addEventListener('click', () => showLoanSub(b.dataset.sub)));
+
+  // ---------- Buku yang saya pinjam daripada orang lain ----------
+  const BORROW_MAP = { bTitle: 'title', bAuthor: 'author', bIsbn: 'isbn', bLender: 'lender', bLenderType: 'lenderType', bDate: 'borrowDate', bDue: 'dueDate', bReturned: 'returnDate', bNote: 'note' };
+  function resetBorrow() { $('borrowForm').reset(); $('borrowId').value = ''; $('saveBorrowBtn').textContent = 'Simpan'; $('bDate').value = todayStr(); }
+  $('borrowForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const id = $('borrowId').value || newId(''), old = borrowings.find(x => x.id === id);
+    const rec = Object.assign({}, old || {}, { id });
+    Object.entries(BORROW_MAP).forEach(([el, k]) => { rec[k] = $(el).value.trim(); });
+    if (rec.dueDate && rec.borrowDate && rec.dueDate < rec.borrowDate) { toast('Tarikh perlu dipulangkan tidak boleh lebih awal daripada tarikh pinjam.'); return; }
+    touch(rec);
+    if (old) borrowings = borrowings.map(x => (x.id === id ? rec : x)); else borrowings.unshift(rec);
+    persist(); resetBorrow(); render(); toast(old ? 'Rekod dikemaskini.' : 'Rekod buku pinjaman disimpan.');
+  });
+  $('resetBorrowBtn').addEventListener('click', resetBorrow);
+  function renderBorrowings() {
+    const q = $('borrowSearch').value.toLowerCase(), showRet = $('showReturned').checked;
+    const rank = x => { const s = borrowStatus(x); return s.late ? 0 : s.active ? 1 : 2; };
+    const shown = [...borrowings].filter(x => (showRet || !x.returnDate) && (x.title + ' ' + x.author + ' ' + x.lender).toLowerCase().includes(q))
+      .sort((a, b) => rank(a) - rank(b) || cmpBy(x => x.dueDate)(a, b) || byNewest(a, b));
+    $('borrowTabBtn').textContent = 'Saya pinjam' + (borrowings.some(x => borrowStatus(x).active) ? ` (${borrowings.filter(x => borrowStatus(x).active).length})` : '');
+    $('borrowRows').innerHTML = shown.length ? shown.map(x => { const st = borrowStatus(x); return `<tr class="${st.late ? 'row-late' : ''}"><td><strong>${esc(x.title)}</strong>${x.author ? `<br><span class="small">${esc(x.author)}</span>` : ''}${x.note ? `<br><span class="small">${esc(x.note)}</span>` : ''}</td><td>${esc(x.lender)}<br><span class="small">${esc(x.lenderType || '')}</span></td><td>${esc(x.borrowDate || '—')}</td><td>${esc(x.dueDate || '—')}</td><td><span class="pill ${st.cls}">${st.label}</span>${x.returnDate ? `<br><span class="small">${esc(x.returnDate)}</span>` : ''}</td><td class="no-print">${st.active ? `<button class="btn small-btn" type="button" data-return-borrow="${esc(x.id)}">Dah pulangkan</button> ` : ''}<button class="btn secondary small-btn" type="button" data-edit-borrow="${esc(x.id)}">Edit</button> <button class="btn danger small-btn" type="button" data-delete-borrow="${esc(x.id)}">Padam</button></td></tr>`; }).join('') : `<tr><td colspan="6" class="empty">${borrowings.length ? 'Tiada rekod yang sepadan.' : 'Belum ada buku yang anda pinjam daripada orang lain.'}</td></tr>`;
+  }
+  ['borrowSearch', 'showReturned'].forEach(id => $(id).addEventListener('input', renderBorrowings));
+  $('showReturned').addEventListener('change', renderBorrowings);
+  $('borrowRows').addEventListener('click', e => {
+    const t = e.target.closest('[data-return-borrow],[data-edit-borrow],[data-delete-borrow]'); if (!t) return;
+    const x = borrowings.find(r => r.id === (t.dataset.returnBorrow || t.dataset.editBorrow || t.dataset.deleteBorrow)); if (!x) return;
+    if (t.dataset.returnBorrow) {
+      const before = x.returnDate; x.returnDate = todayStr(); touch(x); persist(); render();
+      toast(`"${x.title}" ditanda dipulangkan.`, { undo: () => { x.returnDate = before; touch(x); persist(); render(); } });
+    } else if (t.dataset.editBorrow) {
+      Object.entries(BORROW_MAP).forEach(([el, k]) => { $(el).value = x[k] || ''; });
+      $('borrowId').value = x.id; $('saveBorrowBtn').textContent = 'Kemaskini'; $('bTitle').focus(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      borrowings = borrowings.filter(r => r.id !== x.id); deletions.borrowings[x.id] = nowIso(); persist(); render();
+      toast(`Rekod "${x.title}" dipadam.`, { undo: () => { delete deletions.borrowings[x.id]; touch(x); borrowings.push(x); persist(); render(); } });
+    }
+  });
+
+  // ---------- Senarai hajat ----------
+  const WISH_MAP = { wTitle: 'title', wAuthor: 'author', wIsbn: 'isbn', wPrice: 'targetPrice', wShop: 'shop', wNote: 'note' };
+  function resetWish() { $('wishForm').reset(); $('wishId').value = ''; $('saveWishBtn').textContent = 'Tambah ke Senarai Hajat'; }
+  function ownedMatch(w) { const k = isbnKey(w.isbn); return books.find(b => (k && isbnKey(b.isbn) === k) || (textKey(w.title) && textKey(b.title) === textKey(w.title) && (!textKey(w.author) || textKey(b.author) === textKey(w.author)))); }
+  $('wishForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const id = $('wishId').value || newId(''), old = wishlist.find(x => x.id === id);
+    const rec = Object.assign({}, old || {}, { id, origin: old?.origin || 'Manual' });
+    Object.entries(WISH_MAP).forEach(([el, k]) => { rec[k] = $(el).value.trim(); });
+    rec.title = rec.title.toLocaleUpperCase('ms-MY'); rec.author = formatAuthorName(rec.author);
+    const owned = ownedMatch(rec);
+    if (!old && owned) toast(`Perhatian: "${owned.title}" (${owned.bookCode}) sudah ada dalam koleksi.`, { ms: 8000 });
+    touch(rec);
+    if (old) wishlist = wishlist.map(x => (x.id === id ? rec : x)); else wishlist.unshift(rec);
+    persist(); resetWish(); render(); if (!owned || old) toast(old ? 'Senarai hajat dikemaskini.' : 'Ditambah ke senarai hajat.');
+  });
+  $('resetWishBtn').addEventListener('click', resetWish);
+  function renderWishlist() {
+    const q = $('wishSearch').value.toLowerCase();
+    const shown = [...wishlist].sort(byNewest).filter(w => (w.title + ' ' + w.author + ' ' + w.isbn + ' ' + w.shop + ' ' + w.note).toLowerCase().includes(q));
+    $('tab-wishlistPanel').textContent = 'Senarai Hajat' + (wishlist.length ? ` (${wishlist.length})` : '');
+    $('wishRows').innerHTML = shown.length ? shown.map(w => { const owned = ownedMatch(w); return `<tr><td><strong>${esc(w.title)}</strong>${w.author ? `<br><span class="small">${esc(w.author)}</span>` : ''}${owned ? `<br><span class="pill st-amber">Sudah ada: ${esc(owned.bookCode)}</span>` : ''}</td><td>${esc(w.isbn || '—')}</td><td>${w.targetPrice ? money(w.targetPrice) : '—'}</td><td>${esc(w.shop || '—')}${w.note ? `<br><span class="small">${esc(w.note)}</span>` : ''}</td><td>${esc(new Date(w.createdAt).toLocaleDateString('ms-MY'))}${w.origin === 'PWA' ? '<br><span class="pill st-blue">Dari imbasan</span>' : ''}</td><td class="no-print"><button class="btn small-btn" type="button" data-buy-wish="${esc(w.id)}">Sudah beli</button> <button class="btn secondary small-btn" type="button" data-edit-wish="${esc(w.id)}">Edit</button> <button class="btn danger small-btn" type="button" data-delete-wish="${esc(w.id)}">Padam</button></td></tr>`; }).join('') : `<tr><td colspan="6" class="empty">${wishlist.length ? 'Tiada padanan.' : 'Senarai hajat masih kosong.'}</td></tr>`;
+  }
+  $('wishSearch').addEventListener('input', renderWishlist);
+  $('wishRows').addEventListener('click', e => {
+    const t = e.target.closest('[data-buy-wish],[data-edit-wish],[data-delete-wish]'); if (!t) return;
+    const w = wishlist.find(r => r.id === (t.dataset.buyWish || t.dataset.editWish || t.dataset.deleteWish)); if (!w) return;
+    if (t.dataset.buyWish) {
+      resetBook(true); showTab('formPanel');
+      $('title').value = w.title; $('author').value = w.author; $('isbn').value = w.isbn;
+      $('source').value = 'Beli'; togglePurchaseField(); $('purchase').value = w.shop; if (w.targetPrice) $('price').value = w.targetPrice;
+      pendingWishId = w.id; renderDupWarning(); scheduleDraft('book');
+      toast('Lengkapkan maklumat buku dan simpan. Ia akan dibuang daripada senarai hajat secara automatik.', { ms: 7000 });
+    } else if (t.dataset.editWish) {
+      Object.entries(WISH_MAP).forEach(([el, k]) => { $(el).value = w[k] || ''; });
+      $('wishId').value = w.id; $('saveWishBtn').textContent = 'Kemaskini'; $('wTitle').focus(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      wishlist = wishlist.filter(r => r.id !== w.id); deletions.wishlist[w.id] = nowIso(); persist(); render();
+      toast(`"${w.title}" dibuang daripada senarai hajat.`, { undo: () => { delete deletions.wishlist[w.id]; touch(w); wishlist.push(w); persist(); render(); } });
+    }
+  });
+
+  // ---------- Kunci PIN (setempat pada peranti) ----------
+  const pinCfg = () => lsGet(LS.PIN, null);
+  async function pinHash(pin, salt) {
+    const enc = new TextEncoder();
+    if (window.crypto?.subtle) {
+      const key = await crypto.subtle.importKey('raw', enc.encode(pin), 'PBKDF2', false, ['deriveBits']);
+      const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: enc.encode(salt), iterations: 150000, hash: 'SHA-256' }, key, 256);
+      return 'p2:' + [...new Uint8Array(bits)].map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+    let h = salt + pin; for (let i = 0; i < 5000; i++) h = hashStr(h + i); return 'h:' + h;
+  }
+  let lastActivity = Date.now(), hiddenAt = 0, failCount = 0, lockedUntil = 0;
+  const isLocked = () => !$('lockScreen').hidden;
+  function lockNow() {
+    if (!pinCfg()) return;
+    closeBookDetail(); closeSheet();
+    $('lockScreen').hidden = false; document.documentElement.classList.add('locked');
+    $('pinStep').hidden = false; $('forgotStep').hidden = true; $('lockMsg').textContent = ''; $('pinInput').value = '';
+    $('lockLibName').textContent = libraryName() + ' — masukkan PIN untuk membuka.';
+    setTimeout(() => $('pinInput').focus(), 50);
+  }
+  function unlock() { $('lockScreen').hidden = true; document.documentElement.classList.remove('locked'); lastActivity = Date.now(); failCount = 0; }
+  $('lockForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    if ($('pinStep').hidden) return;
+    const cfg = pinCfg(); if (!cfg) { unlock(); return; }
+    if (Date.now() < lockedUntil) { $('lockMsg').textContent = `Terlalu banyak cubaan. Cuba lagi dalam ${Math.ceil((lockedUntil - Date.now()) / 1000)} saat.`; return; }
+    const pin = $('pinInput').value;
+    if (await pinHash(pin, cfg.salt) === cfg.hash) { unlock(); return; }
+    failCount++; $('pinInput').value = '';
+    if (failCount >= 5) { lockedUntil = Date.now() + 30000; failCount = 0; $('lockMsg').textContent = 'PIN salah 5 kali. Tunggu 30 saat.'; }
+    else $('lockMsg').textContent = `PIN salah. (${5 - failCount} cubaan lagi sebelum disekat sementara)`;
+  });
+  $('forgotPinBtn').addEventListener('click', () => {
+    $('pinStep').hidden = true; $('forgotStep').hidden = false; $('resetMsg').textContent = '';
+    const canCloud = cloudUser && supabaseClient;
+    $('forgotText').textContent = canCloud ? `Masukkan kata laluan akaun awan (${cloudUser.email}) untuk membuang PIN pada peranti ini.` : 'Akaun awan tidak disambungkan pada peranti ini, jadi PIN tidak boleh dibuang dari sini. Pilihan terakhir: padam data laman ini dalam tetapan pelayar — ini akan memadam semua rekod tempatan, jadi pastikan data anda ada dalam awan atau fail sandaran.';
+    $('resetPassword').hidden = !canCloud; $('resetPinBtn').hidden = !canCloud;
+    if (canCloud) $('resetPassword').focus();
+  });
+  $('backToPinBtn').addEventListener('click', () => { $('pinStep').hidden = false; $('forgotStep').hidden = true; $('pinInput').focus(); });
+  $('resetPinBtn').addEventListener('click', async () => {
+    try {
+      if (!navigator.onLine) throw Error('Perlu sambungan internet.');
+      const { error } = await supabaseClient.auth.signInWithPassword({ email: cloudUser.email, password: $('resetPassword').value });
+      if (error) throw error;
+      lsDel(LS.PIN); $('resetPassword').value = ''; unlock(); renderPinSettings(); toast('PIN dibuang. Anda boleh menetapkan PIN baharu dalam Tetapan.');
+    } catch (err) { $('resetMsg').textContent = 'Gagal: ' + (err.message || err); }
+  });
+  function renderPinSettings() {
+    const cfg = pinCfg();
+    $('pinStatus').textContent = cfg ? `Kunci PIN aktif pada peranti ini · kunci automatik: ${cfg.timeout ? cfg.timeout + ' minit tidak aktif' : 'hanya apabila dibuka semula'}.` : 'Kunci PIN belum diaktifkan pada peranti ini.';
+    $('removePinBtn').hidden = !cfg; $('savePinBtn').textContent = cfg ? 'Tukar PIN' : 'Simpan PIN';
+    if (cfg) $('pinTimeout').value = String(cfg.timeout);
+    $('lockNowBtn').hidden = !cfg; $('sheetLockBtn').hidden = !cfg;
+  }
+  $('savePinBtn').addEventListener('click', async () => {
+    const a = $('pinNew').value, b = $('pinConfirm').value;
+    if (!/^\d{4,8}$/.test(a)) { toast('PIN mesti 4 hingga 8 digit nombor.'); return; }
+    if (a !== b) { toast('PIN dan pengesahan tidak sama.'); return; }
+    const salt = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    lsSet(LS.PIN, { hash: await pinHash(a, salt), salt, timeout: Number($('pinTimeout').value), setAt: nowIso() });
+    $('pinNew').value = ''; $('pinConfirm').value = ''; renderPinSettings(); toast('PIN disimpan. Sistem akan dikunci secara automatik mengikut tetapan.');
+  });
+  $('pinTimeout').addEventListener('change', () => { const cfg = pinCfg(); if (cfg) { cfg.timeout = Number($('pinTimeout').value); lsSet(LS.PIN, cfg); renderPinSettings(); } });
+  $('removePinBtn').addEventListener('click', async () => {
+    if (!await ask('Buang kunci PIN pada peranti ini?', 'Ya, buang PIN')) return;
+    lsDel(LS.PIN); renderPinSettings(); toast('Kunci PIN dibuang.');
+  });
+  $('lockNowBtn').addEventListener('click', lockNow);
+  ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(ev => window.addEventListener(ev, () => { if (!isLocked()) lastActivity = Date.now(); }, { passive: true }));
+  document.addEventListener('visibilitychange', () => {
+    const cfg = pinCfg(); if (!cfg) return;
+    if (document.visibilityState === 'hidden') hiddenAt = Date.now();
+    else if (hiddenAt && cfg.timeout && Date.now() - hiddenAt > cfg.timeout * 6e4) lockNow();
+  });
+  setInterval(() => { const cfg = pinCfg(); if (cfg && cfg.timeout && !isLocked() && Date.now() - lastActivity > cfg.timeout * 6e4) lockNow(); }, 15000);
+
   // ---------- Sandaran: eksport / import / tempatan ----------
   function exportData() {
-    return JSON.parse(JSON.stringify({ version: 2, app: 'perpustakaan-mini', exportedAt: nowIso(), libraryName: libraryName(), settings, books: books.map(b => ({ ...b, genre: categories.find(c => c.id === b.categoryId)?.name || b.genre })), loans, categories }));
+    return JSON.parse(JSON.stringify({ version: 3, app: 'perpustakaan-mini', exportedAt: nowIso(), libraryName: libraryName(), settings, books: books.map(b => ({ ...b, genre: categories.find(c => c.id === b.categoryId)?.name || b.genre })), loans, categories, wishlist, borrowings }));
   }
   function downloadJson(data, filename) {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -976,7 +1688,9 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   async function replaceAllLocal(raw) {
     const r = normalizePayload(raw, { recomputeHash: true });
     const t = nowIso(), prev = coverMap();
+    const keep = { wishlist: !r.hasWishlist, borrowings: !r.hasBorrowings }; // fail lama tanpa jenis ini: kekalkan rekod semasa
     TYPES.forEach(type => {
+      if (keep[type]) { r[type] = list(type); return; }
       const inc = new Set(r[type].map(x => x.id));
       list(type).forEach(x => { if (!inc.has(x.id)) deletions[type][x.id] = t; });
       r[type].forEach(x => { delete deletions[type][x.id]; touch(x, t); });
@@ -987,7 +1701,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       else if (b.cover) b.coverUploaded = '';
     });
     books.forEach(b => { if (b.coverPath && !r.books.some(x => x.id === b.id)) pendingCoverRemovals.push(b.coverPath); });
-    books = r.books; loans = r.loans; categories = r.categories;
+    setLists(r);
     const name = str(raw.settings?.libraryName || raw.libraryName).trim();
     if (name) settings = { libraryName: name.slice(0, 90), updatedAt: t };
     fixIntegrity(); attachCovers(prev);
@@ -1087,7 +1801,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     supabaseClient.auth.onAuthStateChange((event, session) => {
       const u = session?.user || null, changed = (u?.id || null) !== (cloudUser?.id || null);
       cloudUser = u;
-      if (!u) { cloudReady = false; if (event === 'SIGNED_OUT') cloudMessage('Tidak log masuk. Data tempatan masih tersedia.'); }
+      if (!u) { cloudReady = false; setSyncChip('local', 'Tempatan sahaja'); if (event === 'SIGNED_OUT') cloudMessage('Tidak log masuk. Data tempatan masih tersedia.'); }
       else if (changed) { cloudReady = false; setTimeout(() => bootstrapCloud(), 0); }
     });
     return supabaseClient;
@@ -1101,7 +1815,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     if (!ensureClient({ url, key })) { cloudMessage('Pustaka sambungan tidak dapat dimuatkan. Semak sambungan internet dan cuba semula.'); return false; }
     cloudMessage('Tetapan disimpan. Seterusnya daftar akaun atau log masuk.'); return true;
   }
-  function scheduleCloudPush(delay = 1200) { if (!cloudReady || !cloudUser || !supabaseClient) return; clearTimeout(cloudTimer); cloudTimer = setTimeout(() => syncNow(), delay); }
+  function scheduleCloudPush(delay = 1200) { if (!cloudReady || !cloudUser || !supabaseClient) return; if (!syncRunning) setSyncChip(navigator.onLine ? 'pending' : 'offline', navigator.onLine ? 'Belum disegerakkan' : 'Luar talian · menunggu'); clearTimeout(cloudTimer); cloudTimer = setTimeout(() => syncNow(), delay); }
   async function readCloud() {
     if (!cloudUser || !supabaseClient) throw Error('Sila log masuk dahulu.');
     const { data, error } = await supabaseClient.from('library_sync').select('payload,updated_at').eq('user_id', cloudUser.id).maybeSingle();
@@ -1136,7 +1850,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   }
   function buildPayload() {
     return {
-      version: 3, updatedAt: nowIso(), loans, categories, deletions, settings,
+      version: 3, updatedAt: nowIso(), loans, categories, wishlist, borrowings, deletions, settings,
       books: books.map(b => {
         const o = { ...b }; delete o.cover;
         if (b.cover && !(b.coverPath && b.coverUploaded === b.coverHash)) { o.cover = b.cover; o.coverPath = ''; o.coverUploaded = ''; } // Storage belum sedia: hantar imej mampat bersama rekod
@@ -1171,7 +1885,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     if (!cloudUser || !supabaseClient) { if (!silent) cloudMessage('Sila log masuk dahulu.'); return false; }
     if (!cloudReady) { if (!silent) await bootstrapCloud(); return false; }
     if (syncRunning) { syncQueued = true; return false; }
-    syncRunning = true; clearTimeout(cloudTimer);
+    syncRunning = true; clearTimeout(cloudTimer); setSyncChip('syncing', 'Menyegerak…');
     try {
       let ok = false; const notes = [];
       for (let attempt = 1; attempt <= 4 && !ok; attempt++) {
@@ -1187,10 +1901,11 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       downloadMissingCovers();
       let msg = 'Disegerakkan · ' + new Date().toLocaleTimeString('ms-MY') + ` · ${books.length} buku, ${loans.length} pinjaman. Penyegerakan automatik aktif.`;
       if (storageBroken) msg += ` Gambar kulit dihantar bersama rekod kerana Supabase Storage belum sedia (${storageError}). Lihat "Persediaan Supabase Storage" di atas.`;
-      cloudMessage(msg);
+      cloudMessage(msg); setSyncChip('ok', 'Disegerakkan ' + new Date().toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit' }));
       if (notes.length) toast('ID buku berganda dibetulkan: ' + notes.join('; '), { ms: 12000 });
       return true;
     } catch (e) {
+      setSyncChip(navigator.onLine ? 'error' : 'offline', navigator.onLine ? 'Sync gagal' : 'Luar talian');
       cloudMessage('Penyegerakan gagal: ' + (e.message || 'ralat tidak diketahui') + '. Data kekal pada peranti ini dan akan dicuba semula. Semak polisi akses/RLS jadual library_sync jika berulang.');
       return false;
     } finally {
@@ -1201,7 +1916,9 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   async function replaceWithCloud(rp) {
     await createBackup('Sebelum diganti dengan data awan');
     const r = normalizePayload(rp), prev = coverMap();
-    books = r.books; loans = r.loans; categories = r.categories; deletions = r.deletions;
+    if (!r.hasWishlist) r.wishlist = wishlist;
+    if (!r.hasBorrowings) r.borrowings = borrowings;
+    setLists(r); deletions = r.deletions;
     if (r.settings) settings = r.settings;
     fixIntegrity(); attachCovers(prev);
     await persist({ sync: false });
@@ -1216,7 +1933,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     if (bootstrapRunning) return;
     bootstrapRunning = true;
     try {
-      cloudMessage('Log masuk sebagai ' + cloudUser.email + '. Menyemak katalog awan…');
+      cloudMessage('Log masuk sebagai ' + cloudUser.email + '. Menyemak katalog awan…'); setSyncChip('syncing', 'Menyemak awan…');
       const remote = await readCloud();
       const linked = lsGet(LS.CLOUD_LINKED, null) === cloudUser.id;
       const localCount = books.length + loans.length;
@@ -1225,7 +1942,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       if (linked || localCount === 0) { cloudReady = true; bootstrapRunning = false; await syncNow(); return; }
       if (remoteCount === 0) {
         if (await ask(`Belum ada data dalam awan. Hantar ${books.length} buku dan ${loans.length} rekod pinjaman dari peranti ini ke awan?`, 'Ya, hantar ke awan')) { cloudReady = true; bootstrapRunning = false; await syncNow(); }
-        else cloudMessage('Data tempatan dikekalkan. Tekan "Segerakkan sekarang" apabila bersedia.');
+        else { cloudMessage('Data tempatan dikekalkan. Tekan "Segerakkan sekarang" apabila bersedia.'); setSyncChip('pending', 'Sync belum aktif'); }
         return;
       }
       const choice = await choose(`Peranti ini ada ${books.length} buku dan ${loans.length} pinjaman. Awan ada ${rp.books.length} buku dan ${rp.loans.length} pinjaman.\n\nBagaimana mahu disegerakkan?`, [
@@ -1235,8 +1952,8 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       ]);
       if (choice === 'merge') { cloudReady = true; bootstrapRunning = false; await syncNow(); }
       else if (choice === 'cloud') await replaceWithCloud(remote.payload);
-      else cloudMessage('Penyegerakan belum diaktifkan. Data peranti ini tidak diubah.');
-    } catch (e) { cloudReady = false; cloudMessage('Tidak dapat menyediakan penyegerakan: ' + (e.message || 'ralat tidak diketahui') + '. Data tempatan tidak diubah. Semak permission/RLS jadual library_sync di Supabase.'); }
+      else { cloudMessage('Penyegerakan belum diaktifkan. Data peranti ini tidak diubah.'); setSyncChip('pending', 'Sync belum aktif'); }
+    } catch (e) { cloudReady = false; setSyncChip('error', 'Sync gagal'); cloudMessage('Tidak dapat menyediakan penyegerakan: ' + (e.message || 'ralat tidak diketahui') + '. Data tempatan tidak diubah. Semak permission/RLS jadual library_sync di Supabase.'); }
     finally { bootstrapRunning = false; }
   }
   async function pullReplace() {
@@ -1296,17 +2013,18 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
         bootstrapCloud();
       } catch (e) { cloudMessage('Log masuk gagal: ' + e.message); }
     });
-    $('logoutCloudBtn').addEventListener('click', async () => { try { if (supabaseClient) await supabaseClient.auth.signOut(); cloudUser = null; cloudReady = false; cloudMessage('Log keluar. Rekod tempatan masih tersedia.'); } catch (e) { cloudMessage('Gagal log keluar: ' + e.message); } });
+    $('logoutCloudBtn').addEventListener('click', async () => { try { if (supabaseClient) await supabaseClient.auth.signOut(); cloudUser = null; cloudReady = false; setSyncChip('local', 'Tempatan sahaja'); cloudMessage('Log keluar. Rekod tempatan masih tersedia.'); } catch (e) { cloudMessage('Gagal log keluar: ' + e.message); } });
     $('pullCloudBtn').addEventListener('click', pullReplace);
     $('pushCloudBtn').addEventListener('click', pushReplace);
     $('syncNowBtn').addEventListener('click', () => syncNow({ silent: false }));
+    window.addEventListener('offline', () => { if (cloudUser) setSyncChip('offline', 'Luar talian'); });
     window.addEventListener('online', () => { if (cloudReady && cloudUser) { cloudMessage('Sambungan internet pulih. Menyegerakkan…'); scheduleCloudPush(300); } });
     document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && cloudReady && Date.now() - lastSyncAt > 20000) syncNow(); });
     setInterval(() => { if (document.visibilityState === 'visible' && cloudReady && Date.now() - lastSyncAt > 110000) syncNow(); }, 30000);
   }
 
   // ---------- Lain-lain kawalan ----------
-  ['bookSearch', 'filterGenre', 'filterReading', 'filterDupes'].forEach(id => $(id).addEventListener('input', renderBooks));
+  ['bookSearch', 'filterGenre', 'filterReading', 'filterTag'].forEach(id => $(id).addEventListener('input', renderBooks));
   $('filterDupes').addEventListener('change', renderBooks);
   $('dupStatBtn').addEventListener('click', () => { $('filterDupes').checked = !$('filterDupes').checked; renderBooks(); });
   $('loanSearch').addEventListener('input', renderLoans);
@@ -1324,7 +2042,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       else data = {};
     }
     const r = normalizePayload(data);
-    books = r.books; loans = r.loans; categories = r.categories; deletions = r.deletions;
+    setLists(r); deletions = r.deletions;
     if (r.settings) settings = r.settings;
     pendingCoverRemovals = arr(data.pendingCoverRemovals).filter(x => typeof x === 'string');
     if (!migrated) {
@@ -1360,10 +2078,14 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   }
 
   async function init() {
+    applyTheme(); renderPinSettings();
+    if (pinCfg()) lockNow(); else document.documentElement.classList.remove('locked');
     await loadData();
-    render(); resetBook(false); resetLoan(false); setupDraftAutosave(); restoreDraft('book'); restoreDraft('loan');
-    setCollectionView(ui.view === 'gallery' ? 'gallery' : 'table');
+    render(); resetBook(false); resetLoan(false); resetBorrow(); setupDraftAutosave(); restoreDraft('book'); restoreDraft('loan');
+    setCollectionView(ui.view);
+    showLoanSub(ui.loanSub === 'borrowSection' ? 'borrowSection' : 'lendSection');
     showTab(ui.tab || 'dashboardPanel');
+    if (isLocked()) $('lockLibName').textContent = libraryName() + ' — masukkan PIN untuk membuka.';
     setupCloudUI();
     try { if (navigator.storage?.persist && !(await navigator.storage.persisted())) await navigator.storage.persist(); } catch (e) {}
     dailyBackup().catch(() => {});
