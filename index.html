@@ -230,6 +230,14 @@ dialog.scan-dialog{border:0;border-radius:16px;padding:0;width:min(560px,calc(10
 .report-card{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.report-actions{display:flex;gap:8px;align-items:center}.report-actions select{width:auto;min-width:110px}
 .qr-box{display:grid;place-items:center;min-height:220px;background:#fff;border-radius:10px;padding:10px}.qr-box svg{width:min(300px,80vw);height:auto}
 dialog.label-dialog{max-width:520px}
+.bulk-defaults{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--soft);max-width:900px}
+.bulk-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;max-width:900px;margin:18px 0 8px}
+.bulk-list{max-width:900px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.bulk-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;padding:10px 12px;border-bottom:1px solid var(--line2);background:var(--paper)}.bulk-row:last-child{border-bottom:0}
+.bulk-row.warn{background:var(--st-amber-bg)}.bulk-row.off{opacity:.55}.bulk-row .check{padding-top:4px}
+.bulk-top{font-size:13px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}.bulk-badges .pill{font-size:11px}
+.bulk-inputs{display:grid;grid-template-columns:2fr 1.5fr .8fr;gap:6px;margin-top:6px}.bulk-inputs input{min-height:38px;padding:7px 9px}
+@media(max-width:600px){.bulk-inputs{grid-template-columns:1fr 1fr}.bulk-inputs input[data-b-f=title]{grid-column:1/-1}}
 /* Responsif */
 @media(max-width:1000px){.dashboard-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.value-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-insights{grid-template-columns:1fr 1fr}.dashboard-insights .dash-card:last-child{grid-column:1/-1}.value-grid{grid-template-columns:1fr}}
@@ -373,7 +381,7 @@ dialog.label-dialog{max-width:520px}
 
   <section id="scanPanel" class="panel" role="tabpanel" aria-labelledby="tab-scanPanel" tabindex="-1">
     <h2>Imbas &amp; Semak</h2>
-    <div class="subtabs" role="tablist" aria-label="Mod imbasan"><button type="button" role="tab" data-scanmode="checkMode" aria-selected="true">Semak buku</button><button type="button" role="tab" data-scanmode="stockMode" aria-selected="false">Semakan stok</button></div>
+    <div class="subtabs" role="tablist" aria-label="Mod imbasan"><button type="button" role="tab" data-scanmode="checkMode" aria-selected="true">Semak buku</button><button type="button" role="tab" data-scanmode="stockMode" aria-selected="false">Semakan stok</button><button type="button" role="tab" data-scanmode="bulkMode" aria-selected="false">Tambah pukal</button></div>
     <div id="checkMode"><p class="sub">Halakan kamera pada barkod ISBN di belakang buku (atau barkod nombor katalog pada rekod cetakan) untuk menyemak sama ada buku itu sudah ada dalam koleksi.</p>
     <div class="scan-box"><video id="scanVideo" playsinline muted hidden></video><div class="scan-frame" id="scanFrame" hidden></div><div class="scan-msg" id="scanMsg">Tekan “Mula imbas” untuk membuka kamera belakang.</div></div>
     <div class="actions" style="margin-top:12px"><button class="btn" type="button" id="scanStartBtn">📷 Mula imbas</button><button class="btn secondary" type="button" id="scanStopBtn" disabled>Hentikan</button></div>
@@ -398,6 +406,28 @@ dialog.label-dialog{max-width:520px}
         <div id="stockList" class="stock-list"></div>
         <div class="actions"><button class="btn secondary" type="button" id="stockPrintBtn">Cetak laporan semakan (A4)</button><button class="btn danger" type="button" id="stockEndBtn">Tamatkan semakan</button></div>
       </div>
+    </div>
+    <div id="bulkMode" hidden>
+      <p class="sub">Imbas banyak buku berturut-turut — kamera kekal aktif dan setiap ISBN masuk ke senarai. Tetapkan maklumat lalai sekali, lengkapkan tajuk &amp; penulis, kemudian daftar semua sekali gus. Senarai disimpan pada peranti ini, jadi anda boleh imbas sekarang dan lengkapkan kemudian.</p>
+      <details class="bulk-defaults" id="bulkDefaults" open><summary>Maklumat lalai untuk semua buku <span class="small" id="bulkDefSummary"></span></summary>
+        <div class="grid" style="margin-top:12px">
+          <div class="field"><label for="bulkGenre">Kategori *</label><select id="bulkGenre"><option value="">Pilih kategori</option></select></div>
+          <div class="field"><label for="bulkFormat">Format *</label><select id="bulkFormat"></select></div>
+          <div class="field"><label for="bulkSource">Sumber *</label><select id="bulkSource"></select></div>
+          <div class="field" id="bulkPurchaseField" hidden><label for="bulkPurchase">Lokasi pembelian *</label><input id="bulkPurchase" placeholder="Contoh: Pesta Buku, Shopee"></div>
+          <div class="field"><label for="bulkReading">Status bacaan</label><select id="bulkReading"></select></div>
+          <div class="field"><label for="bulkLanguage">Bahasa</label><select id="bulkLanguage"></select></div>
+          <div class="field"><label for="bulkCondition">Keadaan</label><select id="bulkCondition"></select></div>
+          <div class="field"><label for="bulkTags">Tag (pisahkan dengan koma)</label><input id="bulkTags" list="tagSuggestions" placeholder="Contoh: PBAKL 2026"></div>
+        </div>
+      </details>
+      <div class="scan-box" style="margin-top:14px"><video id="bulkVideo" playsinline muted hidden></video><div class="scan-frame" id="bulkFrame" hidden></div><div class="scan-msg" id="bulkMsg">Tekan “Mula imbas” dan imbas ISBN di belakang setiap buku.</div></div>
+      <div id="bulkLast" class="stock-last" aria-live="polite" hidden></div>
+      <div class="actions" style="margin-top:12px"><button class="btn" type="button" id="bulkCamBtn">📷 Mula imbas</button><button class="btn secondary" type="button" id="bulkCamStopBtn" disabled>Hentikan kamera</button><button class="btn secondary" type="button" id="bulkBlankBtn">+ Baris tanpa ISBN</button></div>
+      <form id="bulkManualForm" class="scan-manual"><input id="bulkCode" inputmode="numeric" autocomplete="off" placeholder="atau taip ISBN, tekan Enter" aria-label="ISBN untuk tambah pukal"><button class="btn secondary" type="submit">Tambah</button></form>
+      <div class="bulk-head"><strong id="bulkCount">Senarai kosong</strong><span class="small" id="bulkReady"></span></div>
+      <div id="bulkList" class="bulk-list"></div>
+      <div class="actions"><button class="btn" type="button" id="bulkSaveBtn" disabled>Daftar semua</button><button class="btn secondary" type="button" id="bulkClearBtn" disabled>Kosongkan senarai</button></div>
     </div>
   </section>
 
@@ -950,8 +980,9 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     tabs.forEach(b => { const on = b.dataset.tab === id; b.classList.toggle('active', on); b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
     document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
     const inMore = ['loanPanel', 'wishlistPanel', 'categoryPanel', 'syncPanel'].includes(id);
-    if (id !== 'scanPanel' && scan.on && !$('scanDialog').open) { stopScanner(); setScanUi('idle', 'Tekan “Mula imbas” untuk membuka kamera belakang.'); setStockCam(false); }
+    if (id !== 'scanPanel' && scan.on && !$('scanDialog').open) { stopScanner(); setScanUi('idle', 'Tekan “Mula imbas” untuk membuka kamera belakang.'); setStockCam(false); setBulkCam(false); }
     if (id === 'scanPanel' && !$('stockMode').hidden) renderStock();
+    if (id === 'scanPanel' && !$('bulkMode').hidden) renderBulk();
     bottomBtns.forEach(b => b.classList.toggle('active', b.dataset.go === id || (inMore && b.dataset.go === 'more')));
     closeSheet();
     saveUi({ tab: id });
@@ -1214,6 +1245,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     const sorted = [...categories].sort((a, b) => categoryLabel(a).localeCompare(categoryLabel(b), 'ms'));
     const opts = sorted.map(c => `<option value="${esc(c.id)}">${esc(categoryLabel(c))}</option>`).join('');
     $('genre').innerHTML = '<option value="">Pilih kategori</option>' + opts;
+    if ($('bulkGenre')) { const bg = $('bulkGenre').value || ((lsGet('perpustakaanMini_bulk_v1', {}) || {}).defaults || {}).categoryId || ''; $('bulkGenre').innerHTML = '<option value="">Pilih kategori</option>' + opts; if (sorted.some(c => c.id === bg)) $('bulkGenre').value = bg; }
     $('filterGenre').innerHTML = '<option value="">Semua kategori</option>' + opts;
     if (sorted.some(c => c.id === selected)) $('genre').value = selected;
     if (sorted.some(c => c.id === filterSelected)) $('filterGenre').value = filterSelected;
@@ -2056,7 +2088,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     if (scan.stream) { scan.stream.getTracks().forEach(t => t.stop()); scan.stream = null; }
     if (scan.video) { try { scan.video.srcObject?.getTracks?.().forEach(t => t.stop()); } catch (e) {} scan.video.srcObject = null; }
   }
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && scan.on) { stopScanner(); setScanUi('idle', 'Kamera dihentikan. Tekan “Mula imbas” untuk meneruskan.'); setStockCam(false); closeScanDialog(); } });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && scan.on) { stopScanner(); setScanUi('idle', 'Kamera dihentikan. Tekan “Mula imbas” untuk meneruskan.'); setStockCam(false); setBulkCam(false); closeScanDialog(); } });
 
   // Tab "Imbas & Semak"
   function setScanUi(state, msg) {
@@ -2130,16 +2162,17 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
 
   // ---------- Mod imbasan: Semak buku / Semakan stok ----------
   function showScanMode(id) {
-    ['checkMode', 'stockMode'].forEach(m => { $(m).hidden = m !== id; });
+    ['checkMode', 'stockMode', 'bulkMode'].forEach(m => { $(m).hidden = m !== id; });
     document.querySelectorAll('[data-scanmode]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.scanmode === id)));
     stopAllCams(); saveUi({ scanMode: id });
     if (id === 'stockMode') renderStock();
+    if (id === 'bulkMode') { renderBulk(); updateBulkDefSummary(true); }
   }
   document.querySelectorAll('[data-scanmode]').forEach(b => b.addEventListener('click', () => showScanMode(b.dataset.scanmode)));
   function stopAllCams() {
     if (scan.on && !$('scanDialog').open) stopScanner();
     setScanUi($('scanResult').innerHTML ? 'done' : 'idle', $('scanResult').innerHTML ? null : 'Tekan “Mula imbas” untuk membuka kamera belakang.');
-    setStockCam(false);
+    setStockCam(false); setBulkCam(false);
   }
 
   // ---------- Semakan stok ----------
@@ -2259,6 +2292,145 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     openPrintWindow('Laporan Semakan Stok — ' + lib, css, body, { note: 'Pratonton laporan semakan stok · A4' });
   }
   $('stockPrintBtn').addEventListener('click', printStockReport);
+
+  // ---------- Tambah pukal: imbas banyak ISBN → lengkapkan → daftar sekali gus ----------
+  const BULK_KEY = 'perpustakaanMini_bulk_v1';
+  let bulk = lsGet(BULK_KEY, null) || { items: [], defaults: {} };
+  if (!Array.isArray(bulk.items)) bulk.items = [];
+  let bulkSaveTimer = null, bulkCreated = [];
+  const saveBulk = () => { clearTimeout(bulkSaveTimer); lsSet(BULK_KEY, bulk); };
+  const saveBulkSoon = () => { clearTimeout(bulkSaveTimer); bulkSaveTimer = setTimeout(saveBulk, 200); };
+  const BULK_DEF = { bulkGenre: 'categoryId', bulkFormat: 'format', bulkSource: 'source', bulkPurchase: 'purchase', bulkReading: 'reading', bulkLanguage: 'language', bulkCondition: 'condition', bulkTags: 'tags' };
+  // Salin pilihan dari borang utama supaya senarai sentiasa sama
+  [['bulkFormat', 'format'], ['bulkReading', 'reading'], ['bulkLanguage', 'language'], ['bulkCondition', 'condition'], ['bulkSource', 'source']].forEach(([a, b]) => { $(a).innerHTML = $(b).innerHTML; });
+  function applyBulkDefaults() {
+    Object.entries(BULK_DEF).forEach(([el, k]) => { const v = bulk.defaults[k]; if (v != null && [...($(el).options || [])].every(o => o.value !== v) && $(el).tagName === 'SELECT') return; if (v != null) $(el).value = v; });
+    if (!bulk.defaults.reading) $('bulkReading').value = 'Belum dibaca';
+    $('bulkPurchaseField').hidden = $('bulkSource').value !== 'Beli';
+    updateBulkDefSummary(true);
+  }
+  // Ringkasan satu baris; bahagian dilipat apabila maklumat wajib lengkap (kamera lebih dekat di telefon)
+  function updateBulkDefSummary(setOpen) {
+    const cat = categories.find(c => c.id === $('bulkGenre').value), src = $('bulkSource').value;
+    const ok = cat && $('bulkFormat').value && src && (src !== 'Beli' || $('bulkPurchase').value.trim());
+    $('bulkDefSummary').textContent = ok ? '· ' + [categoryLabel(cat), $('bulkFormat').value, src + (src === 'Beli' ? ' (' + $('bulkPurchase').value.trim() + ')' : '')].join(' · ') : '· belum lengkap';
+    if (setOpen) $('bulkDefaults').open = !ok;
+  }
+  Object.entries(BULK_DEF).forEach(([el, k]) => $(el).addEventListener('input', () => { bulk.defaults[k] = $(el).value; $('bulkPurchaseField').hidden = $('bulkSource').value !== 'Beli'; updateBulkDefSummary(false); saveBulkSoon(); }));
+  $('bulkSource').addEventListener('change', () => { $('bulkPurchaseField').hidden = $('bulkSource').value !== 'Beli'; });
+  const bulkComplete = it => it.title.trim() && it.author.trim();
+  function bulkBadges(it) {
+    const out = [];
+    const owned = it.owned && books.find(b => b.id === it.owned);
+    if (owned) out.push(`<span class="pill st-amber">Sudah ada: ${esc(owned.bookCode)}${it.include ? ' · didaftar sebagai naskhah tambahan' : ''}</span>`);
+    if (it.wish) out.push('<span class="pill st-blue">Dari senarai hajat</span>');
+    if (it.include && !bulkComplete(it)) out.push('<span class="pill st-red">Perlu tajuk &amp; penulis</span>');
+    return out.join(' ');
+  }
+  function bulkRowHtml(it) {
+    return `<div class="bulk-row${it.owned ? ' warn' : ''}${it.include ? '' : ' off'}" data-key="${esc(it.key)}">
+      <label class="check" title="Sertakan semasa mendaftar"><input type="checkbox" data-b-inc ${it.include ? 'checked' : ''} aria-label="Sertakan buku ini"></label>
+      <div><div class="bulk-top"><span class="code-txt">${it.isbn ? esc(it.isbn) : 'Tanpa ISBN'}</span> <span class="bulk-badges">${bulkBadges(it)}</span></div>
+      <div class="bulk-inputs"><input data-b-f="title" placeholder="Tajuk *" value="${esc(it.title)}" aria-label="Tajuk"><input data-b-f="author" placeholder="Penulis *" value="${esc(it.author)}" aria-label="Penulis"><input data-b-f="price" inputmode="decimal" placeholder="Harga (RM)" value="${esc(it.price)}" aria-label="Harga"></div></div>
+      <button type="button" class="btn secondary small-btn" data-b-del aria-label="Buang dari senarai">✕</button></div>`;
+  }
+  function bulkSummary() {
+    const inc = bulk.items.filter(i => i.include), ready = inc.filter(bulkComplete);
+    $('bulkCount').textContent = bulk.items.length ? `${bulk.items.length} buku dalam senarai` : 'Senarai kosong';
+    $('bulkReady').textContent = bulk.items.length ? `${ready.length} sedia didaftar${inc.length - ready.length ? ` · ${inc.length - ready.length} perlu tajuk/penulis` : ''}${bulk.items.length - inc.length ? ` · ${bulk.items.length - inc.length} tidak disertakan` : ''}` : '';
+    $('bulkSaveBtn').textContent = ready.length ? `Daftar ${ready.length} buku` : 'Daftar semua';
+    $('bulkSaveBtn').disabled = !ready.length; $('bulkClearBtn').disabled = !bulk.items.length;
+  }
+  function renderBulk() {
+    $('bulkList').innerHTML = bulk.items.length ? bulk.items.map(bulkRowHtml).join('') : '<p class="empty">Imbas ISBN pertama untuk mula. Anda juga boleh menaip ISBN, atau tambah baris tanpa ISBN.</p>';
+    bulkSummary();
+  }
+  const bulkItem = el => bulk.items.find(i => i.key === el.closest('[data-key]')?.dataset.key);
+  $('bulkList').addEventListener('input', e => {
+    const it = bulkItem(e.target); if (!it) return;
+    if (e.target.dataset.bF) it[e.target.dataset.bF] = e.target.value;
+    if (e.target.matches('[data-b-inc]')) { it.include = e.target.checked; e.target.closest('.bulk-row').classList.toggle('off', !it.include); }
+    e.target.closest('.bulk-row').querySelector('.bulk-badges').innerHTML = bulkBadges(it);
+    saveBulkSoon(); bulkSummary();
+  });
+  $('bulkList').addEventListener('change', e => {
+    const it = bulkItem(e.target); if (!it || !e.target.dataset.bF) return;
+    if (e.target.dataset.bF === 'title') it.title = e.target.value = e.target.value.toLocaleUpperCase('ms-MY').trim();
+    if (e.target.dataset.bF === 'author') it.author = e.target.value = formatAuthorName(e.target.value);
+    if (e.target.dataset.bF === 'price') { const v = e.target.value.replace(',', '.').trim(); it.price = e.target.value = v && !Number.isNaN(Number(v)) ? v : ''; }
+    saveBulk();
+  });
+  $('bulkList').addEventListener('click', e => {
+    const del = e.target.closest('[data-b-del]'); if (!del) return;
+    const it = bulkItem(del); bulk.items = bulk.items.filter(i => i !== it); saveBulk(); renderBulk();
+  });
+  function bulkLast(cls, html) { const el = $('bulkLast'); el.hidden = false; el.className = 'stock-last ' + cls; el.innerHTML = html; }
+  function bulkAdd(raw) {
+    const code = String(raw || '').trim();
+    if (!code || code.includes('PMSB1.')) return;
+    const qi = isbnKey(code);
+    if (!(qi.length === 13 && /^97[89]/.test(qi))) {
+      const own = books.find(b => b.bookCode && normCode(b.bookCode) === normCode(code));
+      beep(false); bulkLast('bad', own ? `Ini nombor katalog buku sedia ada: ${esc(own.title)} (${esc(own.bookCode)})` : `✗ <span class="code-txt">${esc(code)}</span> bukan ISBN buku. ISBN bermula dengan 978 atau 979.`); return;
+    }
+    if (bulk.items.some(i => i.isbn && isbnKey(i.isbn) === qi)) { beep(true); bulkLast('dup', `Sudah dalam senarai: <span class="code-txt">${esc(code)}</span>`); return; }
+    const owned = books.find(b => isbnKey(b.isbn) === qi), wish = wishlist.find(w => isbnKey(w.isbn) === qi);
+    const it = { key: newId('q'), isbn: code, title: wish ? wish.title : '', author: wish ? wish.author : '', price: wish ? wish.targetPrice : '', include: !owned, owned: owned ? owned.id : '', wish: wish ? wish.id : '' };
+    bulk.items.unshift(it); saveBulk(); renderBulk(); beep(true);
+    bulkLast(owned ? 'dup' : 'ok', owned ? `Ditambah, tetapi buku ini <strong>sudah ada</strong> (${esc(owned.bookCode)} · ${esc(owned.title)}). Tandakan jika ini naskhah tambahan.` : `✓ Ditambah: <span class="code-txt">${esc(code)}</span>${wish ? ' · ' + esc(wish.title) + ' (dari senarai hajat)' : ''} · ${bulk.items.length} dalam senarai`);
+  }
+  function setBulkCam(on) { $('bulkVideo').hidden = !on; $('bulkFrame').hidden = !on; $('bulkMsg').hidden = on; $('bulkCamBtn').disabled = on; $('bulkCamStopBtn').disabled = !on; $('bulkCamBtn').textContent = on ? 'Kamera aktif' : '📷 Mula imbas'; }
+  $('bulkCamBtn').addEventListener('click', async () => {
+    try { const ok = await startScanner($('bulkVideo'), bulkAdd, { continuous: true }); if (ok !== false && scan.on) setBulkCam(true); }
+    catch (e) { stopScanner(); setBulkCam(false); $('bulkMsg').innerHTML = 'Kamera tidak dapat diaktifkan: ' + esc(cameraError(e)); }
+  });
+  $('bulkCamStopBtn').addEventListener('click', () => { stopScanner(); setBulkCam(false); $('bulkMsg').textContent = 'Kamera dihentikan. Senarai disimpan — lengkapkan tajuk & penulis di bawah.'; });
+  $('bulkManualForm').addEventListener('submit', e => { e.preventDefault(); bulkAdd($('bulkCode').value); $('bulkCode').value = ''; $('bulkCode').focus(); });
+  $('bulkBlankBtn').addEventListener('click', () => {
+    bulk.items.unshift({ key: newId('q'), isbn: '', title: '', author: '', price: '', include: true, owned: '', wish: '' });
+    saveBulk(); renderBulk(); $('bulkList').querySelector('[data-b-f="title"]')?.focus();
+  });
+  $('bulkClearBtn').addEventListener('click', async () => {
+    if (!await ask(`Kosongkan senarai (${bulk.items.length} buku)? Buku yang belum didaftar akan dibuang daripada senarai.`, 'Ya, kosongkan')) return;
+    bulk.items = []; saveBulk(); renderBulk(); $('bulkLast').hidden = true;
+  });
+  $('bulkSaveBtn').addEventListener('click', async () => {
+    const d = bulk.defaults, cat = categories.find(c => c.id === $('bulkGenre').value);
+    const need = !cat ? ['bulkGenre', 'kategori'] : !$('bulkFormat').value ? ['bulkFormat', 'format'] : !$('bulkSource').value ? ['bulkSource', 'sumber'] : ($('bulkSource').value === 'Beli' && !$('bulkPurchase').value.trim()) ? ['bulkPurchase', 'lokasi pembelian'] : null;
+    if (need) { $('bulkDefaults').open = true; $(need[0]).focus(); toast(`Pilih ${need[1]} dalam "Maklumat lalai" dahulu.`); return; }
+    const ready = bulk.items.filter(i => i.include && bulkComplete(i)), pending = bulk.items.filter(i => i.include && !bulkComplete(i)).length;
+    if (!ready.length) return;
+    const extra = ready.filter(i => i.owned).length;
+    if (!await ask(`Daftar ${ready.length} buku dengan kategori ${categoryLabel(cat)}, format ${$('bulkFormat').value}, sumber ${$('bulkSource').value}?${extra ? `\n${extra} daripadanya ialah naskhah tambahan bagi buku sedia ada.` : ''}${pending ? `\n${pending} buku yang belum lengkap akan kekal dalam senarai.` : ''}`, `Ya, daftar ${ready.length} buku`)) return;
+    const tags = parseTags($('bulkTags').value).join(', '), created = [], removedWish = [];
+    ready.forEach(it => {
+      const price = String(it.price || '').replace(',', '.').trim();
+      const b = touch({
+        id: newId(''), bookCode: nextBookCode(), format: $('bulkFormat').value, categoryId: cat.id, genre: cat.name,
+        isbn: it.isbn, title: it.title.toLocaleUpperCase('ms-MY').trim(), publisher: '', author: formatAuthorName(it.author),
+        reading: $('bulkReading').value || 'Belum dibaca', price: price && !Number.isNaN(Number(price)) ? price : '', source: $('bulkSource').value,
+        purchase: $('bulkSource').value === 'Beli' ? $('bulkPurchase').value.trim() : '', publishPlace: '', year: '', dupOk: it.owned ? '1' : '',
+        tags, edition: '', language: $('bulkLanguage').value, pages: '', condition: $('bulkCondition').value, series: '', volume: '', seriesTotal: '', cover: '', coverHash: ''
+      });
+      books.unshift(b); created.push(b);
+      const qi = isbnKey(b.isbn);
+      wishlist.filter(w => w.id === it.wish || (qi && isbnKey(w.isbn) === qi)).forEach(w => { if (!removedWish.includes(w)) removedWish.push(w); });
+    });
+    removedWish.forEach(w => { deletions.wishlist[w.id] = tombTime(w); }); wishlist = wishlist.filter(w => !removedWish.includes(w));
+    const doneItems = ready; bulk.items = bulk.items.filter(i => !doneItems.includes(i)); saveBulk();
+    persist(); render(); renderBulk(); bulkCreated = created;
+    const range = created.length > 1 ? `${created[0].bookCode} – ${created[created.length - 1].bookCode}` : created[0].bookCode;
+    bulkLast('ok', `✓ ${created.length} buku didaftarkan (${esc(range)})${removedWish.length ? ` · ${removedWish.length} dibuang daripada senarai hajat` : ''}. <button type="button" class="btn secondary small-btn" id="bulkLabelBtn">Cetak label untuk buku ini</button>`);
+    toast(`${created.length} buku didaftarkan.`, { undo: () => {
+      const ids = new Set(created.map(b => b.id));
+      books = books.filter(b => !ids.has(b.id)); created.forEach(b => { deletions.books[b.id] = tombTime(b); });
+      removedWish.forEach(w => { delete deletions.wishlist[w.id]; touch(w); wishlist.push(w); });
+      bulk.items = [...doneItems, ...bulk.items]; saveBulk(); persist(); render(); renderBulk(); $('bulkLast').hidden = true; toast('Pendaftaran pukal dibatalkan. Senarai dipulihkan.');
+    } });
+  });
+  $('bulkLast').addEventListener('click', e => { if (e.target.id === 'bulkLabelBtn') openLabelDialog(bulkCreated.map(b => books.find(x => x.id === b.id)).filter(Boolean)); });
+  // Senarai diubah dalam tab lain
+  window.addEventListener('storage', e => { if (e.key === BULK_KEY && !$('bulkList').contains(document.activeElement)) { bulk = lsGet(BULK_KEY, null) || { items: [], defaults: {} }; applyBulkDefaults(); renderBulk(); } });
 
   // ---------- Label barkod (kertas pelekat A4) ----------
   const LABEL_PRESETS = {
@@ -2890,7 +3062,8 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     render(); resetBook(false); resetLoan(false); resetBorrow(); setupDraftAutosave(); restoreDraft('book'); restoreDraft('loan');
     setCollectionView(ui.view);
     showLoanSub(ui.loanSub === 'borrowSection' ? 'borrowSection' : 'lendSection');
-    showScanMode(ui.scanMode === 'stockMode' ? 'stockMode' : 'checkMode');
+    applyBulkDefaults();
+    showScanMode(['stockMode', 'bulkMode'].includes(ui.scanMode) ? ui.scanMode : 'checkMode');
     showTab(ui.tab || 'dashboardPanel');
     if (isLocked()) $('lockLibName').textContent = libraryName() + ' — masukkan PIN untuk membuka.';
     setupCloudUI();
