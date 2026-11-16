@@ -59,55 +59,54 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
 
 .view-switch{display:flex;gap:7px;align-items:center}.view-switch .btn{padding:9px 12px}.view-switch .btn.selected{box-shadow:inset 0 0 0 2px #b5d7ca}.gallery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:14px}.gallery-card{border:1px solid var(--line);background:#fff;border-radius:12px;overflow:hidden;min-width:0;box-shadow:0 4px 14px #17352a08;display:flex;flex-direction:column}.gallery-cover{height:205px;background:linear-gradient(145deg,#edf3f0,#dfeae5);display:flex;align-items:center;justify-content:center;overflow:hidden}.gallery-cover img{width:100%;height:100%;object-fit:contain}.gallery-cover .cover-letter{font-size:48px;font-weight:800;color:#83a99b}.gallery-info{padding:13px;display:flex;flex-direction:column;gap:7px;flex:1}.gallery-info h3{font-size:15px;line-height:1.35;margin:0;overflow-wrap:anywhere}.gallery-info .author{font-size:12px;color:var(--muted)}.gallery-meta{display:flex;flex-wrap:wrap;gap:5px}.gallery-meta span{font-size:11px;border-radius:99px;padding:3px 7px;background:#eef4f1;color:#42665a}.gallery-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:6px}.gallery-actions .btn{font-size:12px;padding:7px 9px}.collection-empty{grid-column:1/-1}
 @media(max-width:900px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:900px){.dashboard-insights{grid-template-columns:1fr 1fr}.dashboard-insights .dash-card:last-child{grid-column:1/-1}}\n@media(max-width:600px){.dashboard-insights{grid-template-columns:1fr}.dashboard-insights .dash-card:last-child{grid-column:auto}.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery-cover{height:160px}.dashboard-columns{grid-template-columns:1fr}.dashboard-hero{padding:18px}.hero-count{font-size:36px}.category-row{grid-template-columns:78px 1fr 24px}}
+@media(max-width:900px){.dashboard-insights{grid-template-columns:1fr 1fr}.dashboard-insights .dash-card:last-child{grid-column:1/-1}}
+@media(max-width:600px){.dashboard-insights{grid-template-columns:1fr}.dashboard-insights .dash-card:last-child{grid-column:auto}.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery-cover{height:160px}.dashboard-columns{grid-template-columns:1fr}.dashboard-hero{padding:18px}.hero-count{font-size:36px}.category-row{grid-template-columns:78px 1fr 24px}}
 @media(max-width:380px){.gallery-grid{grid-template-columns:1fr}.gallery-cover{height:220px}}
 @media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:0 12px 28px}.panel{padding:16px}}
 @media(max-width:500px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:13px}}
 
-/* Barcode scanner */
-.scan-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}.scan-camera-card video{display:block;width:100%;min-height:230px;max-height:390px;object-fit:cover;background:#15231f;border-radius:10px;margin:10px 0}.scan-result{margin-top:16px}.scan-found{display:grid;grid-template-columns:100px 1fr;gap:14px;align-items:start;border:1px solid var(--line);background:#f7faf8;border-radius:12px;padding:14px}.scan-found img{width:100px;height:140px;object-fit:contain;background:#edf3f0;border-radius:6px}.scan-found h4{margin:0 0 6px;font-size:17px;line-height:1.3}.scan-found .code{font-weight:800;letter-spacing:1px;color:var(--accent)}.scan-empty{padding:14px;border-radius:10px;background:#fff4f1;color:#8b3328}.scan-status-good{color:#24674f;font-weight:700}.scan-status-bad{color:#9b3c32;font-weight:700}
-@media(max-width:700px){.scan-layout{grid-template-columns:1fr}.scan-camera-card video{min-height:200px}.scan-found{grid-template-columns:76px 1fr}.scan-found img{width:76px;height:110px}}
 
 @media print{
  @page{size:A4 landscape;margin:12mm}
- body.single-book-print{background:#fff}
- body.single-book-print @page{size:A4 portrait;margin:16mm}
- body.single-book-print header, body.single-book-print main > .notice,
- body.single-book-print main > .tabs, body.single-book-print main > section{display:none!important}
- body.single-book-print #singleBookPrint{display:block!important}
- body.single-book-print #singleBookPrint .print-card{display:grid;grid-template-columns:38% 1fr;gap:18px;align-items:start}
- body.single-book-print #singleBookPrint .print-cover{width:100%;max-height:420px;object-fit:contain;object-position:top left}
- body.single-book-print #singleBookPrint .cover-placeholder{border:1px dashed #aaa;min-height:180px;display:flex;align-items:center;justify-content:center;color:#555;padding:12px;text-align:center}
- body.single-book-print #singleBookPrint h1{font-size:22pt;margin:0 0 14px}
- body.single-book-print #singleBookPrint .detail{margin:0 0 9px;padding-bottom:7px;border-bottom:1px solid #ddd}
- body.single-book-print #singleBookPrint .detail strong{display:block;font-size:9pt;color:#555;margin-bottom:2px}
- body.single-book-print #singleBookPrint .detail span{font-size:11pt;overflow-wrap:anywhere}
- body.single-book-print #singleBookPrint .print-record-title{font-size:16pt;margin:0 0 16px}
- body.single-book-print #singleBookPrint .print-card{break-inside:avoid}
 
- body{background:#fff;font-size:10pt;color:#111}#dashboardPanel{display:none!important}header{background:#fff!important;color:#111;padding:0 0 10mm;border-bottom:2px solid #333}header p{color:#333}main{max-width:none;margin:0;padding:0}.notice,.tabs,.no-print,.panel:not(.active){display:none!important}.panel.active{display:block;border:0;box-shadow:none;padding:0}.panel h2{font-size:18pt}.sub{margin-bottom:5mm}#formPanel,#loanPanel{display:none!important}#collectionPanel{display:block!important}.table-wrap{overflow:visible;border:0}table{min-width:0;width:100%;font-size:8pt;table-layout:auto}th,td{padding:5px 6px;border:1px solid #bbb;overflow-wrap:anywhere}th{background:#eee!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.book-cover{width:28px;height:38px}.print-heading{display:block!important}.print-meta{display:block!important}
+ body{background:#fff;font-size:10pt;color:#111}#dashboardPanel{display:none!important}header{background:#fff!important;color:#111;padding:0 0 10mm;border-bottom:2px solid #333}header p{color:#333}main{max-width:none;margin:0;padding:0}.notice,.tabs,.no-print,.panel:not(.active){display:none!important}.panel.active{display:block;border:0;box-shadow:none;padding:0}.panel h2{font-size:18pt}.sub{margin-bottom:5mm}#formPanel,#loanPanel{display:none!important}#collectionPanel{display:block!important}.table-wrap{overflow:visible;border:0}table{min-width:0;width:100%;font-size:8pt;table-layout:auto}th,td{padding:5px 6px;border:1px solid #bbb;overflow-wrap:anywhere}th{background:#eee!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.book-cover{width:28px;height:38px}.print-heading{display:block!important}.print-meta{display:block!important}.toast,#syncPanel,#categoryPanel{display:none!important}
 }
 .print-heading,.print-meta{display:none}
+/* Buku berganda & isihan */
+.dup-warning{background:#fff6e6;border:1px solid #f0cf9c;color:#5f400f;border-radius:10px;padding:12px 14px;margin-top:16px}.dup-warning[hidden]{display:none}
+.dup-warning ul{margin:8px 0;padding-left:18px}.dup-warning li{margin:5px 0}.dup-warning .btn{padding:4px 9px;font-size:12px;margin-left:4px}
+.pill.dup{background:#fff0d9;color:#8a5a12;margin-left:6px}.gallery-meta span.dup{background:#fff0d9;color:#8a5a12}
+.stat-btn{font:inherit;text-align:left;cursor:pointer;color:inherit}.stat-btn.has{border-color:#f0cf9c;background:#fff8ec}.stat-btn[aria-pressed="true"]{box-shadow:inset 0 0 0 2px #e2b56b}
+.check{display:flex;gap:6px;align-items:center;font-weight:600;font-size:13px;white-space:nowrap}.check input{width:auto;min-height:0;margin:0}
+/* Toast, dialog, tetapan */
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1f332e;color:#fff;padding:11px 14px;border-radius:10px;box-shadow:0 8px 28px #0003;display:flex;gap:12px;align-items:center;z-index:50;max-width:calc(100% - 24px);font-size:14px}
+.toast[hidden]{display:none}.toast button{background:#e6f3ee;color:#1f332e;border:0;border-radius:7px;padding:7px 11px;font-weight:700;cursor:pointer;white-space:nowrap}
+dialog.choice{border:0;border-radius:14px;padding:22px;max-width:460px;width:calc(100% - 30px);box-shadow:0 18px 50px #0004;color:var(--ink)}dialog.choice::backdrop{background:#0d1d1980}
+dialog.choice p{margin:0 0 16px;white-space:pre-line}dialog.choice .actions{margin-top:0;flex-direction:column}dialog.choice .btn{width:100%;text-align:left}
+.tab:focus-visible,.btn:focus-visible{outline:3px solid #94c8b9;outline-offset:2px}
+pre.sql{background:#f4f7f6;border:1px solid var(--line);border-radius:8px;padding:12px;overflow:auto;font-size:12px;white-space:pre}
+details summary{cursor:pointer;font-weight:650}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <header>
-  <h1>Perpustakaan Mini Muhammad Asyraf Azizan</h1>
+  <h1 id="libraryTitle">Perpustakaan Mini Muhammad Asyraf Azizan</h1>
   <p>Sistem rekod buku dan pinjaman peribadi · akses merentas telefon dan komputer</p>
 </header>
 <main>
-  <div class="notice"><strong>Nota akses:</strong> Rekod kekal disimpan pada peranti ini sehingga anda menyambungkan pangkalan data awan di bahagian <em>Sync & Tetapan</em>. Selepas disediakan, log masuk akaun yang sama pada telefon dan komputer untuk menyegerakkan rekod. Eksport sandaran masih disyorkan.</div>
-  <nav class="tabs no-print" aria-label="Bahagian sistem">
-    <button class="tab active" data-tab="dashboardPanel">Dashboard</button>
-    <button class="tab" data-tab="formPanel">Borang Maklumat Buku</button>
-    <button class="tab" data-tab="loanPanel">Rekod Pinjaman</button>
-    <button class="tab" data-tab="collectionPanel">Koleksi Buku</button>
-    <button class="tab" data-tab="categoryPanel">Pengurusan Kategori</button>
-    <button class="tab" data-tab="syncPanel">Sync & Tetapan</button>
+  <div class="notice"><strong>Nota akses:</strong> Rekod disimpan dalam pangkalan data pelayar (IndexedDB) pada peranti ini sehingga anda menyambungkan pangkalan data awan di bahagian <em>Sync & Tetapan</em>. Selepas disediakan, log masuk akaun yang sama pada telefon dan komputer untuk menyegerakkan rekod. Sandaran automatik harian disimpan pada peranti ini; eksport sandaran (.json) ke tempat lain masih disyorkan.</div>
+  <nav class="tabs no-print" role="tablist" aria-label="Bahagian sistem">
+    <button class="tab active" type="button" role="tab" id="tab-dashboardPanel" aria-controls="dashboardPanel" aria-selected="true" tabindex="0" data-tab="dashboardPanel">Dashboard</button>
+    <button class="tab" type="button" role="tab" id="tab-formPanel" aria-controls="formPanel" aria-selected="false" tabindex="-1" data-tab="formPanel">Borang Maklumat Buku</button>
+    <button class="tab" type="button" role="tab" id="tab-loanPanel" aria-controls="loanPanel" aria-selected="false" tabindex="-1" data-tab="loanPanel">Rekod Pinjaman</button>
+    <button class="tab" type="button" role="tab" id="tab-collectionPanel" aria-controls="collectionPanel" aria-selected="false" tabindex="-1" data-tab="collectionPanel">Koleksi Buku</button>
+    <button class="tab" type="button" role="tab" id="tab-categoryPanel" aria-controls="categoryPanel" aria-selected="false" tabindex="-1" data-tab="categoryPanel">Pengurusan Kategori</button>
+    <button class="tab" type="button" role="tab" id="tab-syncPanel" aria-controls="syncPanel" aria-selected="false" tabindex="-1" data-tab="syncPanel">Sync & Tetapan</button>
   </nav>
 
-  <section id="dashboardPanel" class="panel active">
+  <section id="dashboardPanel" class="panel active" role="tabpanel" aria-labelledby="tab-dashboardPanel" tabindex="-1">
     <div class="dashboard-hero"><div><h2>Selamat datang ke perpustakaan peribadi</h2><p>Ringkasan koleksi, kemajuan bacaan dan status pinjaman anda.</p></div><div class="hero-count" id="heroBookCount">0 <span style="font-size:14px;font-weight:600">buku</span></div></div>
     <div class="dashboard-stats">
       <div class="dash-stat"><span class="stat-label">JUMLAH KOLEKSI</span><strong id="dashTotal">0</strong><span class="stat-note">Buku direkodkan</span></div>
@@ -123,7 +122,7 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
     </div>
   </section>
 
-  <section id="formPanel" class="panel">
+  <section id="formPanel" class="panel" role="tabpanel" aria-labelledby="tab-formPanel" tabindex="-1">
     <h2>Borang Maklumat Buku</h2><p class="sub">Masukkan maklumat buku. Medan bertanda * wajib diisi.</p><p id="bookDraftStatus" class="small" role="status" aria-live="polite">Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.</p>
     <form id="bookForm">
       <input type="hidden" id="bookId">
@@ -133,7 +132,7 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
         <div class="field"><label for="genre">Kategori / Genre *</label><select id="genre" required><option value="">Pilih kategori</option></select></div>
         <div class="field"><label for="isbn">Kod ISBN</label><input id="isbn" placeholder="Contoh: 978-..." autocomplete="off"></div>
         <div class="field"><label for="title">Nama Buku *</label><input id="title" required placeholder="Masukkan tajuk buku"></div>
-        <div class="field"><label for="cover">Kulit Buku (imej)</label><input id="cover" type="file" accept="image/*"><span class="small">Imej akan disimpan dalam pelayar. Saiz disyorkan bawah 1 MB.</span><div id="coverPreview" class="cover-preview"></div></div>
+        <div class="field"><label for="cover">Kulit Buku (imej)</label><input id="cover" type="file" accept="image/*"><span class="small">Imej dimampatkan secara automatik (lebar maks. 600px, JPEG, ≤150 KB) sebelum disimpan.</span><div id="coverPreview" class="cover-preview"></div></div>
         <div class="field"><label for="publisher">Penerbit</label><input id="publisher" placeholder="Nama penerbit"></div>
         <div class="field"><label for="author">Penulis *</label><input id="author" required placeholder="Nama penulis"></div>
         <div class="field"><label for="reading">Status Bacaan *</label><select id="reading" required><option>Belum dibaca</option><option>Sedang dibaca</option><option>Selesai</option></select></div>
@@ -143,11 +142,12 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
         <div class="field"><label for="publishPlace">Lokasi Terbit</label><input id="publishPlace" placeholder="Bandar / negara"></div>
         <div class="field"><label for="year">Tahun Terbit</label><input id="year" type="number" min="0" max="2100" placeholder="Contoh: 2024"></div>
       </div>
+      <div id="dupWarning" class="dup-warning" role="status" aria-live="polite" hidden></div>
       <div class="actions"><button class="btn" type="submit" id="saveBookBtn">Simpan Buku</button><button class="btn secondary" type="button" id="resetBookBtn">Kosongkan Borang</button></div>
     </form>
   </section>
 
-  <section id="loanPanel" class="panel">
+  <section id="loanPanel" class="panel" role="tabpanel" aria-labelledby="tab-loanPanel" tabindex="-1">
     <h2>Rekod Pinjaman</h2><p class="sub">Pilih buku untuk mengaitkan rekod pinjaman dengan koleksi anda.</p><p id="loanDraftStatus" class="small" role="status" aria-live="polite">Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.</p>
     <form id="loanForm">
       <input type="hidden" id="loanId">
@@ -164,11 +164,11 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
     <div class="table-wrap"><table><thead><tr><th>Buku</th><th>Nama Peminjam</th><th>Status</th><th>Tarikh Dipinjam</th><th>Tarikh Dipulangkan</th><th class="no-print">Tindakan</th></tr></thead><tbody id="loanRows"></tbody></table></div>
   </section>
 
-  <section id="collectionPanel" class="panel">
-    <div class="print-heading"><h1>Perpustakaan Mini Muhammad Asyraf Azizan — Koleksi Buku</h1><p>Senarai koleksi peribadi</p></div>
+  <section id="collectionPanel" class="panel" role="tabpanel" aria-labelledby="tab-collectionPanel" tabindex="-1">
+    <div class="print-heading"><h1 id="printHeadingTitle">Perpustakaan Mini Muhammad Asyraf Azizan — Koleksi Buku</h1><p>Senarai koleksi peribadi</p></div>
     <h2 class="no-print">Koleksi Buku</h2><p class="sub no-print">Semua buku yang telah disimpan dipaparkan di sini.</p>
-    <div class="statrow no-print"><div class="stat"><span>Jumlah buku</span><strong id="totalBooks">0</strong></div><div class="stat"><span>Sedang dipinjam</span><strong id="totalLoans">0</strong></div><div class="stat"><span>Jumlah harga direkodkan</span><strong id="totalValue">RM 0.00</strong></div></div>
-    <div class="toolbar no-print"><input id="bookSearch" placeholder="Cari tajuk/penulis, ISBN, penerbit..."><select id="filterGenre"><option value="">Semua kategori</option></select><select id="filterReading"><option value="">Semua status bacaan</option><option>Belum dibaca</option><option>Sedang dibaca</option><option>Selesai</option></select><button class="btn" id="printBtn" type="button">Cetak Koleksi (A4)</button><div class="view-switch"><button type="button" class="btn secondary selected" id="tableViewBtn" aria-pressed="true">☷ Jadual</button><button type="button" class="btn secondary" id="galleryViewBtn" aria-pressed="false">▦ Galeri</button></div></div>
+    <div class="statrow no-print"><div class="stat"><span>Jumlah buku</span><strong id="totalBooks">0</strong></div><div class="stat"><span>Sedang dipinjam</span><strong id="totalLoans">0</strong></div><div class="stat"><span>Jumlah harga direkodkan</span><strong id="totalValue">RM 0.00</strong></div><button type="button" class="stat stat-btn" id="dupStatBtn" aria-pressed="false" title="Tapis buku yang mungkin berganda"><span>Kemungkinan berganda</span><strong id="totalDupes">0</strong></button></div>
+    <div class="toolbar no-print"><input id="bookSearch" placeholder="Cari tajuk/penulis, ISBN, penerbit..."><select id="filterGenre"><option value="">Semua kategori</option></select><select id="filterReading"><option value="">Semua status bacaan</option><option>Belum dibaca</option><option>Sedang dibaca</option><option>Selesai</option></select><select id="sortBooks" aria-label="Isih koleksi"></select><label class="check" for="filterDupes"><input type="checkbox" id="filterDupes"> Berganda sahaja</label><button class="btn" id="printBtn" type="button">Cetak Koleksi (A4)</button><div class="view-switch"><button type="button" class="btn secondary selected" id="tableViewBtn" aria-pressed="true">☷ Jadual</button><button type="button" class="btn secondary" id="galleryViewBtn" aria-pressed="false">▦ Galeri</button></div></div>
     <div class="print-meta"><p id="printDate"></p></div>
     <div id="bookTableView" class="table-wrap"><table><thead><tr><th>Kulit</th><th>ID Buku</th><th>Maklumat Buku</th><th>Format / Kategori</th><th>Status Bacaan</th><th>Harga</th><th>Lokasi / Tahun Terbit</th><th>Status Pinjaman</th><th class="no-print">Tindakan</th></tr></thead><tbody id="bookRows"></tbody></table></div>
     <div id="bookGalleryView" class="gallery-grid" style="display:none"></div>
@@ -176,9 +176,17 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
     <p class="small no-print">Untuk cetakan: pilih “Cetak Koleksi (A4)”, kemudian pilih kertas A4 dan orientasi landskap dalam dialog cetak. Anda juga boleh memilih “Save as PDF”.</p>
   </section>
 
-  <section id="syncPanel" class="panel">
-    <h2>Sync & Tetapan Awan</h2>
-    <p class="sub">Sediakan sambungan awan sekali sahaja, kemudian gunakan akaun yang sama pada Android, iPhone dan komputer. Data tempatan sedia ada tidak akan diganti secara automatik.</p>
+  <section id="syncPanel" class="panel" role="tabpanel" aria-labelledby="tab-syncPanel" tabindex="-1">
+    <h2>Sync & Tetapan</h2>
+    <p class="sub">Tetapan perpustakaan, penyegerakan awan, storan peranti dan sandaran.</p>
+    <div class="dash-card" style="margin-bottom:16px">
+      <h3>Tetapan perpustakaan</h3>
+      <div class="grid">
+        <div class="field full"><label for="libraryName">Nama perpustakaan</label><input id="libraryName" maxlength="90" placeholder="Contoh: Perpustakaan Mini Keluarga Ali"></div>
+      </div>
+      <div class="actions"><button class="btn" id="saveLibraryNameBtn" type="button">Simpan nama</button></div>
+      <p class="small" id="libraryNameStatus" role="status" aria-live="polite">Nama ini dipaparkan pada tajuk sistem, cetakan koleksi dan rekod buku. Ia turut disegerakkan ke peranti lain.</p>
+    </div>
     <div class="dash-card" style="margin-bottom:16px">
       <h3>1. Sambungan pangkalan data</h3>
       <p class="small">Masukkan URL projek Supabase dan kunci anon/publishable projek anda. Jangan masukkan service_role key. Maklumat sambungan disimpan pada pelayar ini sahaja.</p>
@@ -187,6 +195,23 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
         <div class="field full"><label for="cloudKey">Publishable / anon key</label><input id="cloudKey" type="password" placeholder="sb_publishable_... atau anon key" autocomplete="off"></div>
       </div>
       <div class="actions"><button class="btn" id="connectCloudBtn" type="button">Simpan sambungan</button><button class="btn secondary" id="forgetCloudBtn" type="button">Padam tetapan sambungan</button></div>
+      <details style="margin-top:14px"><summary>Persediaan Supabase Storage untuk gambar kulit buku (sekali sahaja)</summary>
+        <p class="small">Jalankan SQL ini dalam <em>Supabase → SQL Editor</em>. Ia mencipta bucket peribadi <code>covers</code> dan membenarkan setiap pengguna mengakses folder miliknya sahaja. Jika langkah ini belum dibuat, gambar kulit tetap disegerakkan (dalam bentuk mampat) bersama rekod.</p>
+<pre class="sql" id="storageSql">insert into storage.buckets (id, name, public)
+values ('covers', 'covers', false)
+on conflict (id) do nothing;
+
+create policy "covers_select_own" on storage.objects for select to authenticated
+  using (bucket_id = 'covers' and (storage.foldername(name))[1] = auth.uid()::text);
+create policy "covers_insert_own" on storage.objects for insert to authenticated
+  with check (bucket_id = 'covers' and (storage.foldername(name))[1] = auth.uid()::text);
+create policy "covers_update_own" on storage.objects for update to authenticated
+  using (bucket_id = 'covers' and (storage.foldername(name))[1] = auth.uid()::text)
+  with check (bucket_id = 'covers' and (storage.foldername(name))[1] = auth.uid()::text);
+create policy "covers_delete_own" on storage.objects for delete to authenticated
+  using (bucket_id = 'covers' and (storage.foldername(name))[1] = auth.uid()::text);</pre>
+        <div class="actions" style="margin-top:8px"><button class="btn secondary" id="copySqlBtn" type="button">Salin SQL</button></div>
+      </details>
     </div>
     <div class="dash-card" style="margin-bottom:16px">
       <h3>2. Akaun perpustakaan</h3>
@@ -197,16 +222,23 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
       <div class="actions"><button class="btn" id="signupCloudBtn" type="button">Daftar akaun</button><button class="btn secondary" id="loginCloudBtn" type="button">Log masuk</button><button class="btn secondary" id="logoutCloudBtn" type="button">Log keluar</button></div>
       <p id="cloudStatus" class="notice" role="status" aria-live="polite" style="margin-top:14px;margin-bottom:0">Belum disambungkan. Rekod tempatan anda tidak berubah.</p>
     </div>
+    <div class="dash-card" style="margin-bottom:16px">
+      <h3>3. Penyegerakan</h3>
+      <p class="small">Penyegerakan kini digabungkan <strong>per rekod</strong>: setiap buku, pinjaman dan kategori mempunyai masa kemaskini sendiri, jadi perubahan berbeza dari telefon dan komputer akan digabungkan. Hanya jika rekod yang <em>sama</em> diubah pada dua peranti, versi yang paling baharu akan dikekalkan. Rekod yang dipadam turut dipadam pada peranti lain. Kali pertama peranti ini disambungkan dan kedua-dua tempat ada data, anda akan diminta memilih sama ada mahu menggabungkan data atau menggunakan data awan.</p>
+      <div class="actions"><button class="btn" id="syncNowBtn" type="button">Segerakkan sekarang</button><button class="btn secondary" id="pullCloudBtn" type="button">Ganti data peranti ini dengan data awan</button><button class="btn secondary" id="pushCloudBtn" type="button">Ganti data awan dengan data peranti ini</button></div>
+      <p class="small" style="margin-top:12px">Perubahan dihantar secara automatik kira-kira 1.2 saat selepas simpan, dan data awan disemak semula apabila anda kembali ke tab ini atau setiap 2 minit. Dua butang "Ganti" hanya untuk kes khas; sandaran tempatan dibuat secara automatik sebelum data peranti ini diganti.</p>
+    </div>
     <div class="dash-card">
-      <h3>3. Pilih cara penyegerakan</h3>
-      <p class="small">Selepas log masuk, sistem akan menyemak katalog awan secara automatik. Jika data wujud pada kedua-dua tempat, anda akan diminta memilih sumber utama supaya rekod tidak tertindih tanpa kebenaran. Selepas persediaan awal selesai, penambahan dan perubahan dihantar secara automatik.</p>
-      <div class="actions"><button class="btn" id="pullCloudBtn" type="button">Muat turun dari awan ke peranti ini</button><button class="btn secondary" id="pushCloudBtn" type="button">Hantar data peranti ini ke awan</button><button class="btn secondary" id="syncNowBtn" type="button">Segerakkan sekarang</button></div>
-      <p class="small" style="margin-top:12px">Penting: perubahan disegerakkan secara automatik kira-kira 1.2 saat selepas simpan. Jika mengubah data pada beberapa peranti serentak, perubahan yang dihantar kemudian boleh menggantikan versi terdahulu. Gambar kulit buku yang disimpan sebagai data imej turut dihantar bersama rekod dan menggunakan ruang pangkalan data; untuk koleksi besar, lebih baik simpan fail gambar dalam Supabase Storage.</p>
+      <h3>Storan peranti dan sandaran</h3>
+      <p class="small" id="storageInfo">Mengira penggunaan storan…</p>
+      <div class="actions" style="margin-top:8px"><button class="btn secondary" id="compressCoversBtn" type="button">Mampatkan imej kulit sedia ada</button><button class="btn secondary" id="createBackupBtn" type="button">Cipta sandaran sekarang</button></div>
+      <p class="small" id="backupStatus" role="status" aria-live="polite" style="margin-top:10px">Sandaran disimpan pada peranti ini (7 terkini). Sandaran dibuat secara automatik setiap hari dan sebelum data diganti melalui import, pemulihan atau muat turun dari awan.</p>
+      <div class="table-wrap" style="margin-top:10px"><table style="min-width:560px"><thead><tr><th>Tarikh sandaran</th><th>Sebab</th><th>Kandungan</th><th>Tindakan</th></tr></thead><tbody id="backupRows"><tr><td colspan="4" class="empty">Memuatkan…</td></tr></tbody></table></div>
     </div>
   </section>
 
 
-  <section id="categoryPanel" class="panel">
+  <section id="categoryPanel" class="panel" role="tabpanel" aria-labelledby="tab-categoryPanel" tabindex="-1">
     <h2>Pengurusan Kategori dan Subkategori</h2>
     <p class="sub">Urus kategori koleksi di sini. Kategori sedia ada dikekalkan secara automatik.</p>
     <div class="dash-card" style="margin-bottom:16px">
@@ -229,207 +261,688 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
     </div>
   </section>
 
-  <section id="singleBookPrint" style="display:none"></section>
+  <div id="toast" class="toast no-print" role="status" aria-live="polite" hidden><span id="toastText"></span><button type="button" id="toastAction" hidden>Buat asal</button></div>
+  <dialog id="choiceDialog" class="choice"><p id="choiceText"></p><div class="actions" id="choiceActions"></div></dialog>
 </main>
 <script>
 (() => {
-  const DB_KEY = 'perpustakaanMini_v1_books';
-  const LOAN_KEY = 'perpustakaanMini_v1_loans';
-  const CATEGORY_KEY = 'perpustakaanMini_v1_categories';
-  const BOOK_DRAFT_KEY = 'perpustakaanMini_v1_book_draft';
-  const LOAN_DRAFT_KEY = 'perpustakaanMini_v1_loan_draft';
-  let draftTimers = {};
-  let restoringDraft = false;
-  let books = read(DB_KEY, []), loans = read(LOAN_KEY, []), currentCover = '';
-  const DEFAULT_CATEGORIES = ['Fiksyen','Biografi','Agama','Sejarah','Sains','Perniagaan'];
-  let categories = read(CATEGORY_KEY, null);
-  if(!Array.isArray(categories)) categories = DEFAULT_CATEGORIES.map((name,index)=>({id:'legacy-'+index,name,parent:''}));
-  // Import any historic genre values not yet represented; never rewrite existing book records.
-  books.forEach(book=>{
-    const name=String(book.genre||'').trim();
-    if(name&&!categories.some(c=>String(c.name).toLocaleLowerCase('ms-MY')===name.toLocaleLowerCase('ms-MY')))
-      categories.push({id:'legacy-'+Date.now()+'-'+categories.length,name,parent:''});
-  });
-  function saveCategories(){
-    try{
-      localStorage.setItem(CATEGORY_KEY,JSON.stringify(categories));
-      if(cloudReady&&cloudUser)localStorage.setItem(CLOUD_DIRTY,cloudUser.id);
-      scheduleCloudPush();
-      return true;
-    }catch(e){$('categoryStatus').textContent='Kategori tidak dapat disimpan. Semak ruang storan pelayar.';return false;}
-  }
-  let editingCategoryId='';
-
+  'use strict';
   const $ = id => document.getElementById(id);
-  function read(key, fallback){ try { const x=localStorage.getItem(key); return x?JSON.parse(x):fallback; } catch(e){ return fallback; } }
-  function persist(){ try { localStorage.setItem(DB_KEY,JSON.stringify(books)); localStorage.setItem(LOAN_KEY,JSON.stringify(loans)); if(cloudReady&&cloudUser)localStorage.setItem(CLOUD_DIRTY,cloudUser.id); scheduleCloudPush(); } catch(e){ alert('Ruang storan pelayar mungkin penuh. Cuba gunakan imej kulit yang lebih kecil atau eksport sandaran.'); } }
-  function esc(v=''){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-  function money(v){return v!==''&&v!=null&&!Number.isNaN(Number(v))?'RM '+Number(v).toFixed(2):'—';}
-  function bookName(id){const b=books.find(x=>x.id===id);return b?`${b.title||b.author}${b.author?' — '+b.author:''}${b.isbn?' · ISBN '+b.isbn:''}`:'Buku dipadam';}
-  function resetBook(clearDraft=true){ if(clearDraft)clearDraftData('book'); $('bookForm').reset();$('bookId').value='';$('bookCode').value=nextBookCode();currentCover='';$('coverPreview').innerHTML='';$('saveBookBtn').textContent='Simpan Buku';togglePurchaseField();updateDraftStatus('book',false); }
-  function resetLoan(clearDraft=true){ if(clearDraft)clearDraftData('loan'); $('loanForm').reset();$('loanId').value='';$('saveLoanBtn').textContent='Simpan Rekod Pinjaman';updateDraftStatus('loan',false); }
-  function formValues(formId){const data={};$(formId).querySelectorAll('input:not([type="file"]),select,textarea').forEach(el=>{if(el.id)data[el.id]=el.value;});return data;}
-  function updateDraftStatus(kind,hasDraft){const el=$(kind==='book'?'bookDraftStatus':'loanDraftStatus');if(el)el.textContent=hasDraft?'Draf disimpan secara automatik pada peranti ini. Anda boleh bertukar tab dan menyambung semula kemudian.':'Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.';}
-  function clearDraftData(kind){try{localStorage.removeItem(kind==='book'?BOOK_DRAFT_KEY:LOAN_DRAFT_KEY);}catch(e){}}
-  function saveDraft(kind){if(restoringDraft)return;const isBook=kind==='book',formId=isBook?'bookForm':'loanForm',key=isBook?BOOK_DRAFT_KEY:LOAN_DRAFT_KEY;const values=formValues(formId);const hasContent=Object.entries(values).some(([k,v])=>!['bookCode'].includes(k)&&String(v||'').trim()!=='')||(isBook&&!!currentCover);if(!hasContent){clearDraftData(kind);updateDraftStatus(kind,false);return;}try{const draft={savedAt:new Date().toISOString(),values};if(isBook)draft.cover=currentCover||'';localStorage.setItem(key,JSON.stringify(draft));updateDraftStatus(kind,true);}catch(e){updateDraftStatus(kind,false);}}
-  function scheduleDraft(kind){if(restoringDraft)return;clearTimeout(draftTimers[kind]);draftTimers[kind]=setTimeout(()=>saveDraft(kind),250);}
-  function restoreDraft(kind){const isBook=kind==='book',key=isBook?BOOK_DRAFT_KEY:LOAN_DRAFT_KEY,formId=isBook?'bookForm':'loanForm';let draft;try{draft=JSON.parse(localStorage.getItem(key)||'null');}catch(e){draft=null;}if(!draft||!draft.values)return false;restoringDraft=true;try{Object.entries(draft.values).forEach(([id,value])=>{const el=$(id);if(el&&el.type!=='file')el.value=value;});if(isBook){currentCover=draft.cover||'';$('coverPreview').innerHTML=currentCover?`<img alt="Pratonton kulit buku daripada draf" src="${currentCover}"><span class="small">Kulit buku daripada draf tersimpan</span>`:'';togglePurchaseField();$('saveBookBtn').textContent=$('bookId').value?'Kemaskini Buku':'Simpan Buku';}else{$('saveLoanBtn').textContent=$('loanId').value?'Kemaskini Rekod Pinjaman':'Simpan Rekod Pinjaman';}updateDraftStatus(kind,true);return true;}finally{restoringDraft=false;}}
-  function setupDraftAutosave(){['bookForm','loanForm'].forEach(formId=>{const kind=formId==='bookForm'?'book':'loan';$(formId).querySelectorAll('input,select,textarea').forEach(el=>{if(el.type==='file')return;el.addEventListener('input',()=>scheduleDraft(kind));el.addEventListener('change',()=>scheduleDraft(kind));});});window.addEventListener('pagehide',()=>{saveDraft('book');saveDraft('loan');});}
-  
-  function showTab(id){if($('formPanel')?.classList.contains('active'))saveDraft('book');if($('loanPanel')?.classList.contains('active'))saveDraft('loan');document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));}
-  document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
-  $('cover').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Sila pilih fail imej.');return;}if(f.size>1.5*1024*1024){alert('Imej terlalu besar. Pilih imej bawah 1.5 MB untuk mengelakkan storan penuh.');e.target.value='';return;}const r=new FileReader();r.onload=()=>{currentCover=r.result;$('coverPreview').innerHTML=`<img alt="Pratonton kulit buku" src="${currentCover}"><span class="small">Imej dipilih</span>`;scheduleDraft('book');};r.readAsDataURL(f);});
-  function togglePurchaseField(){const buying=$('source').value==='Beli';$('purchaseField').hidden=!buying;$('purchase').required=buying;if(!buying)$('purchase').value='';}
-  $('source').addEventListener('change',togglePurchaseField);
-  function nextBookCode(){const nums=books.map(b=>Number(String(b.bookCode||'').match(/^MAA(\d+)$/)?.[1]||0));return 'MAA'+String(Math.max(0,...nums)+1).padStart(5,'0');}
-  function ensureBookCodes(){let changed=false;let max=books.reduce((m,b)=>Math.max(m,Number(String(b.bookCode||'').match(/^MAA(\d+)$/)?.[1]||0)),0);books.forEach(b=>{if(!b.bookCode){b.bookCode='MAA'+String(++max).padStart(5,'0');changed=true;}});if(changed)persist();}
-  ensureBookCodes();
-  // Format automatik untuk tajuk dan nama penulis.
-  function formatAuthorName(value){
-    return String(value||'').trim().toLocaleLowerCase('ms-MY').replace(/(^|[\s\-’'])\p{L}/gu, m => m.toLocaleUpperCase('ms-MY'));
+
+  // ---------- Pemalar ----------
+  const LS = {
+    BOOK_DRAFT: 'perpustakaanMini_v1_book_draft',
+    LOAN_DRAFT: 'perpustakaanMini_v1_loan_draft',
+    CLOUD_SETTINGS: 'perpustakaanMini_cloudSettings_v1',
+    CLOUD_LINKED: 'perpustakaanMini_cloudLinked_v2',
+    UI: 'perpustakaanMini_ui_v2',
+    LEGACY_BOOKS: 'perpustakaanMini_v1_books',
+    LEGACY_LOANS: 'perpustakaanMini_v1_loans',
+    LEGACY_CATS: 'perpustakaanMini_v1_categories',
+    LEGACY_BACKUP: 'perpustakaanMini_beforeCloudPull_v1',
+    LEGACY_DIRTY: 'perpustakaanMini_cloudDirty_v1'
+  };
+  const DEFAULT_NAME = 'Perpustakaan Mini Muhammad Asyraf Azizan';
+  const DEFAULT_CATEGORIES = ['Fiksyen', 'Biografi', 'Agama', 'Sejarah', 'Sains', 'Perniagaan'];
+  const CODE_PREFIX = 'MAA', COVER_BUCKET = 'covers', MAX_BACKUPS = 7, TOMBSTONE_DAYS = 180;
+  const EPOCH = '2000-01-01T00:00:00.000Z';
+  const TYPES = ['books', 'loans', 'categories'];
+
+  // ---------- Utiliti ----------
+  function lsGet(k, f) { try { const x = localStorage.getItem(k); return x ? JSON.parse(x) : f; } catch (e) { return f; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  function lsRaw(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  const nowIso = () => new Date().toISOString();
+  const str = v => (v == null ? '' : String(v));
+  const arr = v => (Array.isArray(v) ? v : []);
+  const lc = s => str(s).trim().toLocaleLowerCase('ms-MY');
+  function newId(prefix) { return (prefix ? prefix + '-' : '') + Date.now() + Math.random().toString(16).slice(2, 8); }
+  function esc(v = '') { return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+  function money(v) { return v !== '' && v != null && !Number.isNaN(Number(v)) ? 'RM ' + Number(v).toFixed(2) : '—'; }
+  function hashStr(s) { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); } return (h >>> 0).toString(16) + '-' + s.length.toString(16); }
+  const IMG_RE = /^data:image\/(jpeg|jpg|png|webp|gif);base64,[A-Za-z0-9+/]+=*$/;
+  function safeImg(src) { return typeof src === 'string' && IMG_RE.test(src) ? src : ''; }
+  function approxBytes(d) { return d ? Math.round((d.length - d.indexOf(',') - 1) * 3 / 4) : 0; }
+  function fmtSize(n) { n = Number(n) || 0; return n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+  function touch(r, t = nowIso()) { r.updatedAt = t; if (!r.createdAt) r.createdAt = t; return r; }
+  function tsFromId(id) { const m = String(id || '').match(/^(\d{13})/); return m ? new Date(Number(m[1])).toISOString() : null; }
+  function normTimes(r) { if (!r.createdAt) r.createdAt = tsFromId(r.id) || EPOCH; if (!r.updatedAt) r.updatedAt = r.createdAt; return r; }
+  const codeNum = c => Number(str(c).match(/^MAA(\d+)$/)?.[1] || 0);
+  const pad = n => String(n).padStart(5, '0');
+
+  // ---------- Lapisan storan: IndexedDB (utama) / localStorage (sandaran) ----------
+  function reqP(r) { return new Promise((res, rej) => { r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
+  function txDone(t) { return new Promise((res, rej) => { t.oncomplete = () => res(); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error || new Error('Transaksi dibatalkan')); }); }
+  const idbStore = {
+    kind: 'IndexedDB', db: null,
+    async open() {
+      if (!('indexedDB' in window)) throw new Error('IndexedDB tidak disokong');
+      this.db = await new Promise((res, rej) => {
+        const r = indexedDB.open('perpustakaanMini', 1);
+        r.onupgradeneeded = () => { const d = r.result; ['kv', 'covers', 'backups'].forEach(n => { if (!d.objectStoreNames.contains(n)) d.createObjectStore(n); }); };
+        r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); r.onblocked = () => rej(new Error('Pangkalan data disekat oleh tab lain'));
+      });
+    },
+    get(st, k) { return reqP(this.db.transaction(st).objectStore(st).get(k)); },
+    put(st, k, v) { const t = this.db.transaction(st, 'readwrite'); t.objectStore(st).put(v, k); return txDone(t); },
+    del(st, k) { const t = this.db.transaction(st, 'readwrite'); t.objectStore(st).delete(k); return txDone(t); },
+    keys(st) { return reqP(this.db.transaction(st).objectStore(st).getAllKeys()); },
+    async entries(st) { const os = this.db.transaction(st).objectStore(st); const [k, v] = await Promise.all([reqP(os.getAllKeys()), reqP(os.getAll())]); return k.map((key, i) => [key, v[i]]); }
+  };
+  const lsStore = {
+    kind: 'localStorage', P: 'pm2:',
+    async open() {},
+    async get(st, k) { return lsGet(this.P + st + ':' + k, undefined); },
+    async put(st, k, v) { if (!lsSet(this.P + st + ':' + k, v)) throw new Error('Ruang storan pelayar penuh'); },
+    async del(st, k) { lsDel(this.P + st + ':' + k); },
+    async keys(st) { const pre = this.P + st + ':', out = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(pre)) out.push(k.slice(pre.length)); } return out; },
+    async entries(st) { const ks = await this.keys(st); return Promise.all(ks.map(async k => [k, await this.get(st, k)])); }
+  };
+  let store = null;
+
+  // ---------- Keadaan ----------
+  let books = [], loans = [], categories = [];
+  let deletions = { books: {}, loans: {}, categories: {} };
+  let settings = { libraryName: DEFAULT_NAME, updatedAt: EPOCH };
+  let pendingCoverRemovals = [];
+  let currentCover = '', editingCategoryId = '';
+  const list = type => (type === 'books' ? books : type === 'loans' ? loans : categories);
+
+  let saveChain = Promise.resolve();
+  function snapshot() { return { schema: 2, books: books.map(({ cover, ...rest }) => rest), loans, categories, deletions, settings, pendingCoverRemovals }; }
+  function persist({ sync = true } = {}) {
+    const snap = JSON.parse(JSON.stringify(snapshot()));
+    saveChain = saveChain.then(() => store.put('kv', 'data', snap)).catch(e => { console.error(e); toast('Rekod tidak dapat disimpan: ' + (e.message || e) + '. Eksport sandaran segera.'); });
+    if (sync) scheduleCloudPush();
+    return saveChain;
   }
-  $('title').addEventListener('blur',()=>{$('title').value=$('title').value.toLocaleUpperCase('ms-MY').trim();});
-  $('author').addEventListener('blur',()=>{$('author').value=formatAuthorName($('author').value);});
-  $('bookForm').addEventListener('submit',e=>{e.preventDefault();$('title').value=$('title').value.toLocaleUpperCase('ms-MY').trim();$('author').value=formatAuthorName($('author').value);const id=$('bookId').value||String(Date.now())+Math.random().toString(16).slice(2,6);const old=books.find(b=>b.id===id);const source=$('source').value;const bookCode=old?.bookCode||nextBookCode();const b={id,bookCode,format:$('format').value,genre:$('genre').value,isbn:$('isbn').value.trim(),title:$('title').value.trim(),cover:currentCover||(old?.cover||''),publisher:$('publisher').value.trim(),author:$('author').value.trim(),reading:$('reading').value,price:$('price').value,source,purchase:source==='Beli'?$('purchase').value.trim():'',publishPlace:$('publishPlace').value.trim(),year:$('year').value};if(old)books=books.map(x=>x.id===id?b:x);else books.unshift(b);persist();resetBook(true);render();showTab('collectionPanel');});
-  $('resetBookBtn').addEventListener('click',resetBook);
-  $('loanForm').addEventListener('submit',e=>{e.preventDefault();const id=$('loanId').value||String(Date.now())+Math.random().toString(16).slice(2,6);const l={id,bookId:$('loanBook').value,borrower:$('borrower').value.trim(),status:$('loanStatus').value,borrowDate:$('borrowDate').value,returnDate:$('returnDate').value};const old=loans.find(x=>x.id===id);if(old)loans=loans.map(x=>x.id===id?l:x);else loans.unshift(l);persist();resetLoan(true);render();});
-  $('resetLoanBtn').addEventListener('click',resetLoan);
-  function renderBookSelect(){const sel=$('loanBook'),old=sel.value;sel.innerHTML='<option value="">Pilih buku</option>'+books.map(b=>`<option value="${esc(b.id)}">${esc(b.bookCode||'')} · ${esc(b.title||b.author)}${b.author?' — '+esc(b.author):''}</option>`).join('');if(books.some(b=>b.id===old))sel.value=old;}
-  function renderBooks(){
-    const q=$('bookSearch').value.toLowerCase(),g=$('filterGenre').value,r=$('filterReading').value;
-    const list=books.filter(b=>(!q||[b.bookCode,b.title,b.author,b.isbn,b.publisher,b.purchase,b.publishPlace].some(v=>(v||'').toLowerCase().includes(q)))&&(!g||b.genre===g)&&(!r||b.reading===r));
-    $('totalBooks').textContent=books.length;$('totalLoans').textContent=loans.filter(l=>l.status==='Dipinjam').length;$('totalValue').textContent='RM '+books.reduce((s,b)=>s+(Number(b.price)||0),0).toFixed(2);
-    $('bookRows').innerHTML=list.length?list.map(b=>{const loan=loans.find(l=>l.bookId===b.id&&l.status==='Dipinjam');return `<tr><td>${b.cover?`<img class="book-cover" src="${b.cover}" alt="Kulit buku">`:'—'}</td><td><strong>${esc(b.bookCode||'—')}</strong></td><td><strong>${esc(b.title||'Nama buku tidak diisi')}</strong><br><span class="small">Penulis: ${esc(b.author||'—')}</span><br><span class="small">${b.isbn?'ISBN: '+esc(b.isbn):'ISBN tidak diisi'}</span><br><span class="small">${esc(b.publisher||'Penerbit tidak diisi')}</span></td><td>${esc(b.format)}<br><span class="small">${esc(b.genre)}</span></td><td><span class="pill">${esc(b.reading)}</span></td><td>${money(b.price)}</td><td>${esc(b.publishPlace||'—')}<br><span class="small">${esc(b.year||'Tahun tidak diisi')}</span></td><td>${loan?`Dipinjam oleh ${esc(loan.borrower)}`:'Dalam Simpanan'}</td><td class="no-print"><button class="btn secondary" data-edit-book="${esc(b.id)}">Edit</button> <button class="btn secondary" data-print-book="${esc(b.id)}">Cetak</button> <button class="btn danger" data-delete-book="${esc(b.id)}">Padam</button></td></tr>`}).join(''):'<tr><td colspan="9" class="empty">Tiada rekod buku ditemui. Tambah buku melalui tab Borang Maklumat Buku.</td></tr>';
-    $('bookGalleryView').innerHTML=list.length?list.map(b=>{const loan=loans.find(l=>l.bookId===b.id&&l.status==='Dipinjam');return `<article class="gallery-card"><div class="gallery-cover">${b.cover?`<img src="${b.cover}" alt="Kulit buku ${esc(b.title)}">`:`<span class="cover-letter">${esc((b.title||'B').trim().charAt(0).toUpperCase())}</span>`}</div><div class="gallery-info"><div class="small">${esc(b.bookCode||'—')}</div><h3>${esc(b.title||'Nama buku tidak diisi')}</h3><div class="author">${esc(b.author||'Penulis tidak dinyatakan')}</div><div class="gallery-meta"><span>${esc(b.genre||'Tanpa kategori')}</span><span>${esc(b.reading||'Belum dibaca')}</span></div><div class="small">${esc(b.year||'Tahun tidak dinyatakan')} · ${money(b.price)}</div><div class="small">${loan?'Dipinjam: '+esc(loan.borrower):'Dalam simpanan'}</div><div class="gallery-actions"><button class="btn secondary" data-edit-book="${esc(b.id)}">Edit</button><button class="btn secondary" data-print-book="${esc(b.id)}">Cetak</button><button class="btn danger" data-delete-book="${esc(b.id)}">Padam</button></div></div></article>`}).join(''):'<div class="empty collection-empty">Tiada buku yang sepadan dengan carian atau penapis ini.</div>';
-    document.querySelectorAll('[data-edit-book]').forEach(btn=>btn.addEventListener('click',()=>editBook(btn.dataset.editBook)));
-    document.querySelectorAll('[data-print-book]').forEach(btn=>btn.addEventListener('click',()=>printBookRecord(btn.dataset.printBook)));
-    document.querySelectorAll('[data-delete-book]').forEach(btn=>btn.addEventListener('click',()=>deleteBook(btn.dataset.deleteBook)));
+  function saveCover(id, data) {
+    saveChain = saveChain.then(() => (data ? store.put('covers', id, data) : store.del('covers', id))).catch(e => toast('Imej kulit tidak dapat disimpan: ' + (e.message || e)));
+    return saveChain;
   }
-  function renderDashboard(){
-    const total=books.length;
-    const read=books.filter(b=>b.reading==='Selesai').length;
-    const inProgress=books.filter(b=>b.reading==='Sedang dibaca').length;
-    const unread=books.filter(b=>b.reading==='Belum dibaca').length;
-    const activeLoans=loans.filter(l=>l.status==='Dipinjam');
-    const storedLoans=loans.filter(l=>l.status==='Dalam Simpanan');
-    const loanCount=activeLoans.length;
-    const value=books.reduce((sum,b)=>sum+(Number(b.price)||0),0);
-    const pct=total?Math.round(read/total*100):0;
-    $('heroBookCount').innerHTML=`${total} <span style="font-size:14px;font-weight:600">buku</span>`;
-    $('dashTotal').textContent=total;
-    $('dashRead').textContent=read;
-    $('dashReadNote').textContent=pct+'% daripada koleksi';
-    $('dashLoans').textContent=loanCount;
-    $('dashValue').textContent='RM '+value.toFixed(2);
 
-    const counts={};
-    books.forEach(b=>{const k=b.genre||'Tanpa kategori';counts[k]=(counts[k]||0)+1;});
-    const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'ms'));
-    $('categoryBreakdown').innerHTML=entries.length?entries.map(([name,count])=>`<div class="category-row"><span title="${esc(name)}">${esc(name)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3,count/total*100)}%"></div></div><strong>${count}</strong></div>`).join(''):'<p class="small">Belum ada rekod buku.</p>';
+  // ---------- Pembersihan & normalisasi data ----------
+  const BOOK_FIELDS = ['bookCode', 'format', 'genre', 'categoryId', 'isbn', 'title', 'publisher', 'author', 'reading', 'price', 'source', 'purchase', 'publishPlace', 'year', 'coverHash', 'coverPath', 'coverUploaded', 'dupOk', 'createdAt', 'updatedAt'];
+  const LOAN_FIELDS = ['bookId', 'borrower', 'status', 'borrowDate', 'returnDate', 'createdAt', 'updatedAt'];
+  function cleanBook(raw, recomputeHash) {
+    if (!raw || typeof raw !== 'object') return null;
+    const b = { id: str(raw.id).trim() || newId('') };
+    BOOK_FIELDS.forEach(k => { b[k] = str(raw[k]); });
+    b.cover = safeImg(raw.cover);
+    if (b.cover && (recomputeHash || !b.coverHash)) b.coverHash = hashStr(b.cover);
+    return normTimes(b);
+  }
+  function cleanLoan(raw) {
+    if (!raw || typeof raw !== 'object') return null;
+    const l = { id: str(raw.id).trim() || newId('') };
+    LOAN_FIELDS.forEach(k => { l[k] = str(raw[k]); });
+    if (!l.status) l.status = 'Dipinjam';
+    return normTimes(l);
+  }
+  function cleanCategory(raw) {
+    if (!raw || typeof raw !== 'object') return null;
+    const name = str(raw.name).trim().replace(/\s+/g, ' ').slice(0, 60);
+    if (!name) return null;
+    return normTimes({ id: str(raw.id).trim() || newId('cat'), name, parent: str(raw.parent), createdAt: str(raw.createdAt), updatedAt: str(raw.updatedAt) });
+  }
+  function cleanDeletions(d) {
+    const out = { books: {}, loans: {}, categories: {} };
+    if (d && typeof d === 'object') TYPES.forEach(t => { const src = d[t]; if (src && typeof src === 'object') Object.entries(src).forEach(([id, ts]) => { if (typeof ts === 'string') out[t][id] = ts; }); });
+    return out;
+  }
+  function deriveCategories(bookList) {
+    const cats = DEFAULT_CATEGORIES.map((name, i) => ({ id: 'legacy-' + i, name, parent: '', createdAt: EPOCH, updatedAt: EPOCH }));
+    bookList.forEach(b => { const name = str(b.genre).trim(); if (name && !cats.some(c => lc(c.name) === lc(name))) cats.push({ id: 'legacy-g-' + hashStr(lc(name)), name, parent: '', createdAt: EPOCH, updatedAt: EPOCH }); });
+    return cats;
+  }
+  function normalizePayload(p, { recomputeHash = false } = {}) {
+    p = p && typeof p === 'object' ? p : {};
+    const out = {
+      books: arr(p.books).map(b => cleanBook(b, recomputeHash)).filter(Boolean),
+      loans: arr(p.loans).map(cleanLoan).filter(Boolean),
+      categories: Array.isArray(p.categories) ? p.categories.map(cleanCategory).filter(Boolean) : null,
+      deletions: cleanDeletions(p.deletions),
+      settings: null
+    };
+    if (!out.categories) out.categories = deriveCategories(out.books);
+    const s = p.settings && typeof p.settings === 'object' ? p.settings : null;
+    if (s && str(s.libraryName).trim()) out.settings = { libraryName: str(s.libraryName).trim().slice(0, 90), updatedAt: str(s.updatedAt) || EPOCH };
+    return out;
+  }
 
-    const recent=books.slice(0,5);
-    $('recentBooks').innerHTML=recent.length?recent.map(b=>`<div class="recent-book">${b.cover?`<img src="${b.cover}" alt="Kulit buku">`:`<div class="recent-placeholder">▤</div>`}<div><strong>${esc(b.title||'Nama buku tidak diisi')}</strong><span class="small">${esc(b.bookCode||'')} · ${esc(b.author||'Penulis tidak dinyatakan')}</span></div></div>`).join(''):'<p class="small">Buku yang disimpan akan dipaparkan di sini.</p>';
-
-    const readingRows=[['Belum dibaca',unread],['Sedang dibaca',inProgress],['Selesai',read]];
-    $('readingBreakdown').innerHTML=total?readingRows.map(([label,count])=>`<div class="insight-row"><span>${label}</span><strong>${count} <span class="small">(${Math.round(count/total*100)}%)</span></strong></div><div class="insight-track"><div class="insight-fill" style="width:${count/total*100}%"></div></div>`).join(''):'<p class="insight-empty">Belum ada rekod bacaan.</p>';
-    $('readingProgressBar').style.width=pct+'%';
-    $('readingProgressText').textContent=pct+'% selesai dibaca';
-
-    function renderMiniCounts(id, field, labels){
-      const tally={};books.forEach(b=>{const value=(b[field]||'Tidak dinyatakan').trim();tally[value]=(tally[value]||0)+1;});
-      const rows=Object.entries(tally).sort((a,b)=>b[1]-a[1]);
-      $(id).innerHTML=rows.length?rows.map(([name,count])=>`<div class="insight-row"><span>${esc(labels?.[name]||name)}</span><strong>${count}</strong></div>`).join(''):'<p class="insight-empty">Tiada data.</p>';
+  // Betulkan rujukan & pertindihan selepas muat/gabung. Pulangkan nota perubahan ID buku.
+  function fixIntegrity() {
+    const t = nowIso(), notes = [];
+    // 1. Kategori: induk tidak sah, nama berganda (contoh: kategori yang dicipta berasingan pada dua peranti)
+    const ids = new Set(categories.map(c => c.id));
+    categories.forEach(c => { if (c.parent && (!ids.has(c.parent) || c.parent === c.id)) c.parent = ''; });
+    const byName = new Map(), remap = {};
+    [...categories].sort((a, b) => (a.id < b.id ? -1 : 1)).forEach(c => { const k = lc(c.name); if (byName.has(k)) remap[c.id] = byName.get(k).id; else byName.set(k, c); });
+    if (Object.keys(remap).length) {
+      categories = categories.filter(c => !remap[c.id]);
+      Object.keys(remap).forEach(id => { deletions.categories[id] = t; });
+      categories.forEach(c => { if (remap[c.parent]) { c.parent = remap[c.parent]; touch(c, t); } });
     }
-    renderMiniCounts('formatBreakdown','format');
-    renderMiniCounts('sourceBreakdown','source');
+    // 2. Buku → kategori (disimpan mengikut ID; nama hanya salinan untuk eksport)
+    books.forEach(b => {
+      const cid = remap[b.categoryId] || b.categoryId;
+      let cat = categories.find(c => c.id === cid);
+      if (!cat) {
+        const name = str(b.genre).trim();
+        if (name) {
+          cat = categories.find(c => lc(c.name) === lc(name));
+          if (!cat) { cat = { id: 'legacy-g-' + hashStr(lc(name)), name, parent: '', createdAt: EPOCH, updatedAt: EPOCH }; categories.push(cat); }
+        }
+      }
+      const newCid = cat ? cat.id : '';
+      if (newCid !== b.categoryId) { const had = !!b.categoryId; b.categoryId = newCid; if (had) touch(b, t); }
+      if (cat) b.genre = cat.name;
+    });
+    // 3. Pinjaman bagi buku yang telah dipadam
+    loans = loans.filter(l => { if (deletions.books[l.bookId] && !books.some(b => b.id === l.bookId)) { deletions.loans[l.id] = t; return false; } return true; });
+    // 4. ID buku kosong / berganda (contoh: buku ditambah pada dua peranti sebelum sync)
+    let max = books.reduce((m, b) => Math.max(m, codeNum(b.bookCode)), 0);
+    const seen = new Set();
+    [...books].sort((a, b) => str(a.createdAt).localeCompare(str(b.createdAt)) || (a.id < b.id ? -1 : 1)).forEach(b => {
+      const c = str(b.bookCode);
+      if (!c) { b.bookCode = CODE_PREFIX + pad(++max); touch(b, t); }
+      else if (seen.has(c)) { b.bookCode = CODE_PREFIX + pad(++max); touch(b, t); notes.push(c + ' → ' + b.bookCode + ' (' + (b.title || 'buku') + ')'); }
+      seen.add(b.bookCode);
+    });
+    // 5. Kemas rekod pemadaman lama
+    const cutoff = new Date(Date.now() - TOMBSTONE_DAYS * 864e5).toISOString();
+    TYPES.forEach(type => {
+      const live = new Map(list(type).map(r => [r.id, r]));
+      Object.entries(deletions[type]).forEach(([id, ts]) => { const r = live.get(id); if ((r && str(r.updatedAt) > ts) || ts < cutoff) delete deletions[type][id]; });
+    });
+    return notes;
+  }
 
-    const loanItems=activeLoans.slice(0,4);
-    $('loanBreakdown').innerHTML=`<div class="insight-row"><span>Sedang dipinjam</span><strong>${activeLoans.length}</strong></div><div class="insight-row"><span>Dalam simpanan</span><strong>${storedLoans.length}</strong></div>`+
-      (loanItems.length?'<div class="small" style="font-weight:700;margin-top:12px">Pinjaman aktif</div>'+loanItems.map(l=>`<div class="loan-item"><strong>${esc(l.borrower||'Peminjam tidak dinyatakan')}</strong><span>${esc(bookName(l.bookId))}</span>${l.borrowDate?`<div class="small">Tarikh pinjam: ${esc(l.borrowDate)}</div>`:''}</div>`).join(''):'<p class="insight-empty">Tiada buku yang sedang dipinjam.</p>');
+  // ---------- Gabungan per rekod ----------
+  function mergeById(local, remote, dels) {
+    const m = new Map();
+    remote.forEach(r => m.set(r.id, r));
+    local.forEach(l => { const r = m.get(l.id); if (!r || str(l.updatedAt) > str(r.updatedAt)) m.set(l.id, l); });
+    return [...m.values()].filter(x => { const d = dels[x.id]; return !d || d < str(x.updatedAt); });
   }
-  function renderLoans(){const q=$('loanSearch').value.toLowerCase();const list=loans.filter(l=>(l.borrower+' '+bookName(l.bookId)).toLowerCase().includes(q));$('loanRows').innerHTML=list.length?list.map(l=>`<tr><td>${esc(bookName(l.bookId))}</td><td>${esc(l.borrower)}</td><td><span class="pill">${esc(l.status)}</span></td><td>${esc(l.borrowDate||'—')}</td><td>${esc(l.returnDate||'—')}</td><td class="no-print"><button class="btn secondary" data-edit-loan="${esc(l.id)}">Edit</button> <button class="btn danger" data-delete-loan="${esc(l.id)}">Padam</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">Tiada rekod pinjaman.</td></tr>';
-    $('loanRows').querySelectorAll('[data-edit-loan]').forEach(btn=>btn.addEventListener('click',()=>editLoan(btn.dataset.editLoan)));$('loanRows').querySelectorAll('[data-delete-loan]').forEach(btn=>btn.addEventListener('click',()=>{if(confirm('Padam rekod pinjaman ini?')){loans=loans.filter(l=>l.id!==btn.dataset.deleteLoan);persist();render();}}));
+  function mergeDeletions(a, b) {
+    const out = { books: {}, loans: {}, categories: {} };
+    TYPES.forEach(t => [a[t] || {}, b[t] || {}].forEach(src => Object.entries(src).forEach(([id, ts]) => { if (!out[t][id] || ts > out[t][id]) out[t][id] = ts; })));
+    return out;
+  }
+  const coverMap = () => new Map(books.map(b => [b.id, { cover: b.cover, coverHash: b.coverHash }]));
+  function attachCovers(prev) {
+    books.forEach(b => {
+      const p = prev.get(b.id);
+      if (b.cover) { if (!p || p.cover !== b.cover) saveCover(b.id, b.cover); return; }
+      if (b.coverHash && p && p.cover && p.coverHash === b.coverHash) { b.cover = p.cover; return; }
+      if (p && p.cover) saveCover(b.id, ''); // gambar telah diganti/dibuang pada peranti lain
+    });
+  }
+  function mergeRemote(rp) {
+    const prev = coverMap();
+    if (rp) {
+      const r = normalizePayload(rp);
+      deletions = mergeDeletions(deletions, r.deletions);
+      books = mergeById(books, r.books, deletions.books);
+      loans = mergeById(loans, r.loans, deletions.loans);
+      categories = mergeById(categories, r.categories, deletions.categories);
+      if (r.settings && str(r.settings.updatedAt) > str(settings.updatedAt)) settings = r.settings;
+    }
+    const notes = fixIntegrity();
+    attachCovers(prev);
+    return notes;
   }
 
-  function categoryLabel(category){
-    if(!category.parent)return category.name;
-    const parent=categories.find(c=>c.id===category.parent);
-    return parent?parent.name+' › '+category.name:category.name;
+  // ---------- Toast & dialog ----------
+  let toastTimer = null, undoFn = null;
+  function toast(msg, { undo = null, ms } = {}) {
+    $('toastText').textContent = msg;
+    undoFn = undo; $('toastAction').hidden = !undo; $('toast').hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, ms || (undo ? 9000 : 5500));
   }
-  function renderCategoryOptions(){
-    const selected=$('genre').value,filterSelected=$('filterGenre').value;
-    const sorted=[...categories].sort((a,b)=>categoryLabel(a).localeCompare(categoryLabel(b),'ms'));
-    $('genre').innerHTML='<option value="">Pilih kategori</option>'+sorted.map(c=>`<option value="${esc(c.name)}">${esc(categoryLabel(c))}</option>`).join('');
-    $('filterGenre').innerHTML='<option value="">Semua kategori</option>'+sorted.map(c=>`<option value="${esc(c.name)}">${esc(categoryLabel(c))}</option>`).join('');
-    if(sorted.some(c=>c.name===selected))$('genre').value=selected;
-    if(sorted.some(c=>c.name===filterSelected))$('filterGenre').value=filterSelected;
-    const parent=$('categoryParent').value;
-    $('categoryParent').innerHTML='<option value="">Tiada — kategori utama</option>'+categories.filter(c=>c.id!==editingCategoryId&&!c.parent).sort((a,b)=>a.name.localeCompare(b.name,'ms')).map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
-    if(categories.some(c=>c.id===parent))$('categoryParent').value=parent;
+  function hideToast() { $('toast').hidden = true; undoFn = null; }
+  $('toastAction').addEventListener('click', () => { const f = undoFn; hideToast(); if (f) f(); });
+  function choose(message, options) {
+    const dlg = $('choiceDialog');
+    if (!dlg || typeof dlg.showModal !== 'function') return Promise.resolve(confirm(message) ? options[0].value : options[options.length - 1].value);
+    return new Promise(res => {
+      $('choiceText').textContent = message;
+      const box = $('choiceActions'); box.innerHTML = '';
+      options.forEach(o => { const b = document.createElement('button'); b.type = 'button'; b.className = 'btn' + (o.primary ? '' : ' secondary'); b.textContent = o.label; b.addEventListener('click', () => { dlg.close(); res(o.value); }); box.appendChild(b); });
+      dlg.oncancel = e => { e.preventDefault(); dlg.close(); res(options[options.length - 1].value); };
+      dlg.showModal(); box.firstChild && box.firstChild.focus();
+    });
   }
-  function resetCategoryForm(){
-    editingCategoryId='';$('categoryName').value='';$('categoryParent').value='';
-    $('categoryFormTitle').textContent='Tambah kategori baharu';$('saveCategoryBtn').textContent='Simpan Kategori';
+  async function ask(message, yesLabel) { return (await choose(message, [{ value: true, label: yesLabel, primary: true }, { value: false, label: 'Batal' }])) === true; }
+
+  // ---------- UI: tab & keadaan paparan ----------
+  const ui = lsGet(LS.UI, {}) || {};
+  function saveUi(patch) { Object.assign(ui, patch); lsSet(LS.UI, ui); }
+  const tabs = [...document.querySelectorAll('.tab')];
+  function showTab(id, { focus = false } = {}) {
+    if (!tabs.some(t => t.dataset.tab === id)) id = 'dashboardPanel';
+    if ($('formPanel').classList.contains('active')) saveDraft('book');
+    if ($('loanPanel').classList.contains('active')) saveDraft('loan');
+    tabs.forEach(b => { const on = b.dataset.tab === id; b.classList.toggle('active', on); b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
+    saveUi({ tab: id });
+    if (id === 'syncPanel') { refreshStorageInfo(); renderBackups(); }
+  }
+  tabs.forEach((b, i) => {
+    b.addEventListener('click', () => showTab(b.dataset.tab));
+    b.addEventListener('keydown', e => {
+      const map = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 };
+      if (!(e.key in map)) return;
+      e.preventDefault();
+      const next = tabs[(map[e.key] + tabs.length) % tabs.length];
+      showTab(next.dataset.tab, { focus: true });
+    });
+  });
+  function setCollectionView(view) {
+    const gallery = view === 'gallery';
+    $('bookTableView').style.display = gallery ? 'none' : 'block'; $('bookGalleryView').style.display = gallery ? 'grid' : 'none';
+    $('tableViewBtn').classList.toggle('selected', !gallery); $('galleryViewBtn').classList.toggle('selected', gallery);
+    $('tableViewBtn').setAttribute('aria-pressed', String(!gallery)); $('galleryViewBtn').setAttribute('aria-pressed', String(gallery));
+    saveUi({ view: gallery ? 'gallery' : 'table' });
+  }
+  $('tableViewBtn').addEventListener('click', () => setCollectionView('table'));
+  $('galleryViewBtn').addEventListener('click', () => setCollectionView('gallery'));
+
+  const libraryName = () => settings.libraryName || DEFAULT_NAME;
+  function applyLibraryName() {
+    const n = libraryName();
+    $('libraryTitle').textContent = n; document.title = n;
+    $('printHeadingTitle').textContent = n + ' — Koleksi Buku';
+    if (document.activeElement !== $('libraryName')) $('libraryName').value = n;
+  }
+
+  // ---------- Draf borang ----------
+  let draftTimers = {}, restoringDraft = false;
+  function formValues(formId) { const data = {}; $(formId).querySelectorAll('input:not([type="file"]),select,textarea').forEach(el => { if (el.id) data[el.id] = el.value; }); return data; }
+  function updateDraftStatus(kind, hasDraft) { const el = $(kind === 'book' ? 'bookDraftStatus' : 'loanDraftStatus'); if (el) el.textContent = hasDraft ? 'Draf disimpan secara automatik pada peranti ini. Anda boleh bertukar tab dan menyambung semula kemudian.' : 'Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.'; }
+  function clearDraftData(kind) { lsDel(kind === 'book' ? LS.BOOK_DRAFT : LS.LOAN_DRAFT); }
+  function saveDraft(kind) {
+    if (restoringDraft) return;
+    const isBook = kind === 'book', formId = isBook ? 'bookForm' : 'loanForm', key = isBook ? LS.BOOK_DRAFT : LS.LOAN_DRAFT;
+    const values = formValues(formId);
+    const hasContent = Object.entries(values).some(([k, v]) => k !== 'bookCode' && String(v || '').trim() !== '') || (isBook && !!currentCover);
+    if (!hasContent) { clearDraftData(kind); updateDraftStatus(kind, false); return; }
+    const draft = { savedAt: nowIso(), values }; if (isBook) draft.cover = currentCover || '';
+    updateDraftStatus(kind, lsSet(key, draft));
+  }
+  function scheduleDraft(kind) { if (restoringDraft) return; clearTimeout(draftTimers[kind]); draftTimers[kind] = setTimeout(() => saveDraft(kind), 250); }
+  function restoreDraft(kind) {
+    const isBook = kind === 'book', key = isBook ? LS.BOOK_DRAFT : LS.LOAN_DRAFT;
+    const draft = lsGet(key, null); if (!draft || !draft.values) return false;
+    restoringDraft = true;
+    try {
+      Object.entries(draft.values).forEach(([id, value]) => { const el = $(id); if (el && el.type !== 'file') el.value = value; });
+      if (isBook) {
+        currentCover = safeImg(draft.cover);
+        $('coverPreview').innerHTML = currentCover ? `<img alt="Pratonton kulit buku daripada draf" src="${esc(currentCover)}"><span class="small">Kulit buku daripada draf tersimpan</span>` : '';
+        togglePurchaseField(); renderDupWarning(); $('saveBookBtn').textContent = $('bookId').value ? 'Kemaskini Buku' : 'Simpan Buku';
+      } else $('saveLoanBtn').textContent = $('loanId').value ? 'Kemaskini Rekod Pinjaman' : 'Simpan Rekod Pinjaman';
+      updateDraftStatus(kind, true); return true;
+    } finally { restoringDraft = false; }
+  }
+  function setupDraftAutosave() {
+    ['bookForm', 'loanForm'].forEach(formId => { const kind = formId === 'bookForm' ? 'book' : 'loan'; $(formId).querySelectorAll('input,select,textarea').forEach(el => { if (el.type === 'file') return; el.addEventListener('input', () => scheduleDraft(kind)); el.addEventListener('change', () => scheduleDraft(kind)); }); });
+    window.addEventListener('pagehide', () => { saveDraft('book'); saveDraft('loan'); });
+  }
+
+  // ---------- Imej kulit: mampatan automatik ----------
+  // Mampatkan kepada JPEG; turunkan kualiti/saiz secara berperingkat sehingga ≤ 150 KB.
+  function loadImage(src) { return new Promise((res, rej) => { const img = new Image(); img.onload = () => res(img); img.onerror = () => rej(new Error('Imej tidak dapat dibaca')); img.src = src; }); }
+  async function compressImage(src) {
+    const img = await loadImage(src);
+    const steps = [[600, 900, 0.8], [600, 900, 0.68], [480, 720, 0.62], [400, 600, 0.55]];
+    let out = '';
+    for (const [maxW, maxH, q] of steps) {
+      const s = Math.min(1, maxW / img.naturalWidth, maxH / img.naturalHeight);
+      const w = Math.max(1, Math.round(img.naturalWidth * s)), h = Math.max(1, Math.round(img.naturalHeight * s));
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, w, h); x.drawImage(img, 0, 0, w, h);
+      out = c.toDataURL('image/jpeg', q);
+      if (approxBytes(out) <= 150 * 1024) break;
+    }
+    if (!safeImg(out)) throw new Error('Format imej tidak disokong');
+    return out;
+  }
+  $('cover').addEventListener('change', async e => {
+    const f = e.target.files[0]; if (!f) return;
+    if (!f.type.startsWith('image/')) { toast('Sila pilih fail imej.'); e.target.value = ''; return; }
+    if (f.size > 25 * 1024 * 1024) { toast('Imej melebihi 25 MB. Pilih imej yang lebih kecil.'); e.target.value = ''; return; }
+    $('coverPreview').innerHTML = '<span class="small">Memampatkan imej…</span>';
+    const url = URL.createObjectURL(f);
+    try {
+      currentCover = await compressImage(url);
+      $('coverPreview').innerHTML = `<img alt="Pratonton kulit buku" src="${esc(currentCover)}"><span class="small">Imej dimampatkan: ${fmtSize(f.size)} → ${fmtSize(approxBytes(currentCover))}</span>`;
+      scheduleDraft('book');
+    } catch (err) { $('coverPreview').innerHTML = ''; e.target.value = ''; toast('Imej tidak dapat dibaca. Cuba format JPEG atau PNG.'); }
+    finally { URL.revokeObjectURL(url); }
+  });
+
+  // ---------- Borang buku ----------
+  function togglePurchaseField() { const buying = $('source').value === 'Beli'; $('purchaseField').hidden = !buying; $('purchase').required = buying; if (!buying) $('purchase').value = ''; }
+  $('source').addEventListener('change', togglePurchaseField);
+  function nextBookCode() { return CODE_PREFIX + pad(books.reduce((m, b) => Math.max(m, codeNum(b.bookCode)), 0) + 1); }
+  function formatAuthorName(value) { return String(value || '').trim().toLocaleLowerCase('ms-MY').replace(/(^|[\s\-’'])\p{L}/gu, m => m.toLocaleUpperCase('ms-MY')); }
+  $('title').addEventListener('blur', () => { $('title').value = $('title').value.toLocaleUpperCase('ms-MY').trim(); });
+  $('author').addEventListener('blur', () => { $('author').value = formatAuthorName($('author').value); });
+  function resetBook(clearDraft = true) { if (clearDraft) clearDraftData('book'); $('bookForm').reset(); $('bookId').value = ''; $('bookCode').value = nextBookCode(); currentCover = ''; $('coverPreview').innerHTML = ''; $('saveBookBtn').textContent = 'Simpan Buku'; togglePurchaseField(); updateDraftStatus('book', false); renderDupWarning(); }
+  function resetLoan(clearDraft = true) { if (clearDraft) clearDraftData('loan'); $('loanForm').reset(); $('loanId').value = ''; $('saveLoanBtn').textContent = 'Simpan Rekod Pinjaman'; updateDraftStatus('loan', false); }
+  let savingBook = false;
+  $('bookForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    if (savingBook) return;
+    $('title').value = $('title').value.toLocaleUpperCase('ms-MY').trim();
+    $('author').value = formatAuthorName($('author').value);
+    const id = $('bookId').value || newId('');
+    const old = books.find(b => b.id === id);
+    const dups = renderDupWarning();
+    let dupOk = old?.dupOk || '';
+    if (dups.length && !dupOk) {
+      savingBook = true;
+      const list = dups.slice(0, 5).map(d => `• ${d.book.bookCode} · ${d.book.title}${d.book.author ? ' — ' + d.book.author : ''} (${d.reason})`).join('\n');
+      const choice = await choose(`Buku ini mungkin sudah ada dalam koleksi:\n${list}\n\nAdakah ini naskhah tambahan?`, [
+        { value: 'save', label: 'Simpan juga sebagai naskhah tambahan', primary: true },
+        { value: 'view', label: 'Lihat buku sedia ada' },
+        { value: 'cancel', label: 'Batal' }
+      ]);
+      savingBook = false;
+      if (choice === 'view') { showBookInCollection(dups[0].book.id); return; }
+      if (choice !== 'save') return;
+      dupOk = '1';
+    }
+    const cat = categories.find(c => c.id === $('genre').value);
+    const source = $('source').value;
+    const b = Object.assign({}, old || {}, {
+      id, bookCode: old?.bookCode || nextBookCode(), format: $('format').value,
+      categoryId: cat ? cat.id : '', genre: cat ? cat.name : '',
+      isbn: $('isbn').value.trim(), title: $('title').value.trim(), publisher: $('publisher').value.trim(), author: $('author').value.trim(),
+      reading: $('reading').value, price: $('price').value, source, purchase: source === 'Beli' ? $('purchase').value.trim() : '',
+      publishPlace: $('publishPlace').value.trim(), year: $('year').value, dupOk
+    });
+    const cover = safeImg(currentCover) || old?.cover || '';
+    if (cover !== (old?.cover || '')) { b.cover = cover; b.coverHash = cover ? hashStr(cover) : ''; b.coverUploaded = ''; saveCover(id, cover); }
+    else b.cover = cover;
+    touch(b);
+    if (old) books = books.map(x => (x.id === id ? b : x)); else books.unshift(b);
+    persist(); resetBook(true); render(); showTab('collectionPanel');
+    toast(old ? 'Buku dikemaskini.' : 'Buku ' + b.bookCode + ' disimpan.');
+  });
+  $('resetBookBtn').addEventListener('click', () => resetBook(true));
+
+  // ---------- Borang pinjaman ----------
+  $('loanForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const id = $('loanId').value || newId('');
+    const old = loans.find(x => x.id === id);
+    const l = touch(Object.assign({}, old || {}, { id, bookId: $('loanBook').value, borrower: $('borrower').value.trim(), status: $('loanStatus').value, borrowDate: $('borrowDate').value, returnDate: $('returnDate').value }));
+    if (old) loans = loans.map(x => (x.id === id ? l : x)); else loans.unshift(l);
+    persist(); resetLoan(true); render();
+    toast(old ? 'Rekod pinjaman dikemaskini.' : 'Rekod pinjaman disimpan.');
+  });
+  $('resetLoanBtn').addEventListener('click', () => resetLoan(true));
+
+  // ---------- Kategori ----------
+  function categoryLabel(c) { if (!c) return ''; if (!c.parent) return c.name; const p = categories.find(x => x.id === c.parent); return p ? p.name + ' › ' + c.name : c.name; }
+  function bookCategoryLabel(b) { return categoryLabel(categories.find(c => c.id === b.categoryId)) || b.genre || ''; }
+  function renderCategoryOptions() {
+    const selected = $('genre').value, filterSelected = $('filterGenre').value, parentSel = $('categoryParent').value;
+    const sorted = [...categories].sort((a, b) => categoryLabel(a).localeCompare(categoryLabel(b), 'ms'));
+    const opts = sorted.map(c => `<option value="${esc(c.id)}">${esc(categoryLabel(c))}</option>`).join('');
+    $('genre').innerHTML = '<option value="">Pilih kategori</option>' + opts;
+    $('filterGenre').innerHTML = '<option value="">Semua kategori</option>' + opts;
+    if (sorted.some(c => c.id === selected)) $('genre').value = selected;
+    if (sorted.some(c => c.id === filterSelected)) $('filterGenre').value = filterSelected;
+    $('categoryParent').innerHTML = '<option value="">Tiada — kategori utama</option>' + categories.filter(c => c.id !== editingCategoryId && !c.parent).sort((a, b) => a.name.localeCompare(b.name, 'ms')).map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
+    if (categories.some(c => c.id === parentSel)) $('categoryParent').value = parentSel;
+  }
+  function resetCategoryForm() { editingCategoryId = ''; $('categoryName').value = ''; $('categoryParent').value = ''; $('categoryFormTitle').textContent = 'Tambah kategori baharu'; $('saveCategoryBtn').textContent = 'Simpan Kategori'; renderCategoryOptions(); }
+  function renderCategories() {
     renderCategoryOptions();
+    const sorted = [...categories].sort((a, b) => categoryLabel(a).localeCompare(categoryLabel(b), 'ms'));
+    $('categoryRows').innerHTML = sorted.length ? sorted.map(c => {
+      const count = books.filter(b => b.categoryId === c.id).length, isChild = !!c.parent;
+      return `<tr><td>${isChild ? '↳ ' : ''}<strong>${esc(c.name)}</strong>${isChild ? '<div class="small">Subkategori kepada ' + esc(categories.find(p => p.id === c.parent)?.name || 'kategori tidak ditemui') + '</div>' : ''}</td><td>${count}</td><td><button class="btn secondary" type="button" data-edit-category="${esc(c.id)}">Edit</button> <button class="btn danger" type="button" data-delete-category="${esc(c.id)}">Padam</button></td></tr>`;
+    }).join('') : '<tr><td colspan="3" class="empty">Belum ada kategori.</td></tr>';
   }
-  function renderCategories(){
-    renderCategoryOptions();
-    const sorted=[...categories].sort((a,b)=>categoryLabel(a).localeCompare(categoryLabel(b),'ms'));
-    $('categoryRows').innerHTML=sorted.length?sorted.map(c=>{
-      const count=books.filter(b=>b.genre===c.name).length;
-      const isChild=!!c.parent;
-      return `<tr><td>${isChild?'↳ ':''}<strong>${esc(c.name)}</strong>${isChild?'<div class="small">Subkategori kepada '+esc(categories.find(p=>p.id===c.parent)?.name||'kategori tidak ditemui')+'</div>':''}</td><td>${count}</td><td><button class="btn secondary" type="button" data-edit-category="${esc(c.id)}">Edit</button> <button class="btn danger" type="button" data-delete-category="${esc(c.id)}">Padam</button></td></tr>`;
-    }).join(''):'<tr><td colspan="3" class="empty">Belum ada kategori.</td></tr>';
-    $('categoryRows').querySelectorAll('[data-edit-category]').forEach(btn=>btn.addEventListener('click',()=>{
-      const c=categories.find(x=>x.id===btn.dataset.editCategory);if(!c)return;
-      editingCategoryId=c.id;$('categoryName').value=c.name;$('categoryParent').value=c.parent||'';
-      $('categoryFormTitle').textContent='Kemaskini kategori';$('saveCategoryBtn').textContent='Simpan Perubahan';renderCategoryOptions();$('categoryParent').value=c.parent||'';
-      window.scrollTo({top:0,behavior:'smooth'});
-    }));
-    $('categoryRows').querySelectorAll('[data-delete-category]').forEach(btn=>btn.addEventListener('click',()=>{
-      const c=categories.find(x=>x.id===btn.dataset.deleteCategory);if(!c)return;
-      const used=books.some(b=>b.genre===c.name),hasChildren=categories.some(x=>x.parent===c.id);
-      if(used){$('categoryStatus').textContent='Kategori ini masih digunakan oleh buku. Tukar kategori buku tersebut dahulu.';return;}
-      if(hasChildren){$('categoryStatus').textContent='Kategori ini mempunyai subkategori. Padam atau pindahkan subkategori dahulu.';return;}
-      if(!confirm('Padam kategori "'+c.name+'"? Rekod buku tidak akan dipadam.'))return;
-      categories=categories.filter(x=>x.id!==c.id);
-      if(saveCategories()){$('categoryStatus').textContent='Kategori berjaya dipadam.';resetCategoryForm();render();renderCategories();}
-    }));
-  }
-  $('saveCategoryBtn').addEventListener('click',()=>{
-    const name=$('categoryName').value.trim().replace(/\s+/g,' ');
-    const parent=$('categoryParent').value;
-    if(!name){$('categoryStatus').textContent='Masukkan nama kategori.';$('categoryName').focus();return;}
-    if(categories.some(c=>c.id!==editingCategoryId&&c.name.toLocaleLowerCase('ms-MY')===name.toLocaleLowerCase('ms-MY'))){$('categoryStatus').textContent='Nama kategori ini sudah wujud.';return;}
-    const existing=categories.find(c=>c.id===editingCategoryId);
-    if(existing){
-      const oldName=existing.name;
-      existing.name=name;existing.parent=parent;
-      if(oldName!==name)books.forEach(b=>{if(b.genre===oldName)b.genre=name;});
-    }else categories.push({id:'cat-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7),name,parent});
-    if(saveCategories()){
-      if(editingCategoryId)persist();
-      $('categoryStatus').textContent='Kategori berjaya disimpan.';
-      resetCategoryForm();render();renderCategories();
+  $('categoryRows').addEventListener('click', e => {
+    const ed = e.target.closest('[data-edit-category]'), del = e.target.closest('[data-delete-category]');
+    if (ed) {
+      const c = categories.find(x => x.id === ed.dataset.editCategory); if (!c) return;
+      editingCategoryId = c.id; renderCategoryOptions(); $('categoryName').value = c.name; $('categoryParent').value = c.parent || '';
+      $('categoryFormTitle').textContent = 'Kemaskini kategori'; $('saveCategoryBtn').textContent = 'Simpan Perubahan';
+      window.scrollTo({ top: 0, behavior: 'smooth' }); $('categoryName').focus();
+    }
+    if (del) {
+      const c = categories.find(x => x.id === del.dataset.deleteCategory); if (!c) return;
+      if (books.some(b => b.categoryId === c.id)) { $('categoryStatus').textContent = 'Kategori ini masih digunakan oleh buku. Tukar kategori buku tersebut dahulu.'; return; }
+      if (categories.some(x => x.parent === c.id)) { $('categoryStatus').textContent = 'Kategori ini mempunyai subkategori. Padam atau pindahkan subkategori dahulu.'; return; }
+      categories = categories.filter(x => x.id !== c.id); deletions.categories[c.id] = nowIso();
+      persist(); if (editingCategoryId === c.id) resetCategoryForm(); render();
+      $('categoryStatus').textContent = 'Kategori "' + c.name + '" dipadam.';
+      toast('Kategori "' + c.name + '" dipadam.', { undo: () => { delete deletions.categories[c.id]; touch(c); categories.push(c); persist(); render(); toast('Kategori dipulihkan.'); } });
     }
   });
-  $('cancelCategoryBtn').addEventListener('click',()=>{resetCategoryForm();$('categoryStatus').textContent='Borang kategori dikosongkan.';});
+  $('saveCategoryBtn').addEventListener('click', () => {
+    const name = $('categoryName').value.trim().replace(/\s+/g, ' '), parent = $('categoryParent').value;
+    if (!name) { $('categoryStatus').textContent = 'Masukkan nama kategori.'; $('categoryName').focus(); return; }
+    if (categories.some(c => c.id !== editingCategoryId && lc(c.name) === lc(name))) { $('categoryStatus').textContent = 'Nama kategori ini sudah wujud.'; return; }
+    const existing = categories.find(c => c.id === editingCategoryId);
+    if (existing && parent && categories.some(c => c.parent === existing.id)) { $('categoryStatus').textContent = 'Kategori yang mempunyai subkategori tidak boleh dijadikan subkategori.'; return; }
+    if (existing) {
+      existing.name = name; existing.parent = parent; touch(existing);
+      books.forEach(b => { if (b.categoryId === existing.id) b.genre = name; });
+    } else categories.push(touch({ id: newId('cat'), name, parent }));
+    persist(); $('categoryStatus').textContent = 'Kategori berjaya disimpan.'; resetCategoryForm(); render();
+  });
+  $('cancelCategoryBtn').addEventListener('click', () => { resetCategoryForm(); $('categoryStatus').textContent = 'Borang kategori dikosongkan.'; });
 
-  function render(){renderBookSelect();renderBooks();renderLoans();renderDashboard();renderCategories();}
-  function editBook(id){const b=books.find(x=>x.id===id);if(!b)return;showTab('formPanel');$('bookId').value=b.id;$('bookCode').value=b.bookCode||'';['format','genre','isbn','title','publisher','author','reading','price','purchase','year'].forEach(k=>$(k).value=b[k]||'');$('source').value=b.source||(b.purchase?'Beli':'Beli');togglePurchaseField();$('purchase').value=b.purchase||'';$('publishPlace').value=b.publishPlace||'';currentCover=b.cover||'';$('coverPreview').innerHTML=currentCover?`<img alt="Kulit buku" src="${currentCover}"><span class="small">Kulit buku sedia ada (pilih imej baharu jika mahu menggantikannya)</span>`:'';$('saveBookBtn').textContent='Kemaskini Buku';window.scrollTo({top:0,behavior:'smooth'});}
+  // ---------- Paparan ----------
+  const byNewest = (a, b) => str(b.createdAt).localeCompare(str(a.createdAt));
+
+  // ---------- Pengesanan buku berganda ----------
+  function isbnKey(v) {
+    let s = str(v).toUpperCase().replace(/[^0-9X]/g, '');
+    if (/^\d{9}[\dX]$/.test(s)) { // ISBN-10 → ISBN-13 supaya kedua-dua format dianggap sama
+      const core = '978' + s.slice(0, 9); let sum = 0;
+      for (let i = 0; i < 12; i++) sum += Number(core[i]) * (i % 2 ? 3 : 1);
+      s = core + ((10 - (sum % 10)) % 10);
+    }
+    return s.length >= 8 ? s : '';
+  }
+  function textKey(v) { return str(v).normalize('NFD').replace(/[̀-ͯ]/g, '').toLocaleLowerCase('ms-MY').replace(/[^\p{L}\p{N}]+/gu, ' ').trim(); }
+  function findDuplicates(cand, excludeId) {
+    const ik = isbnKey(cand.isbn), tk = textKey(cand.title), ak = textKey(cand.author), out = [];
+    if (!ik && !tk) return out;
+    books.forEach(b => {
+      if (b.id === excludeId) return;
+      let reason = '';
+      if (ik && isbnKey(b.isbn) === ik) reason = 'ISBN sama';
+      else if (tk && textKey(b.title) === tk) {
+        const bk = textKey(b.author);
+        if (ak && bk) reason = ak === bk ? 'tajuk & penulis sama' : '';
+        else reason = 'tajuk sama';
+      }
+      if (reason) out.push({ book: b, reason });
+    });
+    return out;
+  }
+  // Buku yang berkongsi ISBN, atau tajuk + penulis yang sama. Naskhah yang telah disahkan sebagai tambahan (dupOk) tidak dikira.
+  function duplicateIds() {
+    const groups = new Map(), ids = new Set();
+    const add = (k, b) => { if (!groups.has(k)) groups.set(k, []); groups.get(k).push(b); };
+    books.forEach(b => {
+      const ik = isbnKey(b.isbn); if (ik) add('i:' + ik, b);
+      const tk = textKey(b.title); if (tk) add('t:' + tk + '|' + textKey(b.author), b);
+    });
+    groups.forEach(g => { if (g.filter(b => !b.dupOk).length > 1) g.forEach(b => ids.add(b.id)); });
+    return ids;
+  }
+  function renderDupWarning() {
+    const el = $('dupWarning');
+    const d = findDuplicates({ isbn: $('isbn').value, title: $('title').value, author: $('author').value }, $('bookId').value);
+    if (!d.length) { el.hidden = true; el.innerHTML = ''; return d; }
+    el.hidden = false;
+    el.innerHTML = `<strong>⚠ Kemungkinan buku berganda.</strong> Buku ini mungkin sudah ada dalam koleksi:<ul>${d.slice(0, 5).map(x => `<li><strong>${esc(x.book.bookCode || '—')}</strong> · ${esc(x.book.title || '—')}${x.book.author ? ' — ' + esc(x.book.author) : ''} <span class="small">(${esc(x.reason)})</span><button type="button" class="btn secondary" data-view-dup="${esc(x.book.id)}">Lihat</button></li>`).join('')}</ul><span class="small">Anda masih boleh menyimpan jika ini naskhah tambahan.</span>`;
+    return d;
+  }
+  let dupTimer = null;
+  ['isbn', 'title', 'author'].forEach(id => $(id).addEventListener('input', () => { clearTimeout(dupTimer); dupTimer = setTimeout(renderDupWarning, 250); }));
+  $('dupWarning').addEventListener('click', e => { const b = e.target.closest('[data-view-dup]'); if (b) showBookInCollection(b.dataset.viewDup); });
+  function showBookInCollection(id) {
+    const b = books.find(x => x.id === id); if (!b) return;
+    showTab('collectionPanel');
+    $('bookSearch').value = b.bookCode || b.title || ''; $('filterGenre').value = ''; $('filterReading').value = ''; $('filterDupes').checked = false;
+    renderBooks(); $('bookSearch').focus();
+  }
+
+  // ---------- Isihan koleksi ----------
+  const collator = new Intl.Collator('ms', { numeric: true, sensitivity: 'base' });
+  const numOrBlank = v => (str(v).trim() === '' || Number.isNaN(Number(v)) ? '' : Number(v));
+  function cmpBy(get, { dir = 1, num = false } = {}) {
+    return (a, b) => {
+      const va = get(a), vb = get(b), ea = va === '' || va == null, eb = vb === '' || vb == null;
+      if (ea || eb) return ea && eb ? 0 : ea ? 1 : -1; // nilai kosong sentiasa di bawah
+      return dir * (num ? va - vb : collator.compare(String(va), String(vb)));
+    };
+  }
+  const READING_ORDER = { 'Sedang dibaca': 1, 'Belum dibaca': 2, 'Selesai': 3 };
+  const SORTS = {
+    newest: ['Terbaru ditambah', byNewest],
+    oldest: ['Terlama ditambah', (a, b) => -byNewest(a, b)],
+    titleAsc: ['Tajuk (A–Z)', cmpBy(b => b.title)],
+    titleDesc: ['Tajuk (Z–A)', cmpBy(b => b.title, { dir: -1 })],
+    authorAsc: ['Penulis (A–Z)', cmpBy(b => b.author)],
+    codeAsc: ['ID buku', cmpBy(b => b.bookCode)],
+    categoryAsc: ['Kategori', cmpBy(b => bookCategoryLabel(b))],
+    readingAsc: ['Status bacaan', cmpBy(b => READING_ORDER[b.reading] || '', { num: true })],
+    yearDesc: ['Tahun terbit (terbaru)', cmpBy(b => numOrBlank(b.year), { dir: -1, num: true })],
+    yearAsc: ['Tahun terbit (terlama)', cmpBy(b => numOrBlank(b.year), { num: true })],
+    priceDesc: ['Harga (tertinggi)', cmpBy(b => numOrBlank(b.price), { dir: -1, num: true })],
+    priceAsc: ['Harga (terendah)', cmpBy(b => numOrBlank(b.price), { num: true })]
+  };
+  $('sortBooks').innerHTML = Object.entries(SORTS).map(([k, [label]]) => `<option value="${k}">Isih: ${esc(label)}</option>`).join('');
+  $('sortBooks').value = SORTS[ui.sort] ? ui.sort : 'newest';
+  $('sortBooks').addEventListener('change', () => { saveUi({ sort: $('sortBooks').value }); renderBooks(); });
+  function sortedBooks() {
+    const primary = (SORTS[$('sortBooks').value] || SORTS.newest)[1];
+    return [...books].sort((a, b) => primary(a, b) || collator.compare(str(a.title), str(b.title)) || byNewest(a, b));
+  }
+  function bookName(id) { const b = books.find(x => x.id === id); return b ? `${b.title || b.author}${b.author ? ' — ' + b.author : ''}${b.isbn ? ' · ISBN ' + b.isbn : ''}` : 'Buku dipadam'; }
+  function coverImg(b, cls, alt) { const src = safeImg(b.cover); return src ? `<img${cls ? ` class="${cls}"` : ''} src="${esc(src)}" alt="${esc(alt)}">` : ''; }
+  function renderBookSelect() { const sel = $('loanBook'), old = sel.value; sel.innerHTML = '<option value="">Pilih buku</option>' + [...books].sort((a, b) => str(a.bookCode).localeCompare(str(b.bookCode))).map(b => `<option value="${esc(b.id)}">${esc(b.bookCode || '')} · ${esc(b.title || b.author)}${b.author ? ' — ' + esc(b.author) : ''}</option>`).join(''); if (books.some(b => b.id === old)) sel.value = old; }
+  function renderBooks() {
+    const q = $('bookSearch').value.toLowerCase(), g = $('filterGenre').value, r = $('filterReading').value, dupOnly = $('filterDupes').checked;
+    const dupIds = duplicateIds();
+    $('totalDupes').textContent = dupIds.size; $('dupStatBtn').classList.toggle('has', dupIds.size > 0); $('dupStatBtn').setAttribute('aria-pressed', String(dupOnly));
+    const shown = sortedBooks().filter(b => (!dupOnly || dupIds.has(b.id)) && (!q || [b.bookCode, b.title, b.author, b.isbn, b.publisher, b.purchase, b.publishPlace].some(v => (v || '').toLowerCase().includes(q))) && (!g || b.categoryId === g) && (!r || b.reading === r));
+    $('totalBooks').textContent = books.length; $('totalLoans').textContent = loans.filter(l => l.status === 'Dipinjam').length; $('totalValue').textContent = 'RM ' + books.reduce((s, b) => s + (Number(b.price) || 0), 0).toFixed(2);
+    $('bookRows').innerHTML = shown.length ? shown.map(b => { const loan = loans.find(l => l.bookId === b.id && l.status === 'Dipinjam'); return `<tr><td>${coverImg(b, 'book-cover', 'Kulit buku') || '—'}</td><td><strong>${esc(b.bookCode || '—')}</strong></td><td><strong>${esc(b.title || 'Nama buku tidak diisi')}</strong>${dupIds.has(b.id) ? '<span class="pill dup">Berganda?</span>' : ''}<br><span class="small">Penulis: ${esc(b.author || '—')}</span><br><span class="small">${b.isbn ? 'ISBN: ' + esc(b.isbn) : 'ISBN tidak diisi'}</span><br><span class="small">${esc(b.publisher || 'Penerbit tidak diisi')}</span></td><td>${esc(b.format)}<br><span class="small">${esc(bookCategoryLabel(b))}</span></td><td><span class="pill">${esc(b.reading)}</span></td><td>${money(b.price)}</td><td>${esc(b.publishPlace || '—')}<br><span class="small">${esc(b.year || 'Tahun tidak diisi')}</span></td><td>${loan ? `Dipinjam oleh ${esc(loan.borrower)}` : 'Dalam Simpanan'}</td><td class="no-print"><button class="btn secondary" type="button" data-edit-book="${esc(b.id)}">Edit</button> <button class="btn secondary" type="button" data-print-book="${esc(b.id)}">Cetak</button> <button class="btn danger" type="button" data-delete-book="${esc(b.id)}">Padam</button></td></tr>`; }).join('') : '<tr><td colspan="9" class="empty">Tiada rekod buku ditemui. Tambah buku melalui tab Borang Maklumat Buku.</td></tr>';
+    $('bookGalleryView').innerHTML = shown.length ? shown.map(b => { const loan = loans.find(l => l.bookId === b.id && l.status === 'Dipinjam'); return `<article class="gallery-card"><div class="gallery-cover">${coverImg(b, '', 'Kulit buku ' + (b.title || '')) || `<span class="cover-letter">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</span>`}</div><div class="gallery-info"><div class="small">${esc(b.bookCode || '—')}</div><h3>${esc(b.title || 'Nama buku tidak diisi')}</h3><div class="author">${esc(b.author || 'Penulis tidak dinyatakan')}</div><div class="gallery-meta"><span>${esc(bookCategoryLabel(b) || 'Tanpa kategori')}</span><span>${esc(b.reading || 'Belum dibaca')}</span>${dupIds.has(b.id) ? '<span class="dup">Berganda?</span>' : ''}</div><div class="small">${esc(b.year || 'Tahun tidak dinyatakan')} · ${money(b.price)}</div><div class="small">${loan ? 'Dipinjam: ' + esc(loan.borrower) : 'Dalam simpanan'}</div><div class="gallery-actions"><button class="btn secondary" type="button" data-edit-book="${esc(b.id)}">Edit</button><button class="btn secondary" type="button" data-print-book="${esc(b.id)}">Cetak</button><button class="btn danger" type="button" data-delete-book="${esc(b.id)}">Padam</button></div></div></article>`; }).join('') : '<div class="empty collection-empty">Tiada buku yang sepadan dengan carian atau penapis ini.</div>';
+    if (!shown.length && books.length) $('bookRows').innerHTML = '<tr><td colspan="9" class="empty">Tiada buku yang sepadan dengan carian atau penapis ini.</td></tr>';
+  }
+  ['bookRows', 'bookGalleryView'].forEach(id => $(id).addEventListener('click', e => {
+    const t = e.target.closest('[data-edit-book],[data-print-book],[data-delete-book]'); if (!t) return;
+    if (t.dataset.editBook) editBook(t.dataset.editBook);
+    else if (t.dataset.printBook) printBookRecord(t.dataset.printBook);
+    else if (t.dataset.deleteBook) deleteBook(t.dataset.deleteBook);
+  }));
+  function renderDashboard() {
+    const total = books.length;
+    const read = books.filter(b => b.reading === 'Selesai').length, inProgress = books.filter(b => b.reading === 'Sedang dibaca').length, unread = books.filter(b => b.reading === 'Belum dibaca').length;
+    const activeLoans = loans.filter(l => l.status === 'Dipinjam'), storedLoans = loans.filter(l => l.status === 'Dalam Simpanan');
+    const value = books.reduce((s, b) => s + (Number(b.price) || 0), 0), pct = total ? Math.round(read / total * 100) : 0;
+    $('heroBookCount').innerHTML = `${total} <span style="font-size:14px;font-weight:600">buku</span>`;
+    $('dashTotal').textContent = total; $('dashRead').textContent = read; $('dashReadNote').textContent = pct + '% daripada koleksi';
+    $('dashLoans').textContent = activeLoans.length; $('dashValue').textContent = 'RM ' + value.toFixed(2);
+    const counts = {}; books.forEach(b => { const k = bookCategoryLabel(b) || 'Tanpa kategori'; counts[k] = (counts[k] || 0) + 1; });
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ms'));
+    $('categoryBreakdown').innerHTML = entries.length ? entries.map(([name, count]) => `<div class="category-row"><span title="${esc(name)}">${esc(name)}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(3, count / total * 100)}%"></div></div><strong>${count}</strong></div>`).join('') : '<p class="small">Belum ada rekod buku.</p>';
+    const recent = [...books].sort(byNewest).slice(0, 5);
+    $('recentBooks').innerHTML = recent.length ? recent.map(b => `<div class="recent-book">${coverImg(b, '', 'Kulit buku') || '<div class="recent-placeholder">▤</div>'}<div><strong>${esc(b.title || 'Nama buku tidak diisi')}</strong><span class="small">${esc(b.bookCode || '')} · ${esc(b.author || 'Penulis tidak dinyatakan')}</span></div></div>`).join('') : '<p class="small">Buku yang disimpan akan dipaparkan di sini.</p>';
+    const readingRows = [['Belum dibaca', unread], ['Sedang dibaca', inProgress], ['Selesai', read]];
+    $('readingBreakdown').innerHTML = total ? readingRows.map(([label, count]) => `<div class="insight-row"><span>${label}</span><strong>${count} <span class="small">(${Math.round(count / total * 100)}%)</span></strong></div><div class="insight-track"><div class="insight-fill" style="width:${count / total * 100}%"></div></div>`).join('') : '<p class="insight-empty">Belum ada rekod bacaan.</p>';
+    $('readingProgressBar').style.width = pct + '%'; $('readingProgressText').textContent = pct + '% selesai dibaca';
+    const miniCounts = (id, field) => { const tally = {}; books.forEach(b => { const v = (b[field] || 'Tidak dinyatakan').trim(); tally[v] = (tally[v] || 0) + 1; }); const rows = Object.entries(tally).sort((a, b) => b[1] - a[1]); $(id).innerHTML = rows.length ? rows.map(([n, c]) => `<div class="insight-row"><span>${esc(n)}</span><strong>${c}</strong></div>`).join('') : '<p class="insight-empty">Tiada data.</p>'; };
+    miniCounts('formatBreakdown', 'format'); miniCounts('sourceBreakdown', 'source');
+    const loanItems = activeLoans.slice(0, 4);
+    $('loanBreakdown').innerHTML = `<div class="insight-row"><span>Sedang dipinjam</span><strong>${activeLoans.length}</strong></div><div class="insight-row"><span>Dalam simpanan</span><strong>${storedLoans.length}</strong></div>` +
+      (loanItems.length ? '<div class="small" style="font-weight:700;margin-top:12px">Pinjaman aktif</div>' + loanItems.map(l => `<div class="loan-item"><strong>${esc(l.borrower || 'Peminjam tidak dinyatakan')}</strong><span>${esc(bookName(l.bookId))}</span>${l.borrowDate ? `<div class="small">Tarikh pinjam: ${esc(l.borrowDate)}</div>` : ''}</div>`).join('') : '<p class="insight-empty">Tiada buku yang sedang dipinjam.</p>');
+  }
+  function renderLoans() {
+    const q = $('loanSearch').value.toLowerCase();
+    const shown = [...loans].sort(byNewest).filter(l => (l.borrower + ' ' + bookName(l.bookId)).toLowerCase().includes(q));
+    $('loanRows').innerHTML = shown.length ? shown.map(l => `<tr><td>${esc(bookName(l.bookId))}</td><td>${esc(l.borrower)}</td><td><span class="pill">${esc(l.status)}</span></td><td>${esc(l.borrowDate || '—')}</td><td>${esc(l.returnDate || '—')}</td><td class="no-print"><button class="btn secondary" type="button" data-edit-loan="${esc(l.id)}">Edit</button> <button class="btn danger" type="button" data-delete-loan="${esc(l.id)}">Padam</button></td></tr>`).join('') : '<tr><td colspan="6" class="empty">Tiada rekod pinjaman.</td></tr>';
+  }
+  $('loanRows').addEventListener('click', e => {
+    const ed = e.target.closest('[data-edit-loan]'), del = e.target.closest('[data-delete-loan]');
+    if (ed) editLoan(ed.dataset.editLoan);
+    if (del) {
+      const l = loans.find(x => x.id === del.dataset.deleteLoan); if (!l) return;
+      loans = loans.filter(x => x.id !== l.id); deletions.loans[l.id] = nowIso(); persist(); render();
+      toast('Rekod pinjaman ' + (l.borrower || '') + ' dipadam.', { undo: () => { delete deletions.loans[l.id]; touch(l); loans.push(l); persist(); render(); toast('Rekod pinjaman dipulihkan.'); } });
+    }
+  });
+  function render() { renderBookSelect(); renderBooks(); renderLoans(); renderDashboard(); renderCategories(); applyLibraryName(); }
+
+  function editBook(id) {
+    const b = books.find(x => x.id === id); if (!b) return;
+    showTab('formPanel');
+    $('bookId').value = b.id; $('bookCode').value = b.bookCode || '';
+    ['format', 'isbn', 'title', 'publisher', 'author', 'reading', 'price', 'year'].forEach(k => { $(k).value = b[k] || ''; });
+    $('genre').value = b.categoryId || '';
+    $('source').value = b.source || 'Beli'; togglePurchaseField(); $('purchase').value = b.purchase || ''; $('publishPlace').value = b.publishPlace || '';
+    currentCover = '';
+    const src = safeImg(b.cover);
+    $('coverPreview').innerHTML = src ? `<img alt="Kulit buku" src="${esc(src)}"><span class="small">Kulit buku sedia ada (pilih imej baharu jika mahu menggantikannya)</span>` : '';
+    $('saveBookBtn').textContent = 'Kemaskini Buku'; renderDupWarning(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function editLoan(id) {
+    const l = loans.find(x => x.id === id); if (!l) return;
+    showTab('loanPanel'); $('loanId').value = l.id;
+    $('loanBook').value = l.bookId || ''; $('borrower').value = l.borrower || ''; $('loanStatus').value = l.status || 'Dipinjam'; $('borrowDate').value = l.borrowDate || ''; $('returnDate').value = l.returnDate || '';
+    $('saveLoanBtn').textContent = 'Kemaskini Rekod Pinjaman'; window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function deleteBook(id) {
+    const idx = books.findIndex(x => x.id === id); if (idx < 0) return;
+    const b = books[idx], related = loans.filter(l => l.bookId === id), t = nowIso();
+    books.splice(idx, 1); loans = loans.filter(l => l.bookId !== id);
+    deletions.books[id] = t; related.forEach(l => { deletions.loans[l.id] = t; });
+    if (b.coverPath) pendingCoverRemovals.push(b.coverPath);
+    if ($('bookId').value === id) resetBook(true);
+    persist(); render();
+    toast(`"${b.title || 'Buku'}" dipadam${related.length ? ' bersama ' + related.length + ' rekod pinjaman' : ''}.`, {
+      undo: () => {
+        const t2 = nowIso();
+        delete deletions.books[id]; touch(b, t2);
+        related.forEach(l => { delete deletions.loans[l.id]; touch(l, t2); });
+        if (b.coverPath) { pendingCoverRemovals = pendingCoverRemovals.filter(p => p !== b.coverPath); b.coverUploaded = ''; }
+        books.push(b); loans.push(...related);
+        if (b.cover) saveCover(b.id, b.cover);
+        persist(); render(); toast('Buku dipulihkan.');
+      }
+    });
+  }
+
   function printBookRecord(id){
     const b=books.find(x=>x.id===id); if(!b)return;
     const loan=loans.find(l=>l.bookId===b.id&&l.status==='Dipinjam');
     const details=[
-      ['ID Buku',b.bookCode||'—'],['Format Buku',b.format],['Kategori / Genre',b.genre],['Kod ISBN',b.isbn],
+      ['ID Buku',b.bookCode||'—'],['Format Buku',b.format],['Kategori / Genre',bookCategoryLabel(b)],['Kod ISBN',b.isbn],
       ['Penulis',b.author],['Penerbit',b.publisher],['Status Bacaan',b.reading],
       ['Sumber',b.source||'Beli'],...( (b.source||'Beli')==='Beli' ? [['Lokasi Pembelian',b.purchase]] : []),['Lokasi Terbit',b.publishPlace],
       ['Tahun Terbit',b.year],['Harga Direkodkan',money(b.price)],['Status Pinjaman',loan?('Dipinjam — '+loan.borrower):'Dalam Simpanan']
     ];
     const popup=window.open('', '_blank', 'width=980,height=800');
-    if(!popup){alert('Tetingkap cetakan disekat oleh pelayar. Benarkan pop-up untuk fail ini dan cuba lagi.');return;}
-    const cover=b.cover
-      ? `<img class="cover" src="${b.cover}" alt="Kulit buku">`
+    if(!popup){toast('Tetingkap cetakan disekat oleh pelayar. Benarkan pop-up untuk laman ini dan cuba lagi.');return;}
+    const coverSrc=safeImg(b.cover);
+    const cover=coverSrc
+      ? `<img class="cover" src="${esc(coverSrc)}" alt="Kulit buku">`
       : '<div class="no-cover"><span>TIADA IMEJ<br>KULIT BUKU</span></div>';
     const rows=details.map(([label,value])=>`<div class="detail"><div class="label">${esc(label)}</div><div class="value">${esc(value||'—')}</div></div>`).join('');
     popup.document.open();
@@ -444,95 +957,419 @@ table{border-collapse:collapse;width:100%;min-width:850px;background:#fff}th,td{
       .footer{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:12px;border-top:1px solid #dce5e1;color:#7b8983;font-size:9px}.screen-actions{max-width:780px;margin:0 auto 14px;display:flex;gap:8px;justify-content:flex-end}.screen-actions button{border:0;border-radius:6px;padding:10px 15px;background:#245b52;color:#fff;font-weight:700;cursor:pointer}.screen-actions .close{background:#e4ebe8;color:#24372f}
       @media(max-width:650px){body{padding:8px}.sheet{padding:18px;min-height:0}.topline{margin:-18px -18px 18px}.layout{grid-template-columns:34% 1fr;gap:14px}.cover-panel{min-height:220px;padding:8px}.title{font-size:20px}.detail{grid-template-columns:1fr;gap:3px}}
       @media print{html,body{background:#fff!important;padding:0!important}.screen-actions{display:none!important}.sheet{max-width:none;width:auto;min-height:0;margin:0;border:0;box-shadow:none;padding:0;overflow:visible}.topline{margin:0 0 20px}.layout{grid-template-columns:36% 1fr;gap:24px;margin-top:22px}.cover-panel{min-height:0;padding:12px}.cover{max-height:225mm}.title{font-size:23px}.detail{grid-template-columns:42% 1fr;padding:7px 0}.footer{margin-top:20px}}
-      </style></head><body><div class="screen-actions"><button onclick="window.print()">Cetak / Simpan PDF</button><button class="close" onclick="window.close()">Tutup</button></div><main class="sheet"><div class="topline"></div><div class="brand"><div class="brand-name">Perpustakaan Mini Muhammad Asyraf Azizan</div><div class="doc-type">Rekod Maklumat Buku</div></div><div class="catalog-strip"><div><div style="font-size:9px;letter-spacing:1.4px;color:#718078;text-transform:uppercase">Nombor katalog</div><div class="catalog-id">${esc(b.bookCode||'—')}</div></div><div class="catalog-code-wrap"><svg id="catalogBarcode" aria-label="Barkod ID buku"></svg><div class="barcode-caption">${esc(b.bookCode||'')}</div></div></div><div class="layout"><aside><div class="cover-panel">${cover}</div></aside><section><p class="eyebrow">Maklumat koleksi</p><h1 class="title">${esc(b.title||'Nama buku tidak diisi')}</h1><p class="subtitle">Rekod katalog buku peribadi</p><h2 class="section-label">Butiran buku</h2>${rows}</section></div><div class="footer"><span>PERPUSTAKAAN MINI · REKOD BUKU</span><span>Dicetak pada ${new Date().toLocaleDateString('ms-MY')}</span></div></main><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script><script>window.addEventListener('load',()=>{try{if(window.JsBarcode)JsBarcode('#catalogBarcode',${JSON.stringify(b.bookCode||'')},{format:'CODE128',displayValue:false,margin:0,height:42,lineColor:'#182a24',width:2});}catch(e){}const imgs=[...document.images];Promise.all(imgs.map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=r;i.onerror=r;}))).then(()=>setTimeout(()=>window.print(),450));});<\/script></body></html>`);
+      </style></head><body><div class="screen-actions"><button onclick="window.print()">Cetak / Simpan PDF</button><button class="close" onclick="window.close()">Tutup</button></div><main class="sheet"><div class="topline"></div><div class="brand"><div class="brand-name">${esc(libraryName())}</div><div class="doc-type">Rekod Maklumat Buku</div></div><div class="catalog-strip"><div><div style="font-size:9px;letter-spacing:1.4px;color:#718078;text-transform:uppercase">Nombor katalog</div><div class="catalog-id">${esc(b.bookCode||'—')}</div></div><div class="catalog-code-wrap"><svg id="catalogBarcode" aria-label="Barkod ID buku"></svg><div class="barcode-caption">${esc(b.bookCode||'')}</div></div></div><div class="layout"><aside><div class="cover-panel">${cover}</div></aside><section><p class="eyebrow">Maklumat koleksi</p><h1 class="title">${esc(b.title||'Nama buku tidak diisi')}</h1><p class="subtitle">Rekod katalog buku peribadi</p><h2 class="section-label">Butiran buku</h2>${rows}</section></div><div class="footer"><span>PERPUSTAKAAN MINI · REKOD BUKU</span><span>Dicetak pada ${new Date().toLocaleDateString('ms-MY')}</span></div></main><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script><script>window.addEventListener('load',()=>{try{if(window.JsBarcode)JsBarcode('#catalogBarcode',${JSON.stringify(b.bookCode||'').replace(/</g,'\\u003c')},{format:'CODE128',displayValue:false,margin:0,height:42,lineColor:'#182a24',width:2});}catch(e){}const imgs=[...document.images];Promise.all(imgs.map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=r;i.onerror=r;}))).then(()=>setTimeout(()=>window.print(),450));});<\/script></body></html>`);
     popup.document.close();
   }
-  function deleteBook(id){const b=books.find(x=>x.id===id);if(!b||!confirm('Padam rekod buku ini? Rekod pinjaman berkaitan juga akan dipadam.'))return;books=books.filter(x=>x.id!==id);loans=loans.filter(x=>x.bookId!==id);persist();render();}
-  function editLoan(id){const l=loans.find(x=>x.id===id);if(!l)return;showTab('loanPanel');$('loanId').value=l.id;['bookId','borrower','status','borrowDate','returnDate'].forEach((k,i)=>{const target=['loanBook','borrower','loanStatus','borrowDate','returnDate'][i];$(target).value=l[k]||'';});$('saveLoanBtn').textContent='Kemaskini Rekod Pinjaman';window.scrollTo({top:0,behavior:'smooth'});}
 
-  // Penyegerakan awan pilihan pengguna: Supabase Auth + satu rekod JSON per pengguna.
-  const CLOUD_SETTINGS='perpustakaanMini_cloudSettings_v1', CLOUD_BACKUP='perpustakaanMini_beforeCloudPull_v1', CLOUD_DIRTY='perpustakaanMini_cloudDirty_v1';
-  let supabaseClient=null, cloudUser=null, cloudReady=false, cloudTimer=null;
-  const cloudSettings=()=>read(CLOUD_SETTINGS,{});
-  function cloudMessage(msg){const el=$('cloudStatus');if(el)el.textContent=msg;}
-  function cloudClient(){return supabaseClient;}
-  function saveCloudSettings(){const url=$('cloudUrl').value.trim().replace(/\/$/,'');const key=$('cloudKey').value.trim();if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)||!key){cloudMessage('Sila masukkan URL projek Supabase yang sah dan publishable/anon key.');return false;}localStorage.setItem(CLOUD_SETTINGS,JSON.stringify({url,key}));supabaseClient=window.supabase?.createClient(url,key);if(!supabaseClient){cloudMessage('Pustaka sambungan tidak dapat dimuatkan. Semak sambungan internet dan cuba semula.');return false;}cloudMessage('Tetapan disimpan. Seterusnya daftar akaun atau log masuk.');return true;}
-  function scheduleCloudPush(){
-    if(!cloudReady||!cloudUser||!supabaseClient)return;
-    clearTimeout(cloudTimer);
-    cloudTimer=setTimeout(()=>pushCloud(true),1200);
+  // ---------- Sandaran: eksport / import / tempatan ----------
+  function exportData() {
+    return JSON.parse(JSON.stringify({ version: 2, app: 'perpustakaan-mini', exportedAt: nowIso(), libraryName: libraryName(), settings, books: books.map(b => ({ ...b, genre: categories.find(c => c.id === b.categoryId)?.name || b.genre })), loans, categories }));
   }
-  async function readCloud(){if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const {data,error}=await supabaseClient.from('library_sync').select('payload,updated_at').eq('user_id',cloudUser.id).maybeSingle();if(error)throw error;return data;}
-  let cloudPushRunning=false, bootstrapRunning=false;
-  async function pushCloud(silent=false){
-    if(cloudPushRunning)return;
-    try{
-      if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');
-      cloudPushRunning=true;
-      const payload={version:2,books,loans,categories,updatedAt:new Date().toISOString()};
-      const {error}=await supabaseClient.from('library_sync').upsert({user_id:cloudUser.id,payload,updated_at:new Date().toISOString()},{onConflict:'user_id'});
-      if(error)throw error;
-      cloudReady=true;
-      localStorage.removeItem(CLOUD_DIRTY);
-      cloudMessage((silent?'Penyegerakan automatik berjaya · ':'Berjaya menghantar ')+(silent?new Date().toLocaleTimeString('ms-MY'):books.length+' buku dan '+loans.length+' rekod pinjaman ke awan. Penyegerakan automatik aktif.'));
-    }catch(e){cloudMessage('Penyegerakan awan gagal: '+(e.message||'ralat tidak diketahui')+'. Data kekal pada komputer. Semak polisi akses/RLS Supabase; sistem akan cuba semula apabila ada perubahan atau sambungan pulih.');}
-    finally{cloudPushRunning=false;}
+  function downloadJson(data, filename) {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
   }
-  async function applyCloudData(data){
-    localStorage.setItem(CLOUD_BACKUP,JSON.stringify({savedAt:new Date().toISOString(),books,loans}));
-    books=Array.isArray(data.payload.books)?data.payload.books:[];
-    loans=Array.isArray(data.payload.loans)?data.payload.loans:[];
-    if(Array.isArray(data.payload.categories))categories=data.payload.categories;
-    else{
-      categories=DEFAULT_CATEGORIES.map((name,index)=>({id:'legacy-'+index,name,parent:''}));
-      books.forEach(book=>{const name=String(book.genre||'').trim();if(name&&!categories.some(c=>c.name.toLocaleLowerCase('ms-MY')===name.toLocaleLowerCase('ms-MY')))categories.push({id:'legacy-cloud-'+categories.length,name,parent:''});});
+  const dateTag = (d = new Date()) => d.toISOString().slice(0, 10);
+  $('exportBtn').addEventListener('click', () => downloadJson(exportData(), `sandaran-perpustakaan-mini-${dateTag()}.json`));
+
+  async function replaceAllLocal(raw) {
+    const r = normalizePayload(raw, { recomputeHash: true });
+    const t = nowIso(), prev = coverMap();
+    TYPES.forEach(type => {
+      const inc = new Set(r[type].map(x => x.id));
+      list(type).forEach(x => { if (!inc.has(x.id)) deletions[type][x.id] = t; });
+      r[type].forEach(x => { delete deletions[type][x.id]; touch(x, t); });
+    });
+    r.books.forEach(b => {
+      const p = books.find(x => x.id === b.id);
+      if (p && b.cover && p.coverHash === b.coverHash) { b.coverPath = p.coverPath; b.coverUploaded = p.coverUploaded; }
+      else if (b.cover) b.coverUploaded = '';
+    });
+    books.forEach(b => { if (b.coverPath && !r.books.some(x => x.id === b.id)) pendingCoverRemovals.push(b.coverPath); });
+    books = r.books; loans = r.loans; categories = r.categories;
+    const name = str(raw.settings?.libraryName || raw.libraryName).trim();
+    if (name) settings = { libraryName: name.slice(0, 90), updatedAt: t };
+    fixIntegrity(); attachCovers(prev);
+    await persist(); resetBook(false); render();
+  }
+  $('importFile').addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const data = JSON.parse(reader.result);
+        if (!data || !Array.isArray(data.books) || !Array.isArray(data.loans)) throw Error('format');
+        if (!await ask(`Import ${data.books.length} buku dan ${data.loans.length} rekod pinjaman daripada fail ini?\nSemua rekod sedia ada akan digantikan. Sandaran tempatan dibuat dahulu.`, 'Ya, import')) return;
+        await createBackup('Sebelum import fail');
+        await replaceAllLocal(data);
+        toast('Sandaran berjaya diimport.');
+      } catch (err) { toast('Fail sandaran tidak sah atau tidak lengkap.'); }
+      finally { e.target.value = ''; }
+    };
+    reader.readAsText(f);
+  });
+
+  async function createBackup(reason, dataOverride, savedAtOverride) {
+    if (!store || store.kind !== 'IndexedDB') return false;
+    try {
+      const data = dataOverride || exportData();
+      const meta = { id: String(Date.now()) + Math.random().toString(16).slice(2, 5), savedAt: savedAtOverride || nowIso(), reason, counts: { books: arr(data.books).length, loans: arr(data.loans).length } };
+      await saveChain;
+      await store.put('backups', meta.id, { ...meta, data });
+      let index = arr(await store.get('kv', 'backupIndex'));
+      index.push(meta); index.sort((a, b) => str(a.savedAt).localeCompare(str(b.savedAt)));
+      while (index.length > MAX_BACKUPS) { const old = index.shift(); await store.del('backups', old.id); }
+      await store.put('kv', 'backupIndex', index);
+      renderBackups();
+      return true;
+    } catch (e) { toast('Sandaran tempatan gagal dibuat: ' + (e.message || e)); return false; }
+  }
+  async function renderBackups() {
+    const tb = $('backupRows'); if (!store) return;
+    if (store.kind !== 'IndexedDB') { tb.innerHTML = '<tr><td colspan="4" class="empty">Sandaran tempatan memerlukan IndexedDB, yang tidak tersedia pada pelayar ini. Gunakan Eksport Sandaran (.json).</td></tr>'; return; }
+    const index = arr(await store.get('kv', 'backupIndex'));
+    tb.innerHTML = index.length ? [...index].reverse().map(m => `<tr><td>${esc(new Date(m.savedAt).toLocaleString('ms-MY'))}</td><td>${esc(m.reason)}</td><td>${m.counts?.books || 0} buku · ${m.counts?.loans || 0} pinjaman</td><td><button class="btn secondary" type="button" data-restore-backup="${esc(m.id)}">Pulihkan</button> <button class="btn secondary" type="button" data-download-backup="${esc(m.id)}">Muat turun</button></td></tr>`).join('') : '<tr><td colspan="4" class="empty">Belum ada sandaran tempatan.</td></tr>';
+  }
+  $('backupRows').addEventListener('click', async e => {
+    const rs = e.target.closest('[data-restore-backup]'), dl = e.target.closest('[data-download-backup]');
+    const id = (rs || dl)?.dataset.restoreBackup || (rs || dl)?.dataset.downloadBackup; if (!id) return;
+    const rec = await store.get('backups', id);
+    if (!rec || !rec.data) { toast('Sandaran tidak ditemui.'); renderBackups(); return; }
+    if (dl) { downloadJson(rec.data, `sandaran-perpustakaan-mini-${dateTag(new Date(rec.savedAt))}.json`); return; }
+    if (!await ask(`Pulihkan sandaran ${new Date(rec.savedAt).toLocaleString('ms-MY')} (${rec.counts?.books || 0} buku)?\nData semasa disandarkan dahulu, kemudian digantikan.`, 'Ya, pulihkan')) return;
+    await createBackup('Sebelum pemulihan sandaran');
+    await replaceAllLocal(rec.data);
+    $('backupStatus').textContent = 'Sandaran dipulihkan.'; toast('Sandaran dipulihkan.');
+  });
+  $('createBackupBtn').addEventListener('click', async () => { if (await createBackup('Manual')) $('backupStatus').textContent = 'Sandaran baharu disimpan pada peranti ini.'; else if (store.kind !== 'IndexedDB') $('backupStatus').textContent = 'Pelayar ini tidak menyokong sandaran tempatan. Gunakan Eksport Sandaran.'; });
+
+  async function refreshStorageInfo() {
+    const withCover = books.filter(b => b.cover), coverBytes = withCover.reduce((s, b) => s + approxBytes(b.cover), 0);
+    let txt = `Storan: ${store ? store.kind : '—'}. ${books.length} buku, ${withCover.length} dengan gambar kulit (≈${fmtSize(coverBytes)}).`;
+    try {
+      if (navigator.storage?.estimate) { const est = await navigator.storage.estimate(); if (est.quota) txt += ` Penggunaan pelayar: ${fmtSize(est.usage)} daripada had ${fmtSize(est.quota)}.`; }
+      if (navigator.storage?.persisted) txt += (await navigator.storage.persisted()) ? ' Storan kekal: aktif.' : ' Storan kekal: belum diberi oleh pelayar (data boleh dibuang jika ruang peranti hampir penuh — pastikan sync awan atau eksport sandaran).';
+    } catch (e) {}
+    $('storageInfo').textContent = txt;
+  }
+  $('compressCoversBtn').addEventListener('click', async () => {
+    const targets = books.filter(b => b.cover && (approxBytes(b.cover) > 120 * 1024 || !b.cover.startsWith('data:image/jpeg')));
+    if (!targets.length) { $('backupStatus').textContent = 'Semua imej kulit sudah dimampatkan.'; return; }
+    if (!await ask(`Mampatkan ${targets.length} imej kulit yang besar? Sandaran tempatan dibuat dahulu.`, 'Ya, mampatkan')) return;
+    await createBackup('Sebelum mampatkan imej');
+    let n = 0, saved = 0;
+    for (const b of targets) {
+      try { const out = await compressImage(b.cover); if (out.length < b.cover.length) { saved += approxBytes(b.cover) - approxBytes(out); b.cover = out; b.coverHash = hashStr(out); b.coverUploaded = ''; touch(b); saveCover(b.id, out); n++; } } catch (e) {}
     }
-    localStorage.setItem(DB_KEY,JSON.stringify(books));localStorage.setItem(LOAN_KEY,JSON.stringify(loans));localStorage.setItem(CATEGORY_KEY,JSON.stringify(categories));localStorage.removeItem(CLOUD_DIRTY);
-    cloudReady=true;render();resetBook(false);cloudMessage('Data awan dimuat turun. Sandaran data tempatan sebelum perubahan telah disimpan. Penyegerakan automatik aktif.');
+    persist(); render(); refreshStorageInfo();
+    $('backupStatus').textContent = `${n} imej dimampatkan, jimat kira-kira ${fmtSize(saved)}.`;
+  });
+
+  // ---------- Tetapan nama ----------
+  $('saveLibraryNameBtn').addEventListener('click', () => {
+    const name = $('libraryName').value.trim().replace(/\s+/g, ' ').slice(0, 90) || DEFAULT_NAME;
+    settings = { libraryName: name, updatedAt: nowIso() };
+    persist(); applyLibraryName(); $('libraryName').value = name;
+    $('libraryNameStatus').textContent = 'Nama perpustakaan disimpan.';
+  });
+  $('copySqlBtn').addEventListener('click', () => { navigator.clipboard?.writeText($('storageSql').textContent).then(() => toast('SQL disalin.'), () => toast('Tidak dapat menyalin. Pilih teks dan salin secara manual.')); });
+
+  // ---------- Penyegerakan awan (Supabase) ----------
+  let supabaseClient = null, cloudUser = null, cloudReady = false, cloudTimer = null;
+  let syncRunning = false, syncQueued = false, bootstrapRunning = false, storageBroken = false, storageError = '', lastSyncAt = 0, downloading = false;
+  const cloudSettings = () => lsGet(LS.CLOUD_SETTINGS, {}) || {};
+  function cloudMessage(msg) { $('cloudStatus').textContent = msg; }
+  function ensureClient(cfg) {
+    if (supabaseClient) return supabaseClient;
+    if (!window.supabase?.createClient || !cfg.url || !cfg.key) return null;
+    supabaseClient = window.supabase.createClient(cfg.url, cfg.key);
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      const u = session?.user || null, changed = (u?.id || null) !== (cloudUser?.id || null);
+      cloudUser = u;
+      if (!u) { cloudReady = false; if (event === 'SIGNED_OUT') cloudMessage('Tidak log masuk. Data tempatan masih tersedia.'); }
+      else if (changed) { cloudReady = false; setTimeout(() => bootstrapCloud(), 0); }
+    });
+    return supabaseClient;
   }
-  async function bootstrapCloud(){
-    if(bootstrapRunning||!cloudUser||!supabaseClient)return;
-    bootstrapRunning=true;cloudReady=false;
-    try{
-      cloudMessage('Menyemak katalog awan dan menyediakan penyegerakan…');
-      const remote=await readCloud();
-      const localCount=books.length+loans.length;
-      const remoteCount=remote?((remote.payload?.books||[]).length+(remote.payload?.loans||[]).length):0;
-      if(!remote){
-        if(localCount===0){cloudReady=true;cloudMessage('Awan masih kosong dan peranti ini tiada rekod. Penyegerakan automatik sedia diaktifkan.');await pushCloud(true);}
-        else if(confirm('Belum ada data dalam awan. Hantar '+books.length+' buku dan '+loans.length+' rekod pinjaman dari komputer ini ke awan sebagai katalog utama?')){cloudReady=true;await pushCloud();}
-        else cloudMessage('Data tempatan dikekalkan. Untuk mengaktifkan penyegerakan, pilih “Hantar data peranti ini ke awan” selepas bersedia.');
-      }else if(localCount===0&&remoteCount>0){await applyCloudData(remote);}
-      else if(localCount===0&&remoteCount===0){cloudReady=true;cloudMessage('Akaun awan sedia. Penyegerakan automatik aktif.');}
-      else if(localStorage.getItem(CLOUD_DIRTY)===cloudUser.id){cloudReady=true;cloudMessage('Perubahan tempatan yang belum disegerakkan dikesan. Menghantar perubahan ke awan…');await pushCloud(true);}
-      else {await applyCloudData(remote);}
-    }catch(e){cloudReady=false;cloudMessage('Tidak dapat menyediakan penyegerakan: '+(e.message||'ralat tidak diketahui')+'. Data tempatan tidak diubah. Semak permission/RLS jadual library_sync di Supabase.');}
-    finally{bootstrapRunning=false;}
+  function saveCloudSettings() {
+    const url = $('cloudUrl').value.trim().replace(/\/$/, ''), key = $('cloudKey').value.trim();
+    if (!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) || !key) { cloudMessage('Sila masukkan URL projek Supabase yang sah dan publishable/anon key.'); return false; }
+    const old = cloudSettings();
+    if (old.url !== url || old.key !== key) { supabaseClient = null; cloudUser = null; cloudReady = false; }
+    lsSet(LS.CLOUD_SETTINGS, { url, key });
+    if (!ensureClient({ url, key })) { cloudMessage('Pustaka sambungan tidak dapat dimuatkan. Semak sambungan internet dan cuba semula.'); return false; }
+    cloudMessage('Tetapan disimpan. Seterusnya daftar akaun atau log masuk.'); return true;
   }
-  async function pullCloud(){try{if(!cloudUser||!supabaseClient)throw Error('Sila log masuk dahulu.');const data=await readCloud();if(!data){if(confirm('Belum ada koleksi di awan. Hantar data peranti ini ke awan sekarang?')){cloudReady=true;await pushCloud();}else cloudMessage('Tiada data awan ditemui. Data tempatan dikekalkan.');return;}if(!confirm('Muat turun '+(data.payload.books||[]).length+' buku dari awan? Data tempatan akan digantikan. Sandaran tempatan akan disimpan dahulu.'))return;await applyCloudData(data);}catch(e){cloudMessage('Gagal memuat turun data: '+(e.message||'ralat tidak diketahui')+'. Data tempatan dikekalkan.');}}
-  async function syncCloud(){if(cloudReady){await pushCloud();return;}await bootstrapCloud();}
-  async function initCloudAuth(){if(!supabaseClient)return;const {data:{session}}=await supabaseClient.auth.getSession();cloudUser=session?.user||null;if(cloudUser){cloudMessage('Log masuk sebagai '+cloudUser.email+'. Menyediakan penyegerakan awan…');await bootstrapCloud();}else cloudMessage('Sambungan disimpan. Daftar akaun atau log masuk untuk menyegerakkan.');supabaseClient.auth.onAuthStateChange((event,session)=>{cloudUser=session?.user||null;if(!cloudUser){cloudReady=false;cloudMessage('Tidak log masuk. Data tempatan masih tersedia.');}else if(event==='SIGNED_IN'){setTimeout(()=>bootstrapCloud(),0);} });}
-  function setupCloudUI(){const cfg=cloudSettings();$('cloudUrl').value=cfg.url||'';$('cloudKey').value=cfg.key||'';if(cfg.url&&cfg.key){supabaseClient=window.supabase?.createClient(cfg.url,cfg.key);if(supabaseClient)initCloudAuth().catch(e=>cloudMessage('Ralat pengesahan: '+e.message));}
-    $('connectCloudBtn').addEventListener('click',()=>{if(saveCloudSettings())initCloudAuth().catch(e=>cloudMessage('Ralat: '+e.message));});
-    $('forgetCloudBtn').addEventListener('click',()=>{if(confirm('Padam tetapan sambungan dari pelayar ini? Rekod buku tempatan tidak dipadam.')){localStorage.removeItem(CLOUD_SETTINGS);supabaseClient=null;cloudUser=null;cloudReady=false;$('cloudUrl').value='';$('cloudKey').value='';cloudMessage('Tetapan sambungan dipadam. Rekod tempatan dikekalkan.');}});
-    $('signupCloudBtn').addEventListener('click',async()=>{try{if(!supabaseClient&&!saveCloudSettings())return;const email=$('cloudEmail').value.trim(),password=$('cloudPassword').value;if(!email||password.length<6)throw Error('Masukkan e-mel dan kata laluan sekurang-kurangnya 6 aksara.');const {data,error}=await supabaseClient.auth.signUp({email,password});if(error)throw error;cloudUser=data.user;cloudMessage(data.session?'Akaun didaftarkan dan anda telah log masuk. Pilih cara penyegerakan.':'Permintaan pendaftaran dihantar. Jika pengesahan e-mel diaktifkan, sahkan e-mel dahulu sebelum log masuk.');}catch(e){cloudMessage('Pendaftaran gagal: '+e.message);}});
-    $('loginCloudBtn').addEventListener('click',async()=>{try{if(!supabaseClient&&!saveCloudSettings())return;const {data,error}=await supabaseClient.auth.signInWithPassword({email:$('cloudEmail').value.trim(),password:$('cloudPassword').value});if(error)throw error;cloudUser=data.user;cloudReady=false;cloudMessage('Log masuk berjaya. Pilih muat turun dari awan atau hantar data peranti ini untuk mengelakkan data tertindih.');}catch(e){cloudMessage('Log masuk gagal: '+e.message);}});
-    $('logoutCloudBtn').addEventListener('click',async()=>{try{if(supabaseClient)await supabaseClient.auth.signOut();cloudUser=null;cloudReady=false;cloudMessage('Log keluar. Rekod tempatan masih tersedia.');}catch(e){cloudMessage('Gagal log keluar: '+e.message);}});
-    $('pullCloudBtn').addEventListener('click',pullCloud);$('pushCloudBtn').addEventListener('click',()=>{if(confirm('Hantar semua buku dan pinjaman pada peranti ini ke awan? Jika data awan sudah wujud, ia akan digantikan.')){cloudReady=true;pushCloud();}});$('syncNowBtn').addEventListener('click',syncCloud);
+  function scheduleCloudPush(delay = 1200) { if (!cloudReady || !cloudUser || !supabaseClient) return; clearTimeout(cloudTimer); cloudTimer = setTimeout(() => syncNow(), delay); }
+  async function readCloud() {
+    if (!cloudUser || !supabaseClient) throw Error('Sila log masuk dahulu.');
+    const { data, error } = await supabaseClient.from('library_sync').select('payload,updated_at').eq('user_id', cloudUser.id).maybeSingle();
+    if (error) throw error; return data;
+  }
+  async function writeCloud(payload, remote) {
+    const ts = nowIso();
+    if (remote && remote.updated_at) {
+      // Kemaskini bersyarat: gagal jika peranti lain menulis selepas kita membaca → gabung semula.
+      const { data, error } = await supabaseClient.from('library_sync').update({ payload, updated_at: ts }).eq('user_id', cloudUser.id).eq('updated_at', remote.updated_at).select('user_id');
+      if (error) throw error;
+      return Array.isArray(data) && data.length > 0;
+    }
+    const { error } = await supabaseClient.from('library_sync').upsert({ user_id: cloudUser.id, payload, updated_at: ts }, { onConflict: 'user_id' });
+    if (error) throw error; return true;
+  }
+  function dataUrlToBlob(d) {
+    const m = d.match(/^data:(image\/[a-z]+);base64,(.*)$/), type = m[1], bin = atob(m[2]), u = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+    return { blob: new Blob([u], { type }), type, ext: { 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif' }[type] || 'jpg' };
+  }
+  function blobToDataUrl(blob) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error); r.readAsDataURL(blob); }); }
+  const extType = p => ({ png: 'image/png', webp: 'image/webp', gif: 'image/gif' }[str(p).split('.').pop()] || 'image/jpeg');
+  async function uploadCovers() {
+    if (storageBroken) return;
+    for (const b of books.filter(x => x.cover && !(x.coverPath && x.coverUploaded === x.coverHash))) {
+      const { blob, type, ext } = dataUrlToBlob(b.cover), path = `${cloudUser.id}/${b.id}.${ext}`;
+      const { error } = await supabaseClient.storage.from(COVER_BUCKET).upload(path, blob, { upsert: true, contentType: type, cacheControl: '3600' });
+      if (error) { storageBroken = true; storageError = error.message || 'ralat storan'; return; }
+      b.coverPath = path; b.coverUploaded = b.coverHash;
+    }
+  }
+  function buildPayload() {
+    return {
+      version: 3, updatedAt: nowIso(), loans, categories, deletions, settings,
+      books: books.map(b => {
+        const o = { ...b }; delete o.cover;
+        if (b.cover && !(b.coverPath && b.coverUploaded === b.coverHash)) { o.cover = b.cover; o.coverPath = ''; o.coverUploaded = ''; } // Storage belum sedia: hantar imej mampat bersama rekod
+        if (!b.cover && !b.coverPath) o.coverHash = '';
+        return o;
+      })
+    };
+  }
+  async function removePendingCovers() {
+    if (!pendingCoverRemovals.length || storageBroken || !cloudUser) return;
+    const live = new Set(books.map(b => b.coverPath).filter(Boolean));
+    const paths = pendingCoverRemovals.filter(p => !live.has(p) && p.startsWith(cloudUser.id + '/'));
+    if (paths.length) { const { error } = await supabaseClient.storage.from(COVER_BUCKET).remove(paths); if (error) return; }
+    pendingCoverRemovals = []; persist({ sync: false });
+  }
+  async function downloadMissingCovers() {
+    if (downloading || !cloudUser || !supabaseClient) return;
+    downloading = true; let n = 0;
+    try {
+      for (const b of books.filter(x => !x.cover && x.coverPath && x.coverHash)) {
+        const { data, error } = await supabaseClient.storage.from(COVER_BUCKET).download(b.coverPath);
+        if (error || !data) continue;
+        const blob = /^image\//.test(data.type) ? data : new Blob([data], { type: extType(b.coverPath) });
+        const url = safeImg(await blobToDataUrl(blob));
+        const cur = books.find(x => x.id === b.id);
+        if (url && cur && !cur.cover && cur.coverHash === b.coverHash) { cur.cover = url; saveCover(cur.id, url); n++; }
+      }
+    } catch (e) { console.warn(e); }
+    finally { downloading = false; if (n) render(); }
+  }
+  async function syncNow({ silent = true } = {}) {
+    if (!cloudUser || !supabaseClient) { if (!silent) cloudMessage('Sila log masuk dahulu.'); return false; }
+    if (!cloudReady) { if (!silent) await bootstrapCloud(); return false; }
+    if (syncRunning) { syncQueued = true; return false; }
+    syncRunning = true; clearTimeout(cloudTimer);
+    try {
+      let ok = false; const notes = [];
+      for (let attempt = 1; attempt <= 4 && !ok; attempt++) {
+        const remote = await readCloud();
+        notes.push(...mergeRemote(remote && remote.payload));
+        await uploadCovers();
+        ok = await writeCloud(buildPayload(), attempt < 4 ? remote : null);
+      }
+      await persist({ sync: false });
+      lsSet(LS.CLOUD_LINKED, cloudUser.id); lastSyncAt = Date.now();
+      render();
+      removePendingCovers().catch(() => {});
+      downloadMissingCovers();
+      let msg = 'Disegerakkan · ' + new Date().toLocaleTimeString('ms-MY') + ` · ${books.length} buku, ${loans.length} pinjaman. Penyegerakan automatik aktif.`;
+      if (storageBroken) msg += ` Gambar kulit dihantar bersama rekod kerana Supabase Storage belum sedia (${storageError}). Lihat "Persediaan Supabase Storage" di atas.`;
+      cloudMessage(msg);
+      if (notes.length) toast('ID buku berganda dibetulkan: ' + notes.join('; '), { ms: 12000 });
+      return true;
+    } catch (e) {
+      cloudMessage('Penyegerakan gagal: ' + (e.message || 'ralat tidak diketahui') + '. Data kekal pada peranti ini dan akan dicuba semula. Semak polisi akses/RLS jadual library_sync jika berulang.');
+      return false;
+    } finally {
+      syncRunning = false;
+      if (syncQueued) { syncQueued = false; scheduleCloudPush(300); }
+    }
+  }
+  async function replaceWithCloud(rp) {
+    await createBackup('Sebelum diganti dengan data awan');
+    const r = normalizePayload(rp), prev = coverMap();
+    books = r.books; loans = r.loans; categories = r.categories; deletions = r.deletions;
+    if (r.settings) settings = r.settings;
+    fixIntegrity(); attachCovers(prev);
+    await persist({ sync: false });
+    cloudReady = true; lsSet(LS.CLOUD_LINKED, cloudUser.id);
+    resetBook(false); render();
+    cloudMessage('Data awan dimuat turun. Sandaran data peranti sebelum ini disimpan dalam "Storan peranti dan sandaran". Penyegerakan automatik aktif.');
+    downloadMissingCovers(); scheduleCloudPush();
+  }
+  async function bootstrapCloud() {
+    if (!cloudUser || !supabaseClient) return;
+    if (cloudReady) { await syncNow(); return; }
+    if (bootstrapRunning) return;
+    bootstrapRunning = true;
+    try {
+      cloudMessage('Log masuk sebagai ' + cloudUser.email + '. Menyemak katalog awan…');
+      const remote = await readCloud();
+      const linked = lsGet(LS.CLOUD_LINKED, null) === cloudUser.id;
+      const localCount = books.length + loans.length;
+      const rp = remote ? normalizePayload(remote.payload) : null;
+      const remoteCount = rp ? rp.books.length + rp.loans.length : 0;
+      if (linked || localCount === 0) { cloudReady = true; bootstrapRunning = false; await syncNow(); return; }
+      if (remoteCount === 0) {
+        if (await ask(`Belum ada data dalam awan. Hantar ${books.length} buku dan ${loans.length} rekod pinjaman dari peranti ini ke awan?`, 'Ya, hantar ke awan')) { cloudReady = true; bootstrapRunning = false; await syncNow(); }
+        else cloudMessage('Data tempatan dikekalkan. Tekan "Segerakkan sekarang" apabila bersedia.');
+        return;
+      }
+      const choice = await choose(`Peranti ini ada ${books.length} buku dan ${loans.length} pinjaman. Awan ada ${rp.books.length} buku dan ${rp.loans.length} pinjaman.\n\nBagaimana mahu disegerakkan?`, [
+        { value: 'merge', label: 'Gabungkan kedua-duanya (disyorkan)', primary: true },
+        { value: 'cloud', label: 'Guna data awan sahaja (data peranti disandarkan dahulu)' },
+        { value: 'none', label: 'Jangan segerak buat masa ini' }
+      ]);
+      if (choice === 'merge') { cloudReady = true; bootstrapRunning = false; await syncNow(); }
+      else if (choice === 'cloud') await replaceWithCloud(remote.payload);
+      else cloudMessage('Penyegerakan belum diaktifkan. Data peranti ini tidak diubah.');
+    } catch (e) { cloudReady = false; cloudMessage('Tidak dapat menyediakan penyegerakan: ' + (e.message || 'ralat tidak diketahui') + '. Data tempatan tidak diubah. Semak permission/RLS jadual library_sync di Supabase.'); }
+    finally { bootstrapRunning = false; }
+  }
+  async function pullReplace() {
+    try {
+      if (!cloudUser || !supabaseClient) throw Error('Sila log masuk dahulu.');
+      const remote = await readCloud();
+      if (!remote) { cloudMessage('Tiada data dalam awan. Data peranti ini dikekalkan.'); return; }
+      const n = arr(remote.payload?.books).length;
+      if (!await ask(`Ganti semua data pada peranti ini dengan data awan (${n} buku)?\nSandaran data peranti ini dibuat dahulu.`, 'Ya, ganti dengan data awan')) return;
+      await replaceWithCloud(remote.payload);
+    } catch (e) { cloudMessage('Gagal memuat turun data: ' + (e.message || 'ralat tidak diketahui') + '. Data tempatan dikekalkan.'); }
+  }
+  async function pushReplace() {
+    try {
+      if (!cloudUser || !supabaseClient) throw Error('Sila log masuk dahulu.');
+      if (!await ask(`Jadikan data peranti ini (${books.length} buku, ${loans.length} pinjaman) sebagai data utama?\nRekod di awan yang tiada pada peranti ini akan dipadam daripada awan dan peranti lain.`, 'Ya, ganti data awan')) return;
+      const remote = await readCloud(), t = nowIso();
+      if (remote) { const r = normalizePayload(remote.payload); TYPES.forEach(type => { const local = new Set(list(type).map(x => x.id)); r[type].forEach(x => { if (!local.has(x.id)) deletions[type][x.id] = t; }); }); }
+      TYPES.forEach(type => list(type).forEach(x => touch(x, t)));
+      settings = { ...settings, updatedAt: t };
+      await persist({ sync: false });
+      cloudReady = true; await syncNow({ silent: false });
+    } catch (e) { cloudMessage('Gagal menghantar data: ' + (e.message || 'ralat tidak diketahui') + '.'); }
+  }
+  function setupCloudUI() {
+    const cfg = cloudSettings();
+    $('cloudUrl').value = cfg.url || ''; $('cloudKey').value = cfg.key || '';
+    if (cfg.url && cfg.key && ensureClient(cfg)) {
+      supabaseClient.auth.getSession().then(({ data }) => {
+        const u = data?.session?.user || null;
+        if (u) { cloudUser = u; bootstrapCloud(); } else cloudMessage('Sambungan disimpan. Daftar akaun atau log masuk untuk menyegerakkan.');
+      }).catch(e => cloudMessage('Ralat pengesahan: ' + e.message));
+    }
+    $('connectCloudBtn').addEventListener('click', saveCloudSettings);
+    $('forgetCloudBtn').addEventListener('click', async () => {
+      if (!await ask('Padam tetapan sambungan dari pelayar ini? Rekod buku tempatan tidak dipadam.', 'Ya, padam tetapan')) return;
+      try { if (supabaseClient) await supabaseClient.auth.signOut(); } catch (e) {}
+      lsDel(LS.CLOUD_SETTINGS); supabaseClient = null; cloudUser = null; cloudReady = false; $('cloudUrl').value = ''; $('cloudKey').value = '';
+      cloudMessage('Tetapan sambungan dipadam. Rekod tempatan dikekalkan.');
+    });
+    $('signupCloudBtn').addEventListener('click', async () => {
+      try {
+        if (!supabaseClient && !saveCloudSettings()) return;
+        const email = $('cloudEmail').value.trim(), password = $('cloudPassword').value;
+        if (!email || password.length < 6) throw Error('Masukkan e-mel dan kata laluan sekurang-kurangnya 6 aksara.');
+        const { data, error } = await supabaseClient.auth.signUp({ email, password }); if (error) throw error;
+        if (data.session) { cloudUser = data.user; bootstrapCloud(); }
+        else cloudMessage('Permintaan pendaftaran dihantar. Jika pengesahan e-mel diaktifkan, sahkan e-mel dahulu sebelum log masuk.');
+      } catch (e) { cloudMessage('Pendaftaran gagal: ' + e.message); }
+    });
+    $('loginCloudBtn').addEventListener('click', async () => {
+      try {
+        if (!supabaseClient && !saveCloudSettings()) return;
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email: $('cloudEmail').value.trim(), password: $('cloudPassword').value });
+        if (error) throw error;
+        cloudUser = data.user; $('cloudPassword').value = '';
+        bootstrapCloud();
+      } catch (e) { cloudMessage('Log masuk gagal: ' + e.message); }
+    });
+    $('logoutCloudBtn').addEventListener('click', async () => { try { if (supabaseClient) await supabaseClient.auth.signOut(); cloudUser = null; cloudReady = false; cloudMessage('Log keluar. Rekod tempatan masih tersedia.'); } catch (e) { cloudMessage('Gagal log keluar: ' + e.message); } });
+    $('pullCloudBtn').addEventListener('click', pullReplace);
+    $('pushCloudBtn').addEventListener('click', pushReplace);
+    $('syncNowBtn').addEventListener('click', () => syncNow({ silent: false }));
+    window.addEventListener('online', () => { if (cloudReady && cloudUser) { cloudMessage('Sambungan internet pulih. Menyegerakkan…'); scheduleCloudPush(300); } });
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && cloudReady && Date.now() - lastSyncAt > 20000) syncNow(); });
+    setInterval(() => { if (document.visibilityState === 'visible' && cloudReady && Date.now() - lastSyncAt > 110000) syncNow(); }, 30000);
   }
 
+  // ---------- Lain-lain kawalan ----------
+  ['bookSearch', 'filterGenre', 'filterReading', 'filterDupes'].forEach(id => $(id).addEventListener('input', renderBooks));
+  $('filterDupes').addEventListener('change', renderBooks);
+  $('dupStatBtn').addEventListener('click', () => { $('filterDupes').checked = !$('filterDupes').checked; renderBooks(); });
+  $('loanSearch').addEventListener('input', renderLoans);
+  $('dashboardAddBtn').addEventListener('click', () => showTab('formPanel'));
+  $('dashboardCollectionBtn').addEventListener('click', () => showTab('collectionPanel'));
+  $('printBtn').addEventListener('click', () => { showTab('collectionPanel'); $('printDate').textContent = 'Tarikh cetakan: ' + new Date().toLocaleDateString('ms-MY') + ' · Diisih mengikut: ' + (SORTS[$('sortBooks').value] || SORTS.newest)[0]; window.print(); });
 
-  ['bookSearch','filterGenre','filterReading'].forEach(id=>$(id).addEventListener('input',renderBooks));$('loanSearch').addEventListener('input',renderLoans);
-  function setCollectionView(view){const gallery=view==='gallery';$('bookTableView').style.display=gallery?'none':'block';$('bookGalleryView').style.display=gallery?'grid':'none';$('tableViewBtn').classList.toggle('selected',!gallery);$('galleryViewBtn').classList.toggle('selected',gallery);$('tableViewBtn').setAttribute('aria-pressed',String(!gallery));$('galleryViewBtn').setAttribute('aria-pressed',String(gallery));}
-  $('tableViewBtn').addEventListener('click',()=>setCollectionView('table'));$('galleryViewBtn').addEventListener('click',()=>setCollectionView('gallery'));
-  $('dashboardAddBtn').addEventListener('click',()=>showTab('formPanel'));$('dashboardCollectionBtn').addEventListener('click',()=>showTab('collectionPanel'));
+  // ---------- Muat data (dengan migrasi daripada versi localStorage lama) ----------
+  async function loadData() {
+    try { await idbStore.open(); store = idbStore; } catch (e) { console.warn('IndexedDB tidak tersedia:', e); store = lsStore; }
+    let data = await store.get('kv', 'data'), migrated = false;
+    if (!data) {
+      const lb = lsGet(LS.LEGACY_BOOKS, null), ll = lsGet(LS.LEGACY_LOANS, null), lcats = lsGet(LS.LEGACY_CATS, null);
+      if (lb || ll || lcats) { data = { books: arr(lb), loans: arr(ll), categories: Array.isArray(lcats) ? lcats : null }; migrated = true; }
+      else data = {};
+    }
+    const r = normalizePayload(data);
+    books = r.books; loans = r.loans; categories = r.categories; deletions = r.deletions;
+    if (r.settings) settings = r.settings;
+    pendingCoverRemovals = arr(data.pendingCoverRemovals).filter(x => typeof x === 'string');
+    if (!migrated) {
+      const covers = new Map(await store.entries('covers'));
+      books.forEach(b => { const c = safeImg(covers.get(b.id)); if (c) b.cover = c; });
+      const ids = new Set(books.map(b => b.id));
+      for (const k of covers.keys()) if (!ids.has(k)) store.del('covers', k).catch(() => {});
+      fixIntegrity();
+      await persist({ sync: false });
+      return;
+    }
+    // Migrasi: perubahan lama yang belum disegerakkan diberi cap masa baharu supaya tidak tertindih oleh data awan.
+    const dirtyUid = lsRaw(LS.LEGACY_DIRTY);
+    if (dirtyUid) { const t = nowIso(); TYPES.forEach(type => list(type).forEach(x => touch(x, t))); lsSet(LS.CLOUD_LINKED, dirtyUid.replace(/"/g, '')); }
+    fixIntegrity();
+    try {
+      for (const b of books) if (b.cover) await store.put('covers', b.id, b.cover);
+      await store.put('kv', 'data', JSON.parse(JSON.stringify(snapshot())));
+      if (store.kind === 'IndexedDB') {
+        const lbk = lsGet(LS.LEGACY_BACKUP, null);
+        if (lbk && Array.isArray(lbk.books)) await createBackup('Sandaran lama (sebelum muat turun awan)', { version: 1, books: lbk.books, loans: arr(lbk.loans) }, str(lbk.savedAt) || undefined);
+        await createBackup('Migrasi ke versi baharu');
+        [LS.LEGACY_BOOKS, LS.LEGACY_LOANS, LS.LEGACY_CATS, LS.LEGACY_BACKUP, LS.LEGACY_DIRTY].forEach(lsDel);
+      } else { [LS.LEGACY_BACKUP, LS.LEGACY_DIRTY].forEach(lsDel); [LS.LEGACY_BOOKS, LS.LEGACY_LOANS, LS.LEGACY_CATS].forEach(lsDel); }
+      toast('Data dipindahkan ke storan baharu (' + store.kind + ').');
+    } catch (e) { toast('Migrasi data gagal: ' + (e.message || e) + '. Data lama dikekalkan. Sila eksport sandaran.'); }
+  }
+  async function dailyBackup() {
+    if (store.kind !== 'IndexedDB' || !books.length) return;
+    const last = str(await store.get('kv', 'lastAutoBackup'));
+    if (last && Date.now() - new Date(last).getTime() < 864e5) return;
+    if (await createBackup('Automatik harian')) await store.put('kv', 'lastAutoBackup', nowIso());
+  }
 
-  $('printBtn').addEventListener('click',()=>{showTab('collectionPanel');$('printDate').textContent='Tarikh cetakan: '+new Date().toLocaleDateString('ms-MY');window.print();});
-  $('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),books,loans},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='sandaran-perpustakaan-mini.json';a.click();URL.revokeObjectURL(url);});
-  $('importFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);if(!Array.isArray(data.books)||!Array.isArray(data.loans))throw Error('format');if(!confirm('Import akan menggantikan rekod sedia ada. Teruskan?'))return;books=data.books;loans=data.loans;persist();render();alert('Sandaran berjaya diimport.');}catch(err){alert('Fail sandaran tidak sah atau tidak lengkap.');}finally{e.target.value='';}};r.readAsText(f);});
-  window.addEventListener('online',()=>{if(cloudReady&&cloudUser&&supabaseClient){cloudMessage('Sambungan internet pulih. Menyegerakkan perubahan…');scheduleCloudPush();}});
-  render();resetBook(false);resetLoan(false);renderCategories();setupDraftAutosave();restoreDraft('book');restoreDraft('loan');setupCloudUI();
-  if (location.protocol.startsWith("http") && "serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+  async function init() {
+    await loadData();
+    render(); resetBook(false); resetLoan(false); setupDraftAutosave(); restoreDraft('book'); restoreDraft('loan');
+    setCollectionView(ui.view === 'gallery' ? 'gallery' : 'table');
+    showTab(ui.tab || 'dashboardPanel');
+    setupCloudUI();
+    try { if (navigator.storage?.persist && !(await navigator.storage.persisted())) await navigator.storage.persist(); } catch (e) {}
+    dailyBackup().catch(() => {});
+  }
+  init().catch(e => { console.error(e); toast('Sistem gagal dimuatkan: ' + (e.message || e)); });
+  if (location.protocol.startsWith('http') && 'serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
 })();
 </script>
 </body>
