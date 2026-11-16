@@ -240,7 +240,7 @@ details summary{cursor:pointer;font-weight:650}
  .table-wrap{overflow:visible;border:0}table{min-width:0;width:100%;font-size:8pt;table-layout:auto}
  th,td{padding:5px 6px;border:1px solid #bbb;overflow-wrap:anywhere}th{background:#eee!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}
  .book-cover{width:28px;height:38px}.print-heading,.print-meta{display:block!important}.toast,#syncPanel,#categoryPanel,.lock,dialog{display:none!important}
- .pill{border:1px solid #999;background:#fff!important;color:#111!important}
+ .pill{border:1px solid #999;background:#fff!important;color:#111!important}.col-st{display:none!important}
 }
 .spine.lent::before{content:"";position:absolute;top:5px;left:3px;right:3px;height:5px;background:#f0c46b;border-radius:2px}
 </style>
@@ -323,7 +323,7 @@ details summary{cursor:pointer;font-weight:650}
       <select id="sortBooks" aria-label="Isih koleksi"></select>
       <label class="check" for="filterDupes"><input type="checkbox" id="filterDupes"> Berganda sahaja</label>
       <span class="spacer"></span>
-      <button class="btn secondary" id="printBtn" type="button">Cetak (A4)</button>
+      <button class="btn secondary" id="printBtn" type="button">Cetak Katalog (A4)</button>
       <div class="view-switch" role="group" aria-label="Paparan koleksi">
         <button type="button" class="btn secondary selected" id="tableViewBtn" aria-pressed="true">☷ <span class="lbl-desk">Jadual</span><span class="lbl-mob">Senarai</span></button>
         <button type="button" class="btn secondary" id="galleryViewBtn" aria-pressed="false">▦ Galeri</button>
@@ -331,12 +331,12 @@ details summary{cursor:pointer;font-weight:650}
       </div>
     </div>
     <div class="print-meta"><p id="printDate"></p></div>
-    <div id="bookTableView" class="table-wrap"><table><thead><tr><th>Kulit</th><th>ID Buku</th><th>Maklumat Buku</th><th>Format / Kategori</th><th>Status Bacaan</th><th>Harga</th><th>Lokasi / Tahun Terbit</th><th>Status Pinjaman</th><th class="no-print">Tindakan</th></tr></thead><tbody id="bookRows"></tbody></table></div>
+    <div id="bookTableView" class="table-wrap"><table><thead><tr><th>Kulit</th><th>ID Buku</th><th>Maklumat Buku</th><th>Format / Kategori</th><th class="col-st">Status Bacaan</th><th>Harga</th><th>Lokasi / Tahun Terbit</th><th class="col-st">Status Pinjaman</th><th class="no-print">Tindakan</th></tr></thead><tbody id="bookRows"></tbody></table></div>
     <div id="bookListView" class="list-view"></div>
     <div id="bookGalleryView" class="gallery-grid" style="display:none"></div>
     <div id="shelfView" class="shelf-view"></div>
     <div class="actions no-print"><button class="btn secondary" id="exportBtn" type="button">Eksport Sandaran (.json)</button><label class="btn secondary" for="importFile" style="cursor:pointer">Import Sandaran (.json)</label><input id="importFile" type="file" accept=".json,application/json" hidden></div>
-    <p class="small no-print">Untuk cetakan: pilih “Cetak (A4)”, kemudian pilih kertas A4 dan orientasi landskap. Anda juga boleh memilih “Save as PDF”.</p>
+    <p class="small no-print">“Cetak Katalog (A4)” mencetak buku yang sedang dipaparkan (ikut carian, penapis dan isihan). Pilih “Save as PDF” dalam dialog cetak untuk menyimpan sebagai PDF.</p>
   </section>
 
   <section id="formPanel" class="panel" role="tabpanel" aria-labelledby="tab-formPanel" tabindex="-1">
@@ -1258,7 +1258,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     $('totalBooks').textContent = books.length; $('totalLoans').textContent = loans.filter(l => l.status === 'Dipinjam').length; $('totalValue').textContent = 'RM ' + books.reduce((s, b) => s + (Number(b.price) || 0), 0).toFixed(2);
     const dupBadge = b => (dupIds.has(b.id) ? ' <span class="pill st-amber">Berganda?</span>' : '');
     const emptyMsg = books.length ? 'Tiada buku yang sepadan dengan carian atau penapis ini.' : 'Belum ada buku. Tekan "Tambah Buku" untuk mendaftar buku pertama.';
-    $('bookRows').innerHTML = shown.length ? shown.map(b => `<tr><td>${coverImg(b, 'book-cover', 'Kulit buku') || '—'}</td><td><strong>${esc(b.bookCode || '—')}</strong></td><td><button type="button" class="linklike" data-open-book="${esc(b.id)}">${esc(b.title || 'Nama buku tidak diisi')}</button>${dupBadge(b)}<br><span class="small">Penulis: ${esc(b.author || '—')}</span><br><span class="small">${b.isbn ? 'ISBN: ' + esc(b.isbn) : 'ISBN tidak diisi'}</span>${b.series ? `<br><span class="small">Siri: ${seriesLine(b)}</span>` : ''}${tagChips(b)}</td><td>${esc(b.format)}<br><span class="small">${esc(bookCategoryLabel(b))}</span>${b.language ? `<br><span class="small">${esc(b.language)}</span>` : ''}</td><td>${readingPill(b.reading)}</td><td>${money(b.price)}</td><td>${esc(b.publishPlace || '—')}<br><span class="small">${esc(b.year || 'Tahun tidak diisi')}</span></td><td>${loanPill(b)}</td><td class="no-print"><button class="btn secondary small-btn" type="button" data-edit-book="${esc(b.id)}">Edit</button> <button class="btn secondary small-btn" type="button" data-print-book="${esc(b.id)}">Cetak</button> <button class="btn danger small-btn" type="button" data-delete-book="${esc(b.id)}">Padam</button></td></tr>`).join('') : `<tr><td colspan="9" class="empty">${emptyMsg}</td></tr>`;
+    $('bookRows').innerHTML = shown.length ? shown.map(b => `<tr><td>${coverImg(b, 'book-cover', 'Kulit buku') || '—'}</td><td><strong>${esc(b.bookCode || '—')}</strong></td><td><button type="button" class="linklike" data-open-book="${esc(b.id)}">${esc(b.title || 'Nama buku tidak diisi')}</button>${dupBadge(b)}<br><span class="small">Penulis: ${esc(b.author || '—')}</span><br><span class="small">${b.isbn ? 'ISBN: ' + esc(b.isbn) : 'ISBN tidak diisi'}</span>${b.series ? `<br><span class="small">Siri: ${seriesLine(b)}</span>` : ''}${tagChips(b)}</td><td>${esc(b.format)}<br><span class="small">${esc(bookCategoryLabel(b))}</span>${b.language ? `<br><span class="small">${esc(b.language)}</span>` : ''}</td><td class="col-st">${readingPill(b.reading)}</td><td>${money(b.price)}</td><td>${esc(b.publishPlace || '—')}<br><span class="small">${esc(b.year || 'Tahun tidak diisi')}</span></td><td class="col-st">${loanPill(b)}</td><td class="no-print"><button class="btn secondary small-btn" type="button" data-edit-book="${esc(b.id)}">Edit</button> <button class="btn secondary small-btn" type="button" data-print-book="${esc(b.id)}">Cetak</button> <button class="btn danger small-btn" type="button" data-delete-book="${esc(b.id)}">Padam</button></td></tr>`).join('') : `<tr><td colspan="9" class="empty">${emptyMsg}</td></tr>`;
     $('bookListView').innerHTML = shown.length ? shown.map(b => `<button type="button" class="list-card" data-open-book="${esc(b.id)}">${coverImg(b, '', '') || `<span class="ph">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</span>`}<span><strong>${esc(b.title || 'Nama buku tidak diisi')}</strong><span class="small">${esc(b.author || '—')} · ${esc(b.bookCode || '')}</span><span class="meta">${readingPill(b.reading)}${activeLoan(b.id) ? loanPill(b) : ''}${dupBadge(b)}</span></span></button>`).join('') : `<div class="empty">${emptyMsg}</div>`;
     $('bookGalleryView').innerHTML = shown.length ? shown.map(b => `<button type="button" class="gallery-card" data-open-book="${esc(b.id)}"><div class="gallery-cover">${coverImg(b, '', 'Kulit buku ' + (b.title || '')) || `<span class="cover-letter">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</span>`}</div><div class="gallery-info"><div class="small">${esc(b.bookCode || '—')}${b.series ? ' · ' + seriesLine(b) : ''}</div><h3>${esc(b.title || 'Nama buku tidak diisi')}</h3><div class="author">${esc(b.author || 'Penulis tidak dinyatakan')}</div><div class="gallery-meta">${readingPill(b.reading)}${activeLoan(b.id) ? loanPill(b) : ''}${dupBadge(b)}</div><div class="small">${esc(bookCategoryLabel(b) || 'Tanpa kategori')} · ${money(b.price)}</div></div></button>`).join('') : `<div class="empty collection-empty">${emptyMsg}</div>`;
     if (document.body.classList.contains('view-shelf')) renderShelf();
@@ -1472,38 +1472,191 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     });
   }
 
-  function printBookRecord(id){
-    const b=books.find(x=>x.id===id); if(!b)return;
-    const loan=loans.find(l=>l.bookId===b.id&&l.status==='Dipinjam');
-    const details=[
-      ['ID Buku',b.bookCode||'—'],['Format Buku',b.format],['Kategori / Genre',bookCategoryLabel(b)],['Kod ISBN',b.isbn],
-      ['Penulis',b.author],['Penerbit',b.publisher],['Status Bacaan',b.reading],
-      ['Sumber',b.source||'Beli'],...( (b.source||'Beli')==='Beli' ? [['Lokasi Pembelian',b.purchase]] : []),['Lokasi Terbit',b.publishPlace],
-      ['Tahun Terbit',b.year],['Edisi / Cetakan',b.edition],['Bahasa',b.language],['Bilangan Halaman',b.pages],
-      ['Siri',b.series?(b.series+(b.volume?' · jilid '+b.volume:'')+(b.seriesTotal?' daripada '+b.seriesTotal:'')):''],['Keadaan Buku',b.condition],['Tag',parseTags(b.tags).join(', ')],
-      ['Harga Direkodkan',money(b.price)],['Status Pinjaman',loan?('Dipinjam — '+loan.borrower):'Dalam Simpanan']
-    ].filter(([k,v])=>['ID Buku','Format Buku','Kategori / Genre','Kod ISBN','Penulis','Penerbit','Status Bacaan','Sumber','Lokasi Terbit','Tahun Terbit','Harga Direkodkan','Status Pinjaman'].includes(k)||String(v||'').trim());
-    const popup=window.open('', '_blank', 'width=980,height=800');
-    if(!popup){toast('Tetingkap cetakan disekat oleh pelayar. Benarkan pop-up untuk laman ini dan cuba lagi.');return;}
-    const coverSrc=safeImg(b.cover);
-    const cover=coverSrc
-      ? `<img class="cover" src="${esc(coverSrc)}" alt="Kulit buku">`
-      : '<div class="no-cover"><span>TIADA IMEJ<br>KULIT BUKU</span></div>';
-    const rows=details.map(([label,value])=>`<div class="detail"><div class="label">${esc(label)}</div><div class="value">${esc(value||'—')}</div></div>`).join('');
+  // ---------- Cetakan A4 (gaya katalog perpustakaan) ----------
+  const longDate = d => new Date(d).toLocaleDateString('ms-MY', { day: 'numeric', month: 'long', year: 'numeric' });
+  const cssStr = s => '"' + String(s).replace(/[\\"]/g, '\\$&').replace(/[\n\r]/g, ' ') + '"';
+  const titleCase = s => String(s || '').toLocaleLowerCase('ms-MY').replace(/(^|[\s\-(“"'‘])\p{L}/gu, m => m.toLocaleUpperCase('ms-MY'));
+  const PRINT_BASE_CSS = `
+    :root{--ink:#1b2a27;--muted:#5d6d67;--line:#d6dfdb;--accent:#1f4f47;--soft:#f3f6f4}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:#e6ebe9;color:var(--ink);font:10pt/1.45 "Segoe UI",system-ui,-apple-system,Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .screen-actions{position:sticky;top:0;z-index:5;display:flex;gap:8px;justify-content:flex-end;align-items:center;padding:10px 16px;background:#e6ebe9;border-bottom:1px solid #d3dbd8}
+    .screen-actions span{margin-right:auto;font-size:12px;color:var(--muted)}
+    .screen-actions button{border:0;border-radius:6px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer;background:var(--accent);color:#fff}
+    .screen-actions .ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+    .sheet{background:#fff;margin:18px auto 30px;box-shadow:0 8px 30px #0002}
+    .masthead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;padding-bottom:7px;border-bottom:1.6pt solid var(--accent);position:relative}
+    .masthead:after{content:"";position:absolute;left:0;right:0;bottom:-4px;border-bottom:.5pt solid var(--accent)}
+    .lib{font-family:Georgia,"Times New Roman",serif;font-size:15pt;line-height:1.2;color:var(--accent)}
+    .lib small{display:block;font-family:"Segoe UI",Arial,sans-serif;font-size:7pt;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+    .doc{text-align:right;font-size:7pt;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);line-height:1.6}
+    .doc b{display:block;font-size:8.5pt;letter-spacing:.14em;color:var(--ink)}
+    .code{font-family:Consolas,"Courier New",monospace;font-weight:700;color:var(--accent);white-space:nowrap}
+    @media print{html,body{background:#fff}.screen-actions{display:none!important}.sheet{box-shadow:none;margin:0!important;padding:0!important;width:auto!important;min-height:0!important}}
+  `;
+  function openPrintWindow(title, css, body, { barcode = '', note = '' } = {}) {
+    const popup = window.open('', '_blank', 'width=1100,height=820');
+    if (!popup) { toast('Tetingkap cetakan disekat oleh pelayar. Benarkan pop-up untuk laman ini dan cuba lagi.'); return; }
+    const bc = barcode ? `<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script>` : '';
+    const bcInit = barcode ? `try{if(window.JsBarcode)JsBarcode('#barcode',${JSON.stringify(barcode).replace(/</g, '\\u003c')},{format:'CODE128',displayValue:false,margin:0,height:38,width:1.6,lineColor:'#1b2a27'});}catch(e){}` : '';
     popup.document.open();
-    popup.document.write(`<!doctype html><html lang="ms"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Rekod Buku — ${esc(b.title||'Buku')}</title><style>
-      @page{size:A4 portrait;margin:14mm}
-      *{box-sizing:border-box}html,body{margin:0;padding:0;background:#edf2f0;color:#1d2c3a;font-family:Arial,"Segoe UI",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-      body{padding:24px}.sheet{width:100%;max-width:780px;min-height:1000px;margin:0 auto;background:#fff;border:1px solid #dce5e1;box-shadow:0 10px 34px #142e2417;padding:30px;position:relative;overflow:hidden}
-      .topline{height:7px;background:#245b52;margin:-30px -30px 25px}.brand{display:flex;justify-content:space-between;align-items:center;gap:18px;padding-bottom:17px;border-bottom:1px solid #dce5e1}.brand-name{font-size:11px;font-weight:800;letter-spacing:2px;color:#245b52;text-transform:uppercase}.doc-type{font-size:10px;color:#65766f;text-transform:uppercase;letter-spacing:1.2px}
-      .catalog-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding:11px 13px;background:#f1f6f3;border-left:4px solid #245b52;border-radius:4px}.catalog-id{font-size:16px;font-weight:800;letter-spacing:1.5px;color:#245b52}.catalog-code-wrap{width:190px;text-align:center}.catalog-code-wrap svg{width:100%;height:48px}.barcode-caption{font:700 10px Arial,sans-serif;letter-spacing:1.5px;color:#24372f;margin-top:2px}.layout{display:grid;grid-template-columns:36% 1fr;gap:28px;margin-top:20px;align-items:start}.cover-panel{background:#f3f7f5;border:1px solid #e0e8e4;border-radius:8px;padding:14px;min-height:350px;display:flex;align-items:flex-start;justify-content:center}.cover{display:block;width:100%;height:auto;max-height:470px;object-fit:contain;object-position:top center;border-radius:3px;box-shadow:0 5px 15px #13282020}.no-cover{width:100%;min-height:290px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px dashed #b7c7c0;color:#7a8d85;font-size:12px;letter-spacing:1px;line-height:1.8}
-      .eyebrow{font-size:10px;letter-spacing:1.8px;color:#668177;font-weight:700;text-transform:uppercase;margin:0 0 8px}.title{font-size:25px;line-height:1.22;margin:0 0 8px;color:#1c3934;overflow-wrap:anywhere}.subtitle{font-size:12px;color:#687a73;margin:0 0 20px}.section-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.4px;color:#245b52;border-bottom:2px solid #dcece6;padding-bottom:8px;margin:0 0 10px}
-      .detail{display:grid;grid-template-columns:42% 1fr;gap:10px;padding:9px 0;border-bottom:1px solid #edf1ef;break-inside:avoid}.label{font-size:10px;color:#718078;text-transform:uppercase;letter-spacing:.35px;font-weight:700}.value{font-size:12px;color:#24372f;overflow-wrap:anywhere;white-space:pre-wrap}.status{display:inline-block;padding:4px 8px;border-radius:4px;background:#e6f1ec;color:#245b52;font-weight:700}
-      .footer{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:12px;border-top:1px solid #dce5e1;color:#7b8983;font-size:9px}.screen-actions{max-width:780px;margin:0 auto 14px;display:flex;gap:8px;justify-content:flex-end}.screen-actions button{border:0;border-radius:6px;padding:10px 15px;background:#245b52;color:#fff;font-weight:700;cursor:pointer}.screen-actions .close{background:#e4ebe8;color:#24372f}
-      @media(max-width:650px){body{padding:8px}.sheet{padding:18px;min-height:0}.topline{margin:-18px -18px 18px}.layout{grid-template-columns:34% 1fr;gap:14px}.cover-panel{min-height:220px;padding:8px}.title{font-size:20px}.detail{grid-template-columns:1fr;gap:3px}}
-      @media print{html,body{background:#fff!important;padding:0!important}.screen-actions{display:none!important}.sheet{max-width:none;width:auto;min-height:0;margin:0;border:0;box-shadow:none;padding:0;overflow:visible}.topline{margin:0 0 20px}.layout{grid-template-columns:36% 1fr;gap:24px;margin-top:22px}.cover-panel{min-height:0;padding:12px}.cover{max-height:225mm}.title{font-size:23px}.detail{grid-template-columns:42% 1fr;padding:7px 0}.footer{margin-top:20px}}
-      </style></head><body><div class="screen-actions"><button onclick="window.print()">Cetak / Simpan PDF</button><button class="close" onclick="window.close()">Tutup</button></div><main class="sheet"><div class="topline"></div><div class="brand"><div class="brand-name">${esc(libraryName())}</div><div class="doc-type">Rekod Maklumat Buku</div></div><div class="catalog-strip"><div><div style="font-size:9px;letter-spacing:1.4px;color:#718078;text-transform:uppercase">Nombor katalog</div><div class="catalog-id">${esc(b.bookCode||'—')}</div></div><div class="catalog-code-wrap"><svg id="catalogBarcode" aria-label="Barkod ID buku"></svg><div class="barcode-caption">${esc(b.bookCode||'')}</div></div></div><div class="layout"><aside><div class="cover-panel">${cover}</div></aside><section><p class="eyebrow">Maklumat koleksi</p><h1 class="title">${esc(b.title||'Nama buku tidak diisi')}</h1><p class="subtitle">Rekod katalog buku peribadi</p><h2 class="section-label">Butiran buku</h2>${rows}</section></div><div class="footer"><span>PERPUSTAKAAN MINI · REKOD BUKU</span><span>Dicetak pada ${new Date().toLocaleDateString('ms-MY')}</span></div></main><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script><script>window.addEventListener('load',()=>{try{if(window.JsBarcode)JsBarcode('#catalogBarcode',${JSON.stringify(b.bookCode||'').replace(/</g,'\\u003c')},{format:'CODE128',displayValue:false,margin:0,height:42,lineColor:'#182a24',width:2});}catch(e){}const imgs=[...document.images];Promise.all(imgs.map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=r;i.onerror=r;}))).then(()=>setTimeout(()=>window.print(),450));});<\/script></body></html>`);
+    popup.document.write(`<!doctype html><html lang="ms"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>${PRINT_BASE_CSS}${css}</style></head><body><div class="screen-actions"><span>${esc(note)}</span><button onclick="window.print()">Cetak / Simpan PDF</button><button class="ghost" onclick="window.close()">Tutup</button></div>${body}${bc}<script>window.addEventListener('load',()=>{${bcInit}const imgs=[...document.images];Promise.all(imgs.map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=r;i.onerror=r;}))).then(()=>setTimeout(()=>window.print(),400));});<\/script></body></html>`);
     popup.document.close();
+  }
+  // Barkod Code 128 (set B) dijana terus sebagai SVG — tidak bergantung pada pustaka luar, berfungsi tanpa internet.
+  const C128 = '212222 222122 222221 121223 121322 131222 122213 122312 132212 221213 221312 231212 112232 122132 122231 113222 123122 123221 223211 221132 221231 213212 223112 312131 311222 321122 321221 312212 322112 322211 212123 212321 232121 111323 131123 131321 112313 132113 132311 211313 231113 231311 112133 112331 132131 113123 113321 133121 313121 211331 231131 213113 213311 213131 311123 311321 331121 312113 312311 332111 314111 221411 431111 111224 111422 121124 121421 141122 141221 112214 112412 122114 122411 142112 142211 241211 221114 413111 241112 134111 111242 121142 121241 114212 124112 124211 411212 421112 421211 212141 214121 412121 111143 111341 131141 114113 114311 411113 411311 113141 114131 311141 411131 211412 211214 211232 2331112'.split(' ');
+  function code128Svg(text) {
+    text = String(text || '');
+    if (!text || !/^[\x20-\x7e]+$/.test(text)) return '';
+    const codes = [104, ...[...text].map(c => c.charCodeAt(0) - 32)];
+    codes.push(codes.reduce((sum, v, i) => sum + v * (i || 1), 0) % 103, 106);
+    const quiet = 10; let x = quiet, rects = '';
+    codes.forEach(c => [...C128[c]].forEach((w, i) => { w = +w; if (i % 2 === 0) rects += `<rect x="${x}" y="0" width="${w}" height="40"/>`; x += w; }));
+    return `<svg class="barcode" viewBox="0 0 ${x + quiet} 40" preserveAspectRatio="none" shape-rendering="crispEdges" role="img" aria-label="Barkod ${esc(text)}"><rect width="100%" height="40" fill="#fff"/><g fill="#1b2a27">${rects}</g></svg>`;
+  }
+  function citation(b) {
+    const parts = [];
+    if (b.author) parts.push(esc(b.author) + '.');
+    parts.push(`<i>${esc(titleCase(b.title) || 'Tanpa tajuk')}</i>.`);
+    if (b.edition) parts.push(esc(b.edition) + '.');
+    const pub = [b.publishPlace ? esc(b.publishPlace) + ':' : '', esc(b.publisher || '')].filter(Boolean).join(' ');
+    if (pub || b.year) parts.push((pub || '[s.n.]') + (b.year ? ', ' + esc(b.year) : '') + '.');
+    if (b.pages) parts.push(esc(b.pages) + ' hlm.');
+    if (b.series) parts.push(`(${esc(b.series)}${b.volume ? '; ' + esc(b.volume) : ''}).`);
+    if (b.isbn) parts.push('ISBN ' + esc(b.isbn) + '.');
+    return parts.join(' ');
+  }
+
+  // Rekod sebuah buku (A4 potret)
+  function printBookRecord(id) {
+    const b = books.find(x => x.id === id); if (!b) return;
+    const src = safeImg(b.cover), dash = v => (str(v).trim() ? esc(v) : '<span class="nil">—</span>');
+    const biblio = [['Pengarang', b.author], ['Penerbit', b.publisher], ['Tempat terbit', b.publishPlace], ['Tahun terbit', b.year], ['Edisi / cetakan', b.edition], ['ISBN', b.isbn], ['Bahasa', b.language], ['Bilangan halaman', b.pages ? b.pages + ' halaman' : ''], ['Siri', b.series ? b.series + (b.volume ? ', jilid ' + b.volume : '') + (b.seriesTotal ? ' (daripada ' + b.seriesTotal + ')' : '') : '']];
+    const acquired = b.source ? b.source + (b.source === 'Beli' && b.purchase ? ' — ' + b.purchase : '') : '';
+    const koleksi = [['No. katalog', b.bookCode], ['Kategori', bookCategoryLabel(b)], ['Format', b.format], ['Keadaan', b.condition], ['Cara diperoleh', acquired], ['Harga / nilai', b.price !== '' ? money(b.price) : ''], ['Tarikh didaftarkan', b.createdAt && b.createdAt > EPOCH ? longDate(b.createdAt) : ''], ['Tag', parseTags(b.tags).join(', ')]];
+    const items = list => list.map(([k, v]) => `<div class="item"><dt>${esc(k)}</dt><dd>${dash(v)}</dd></div>`).join('');
+    const css = `
+      @page{size:A4 portrait;margin:15mm 16mm 13mm}
+      .sheet{width:210mm;min-height:297mm;padding:15mm 16mm 13mm;display:flex;flex-direction:column}
+      @media print{main.sheet.rec .footer{position:fixed;left:0;right:0;bottom:0;margin:0;background:#fff}}
+      .strip{display:flex;justify-content:space-between;align-items:center;margin-top:9mm;padding:0 0 6mm;border-bottom:.5pt solid var(--line)}
+      .strip .no small{display:block;font-size:6.5pt;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+      .strip .no .code{font-size:17pt;letter-spacing:.06em}
+      .strip .bc{text-align:center}.strip svg{height:12mm;width:58mm;display:block}.strip .bc span{font:700 7pt Consolas,monospace;letter-spacing:.3em;color:var(--ink)}
+      .main{display:grid;grid-template-columns:56mm 1fr;gap:9mm;margin-top:8mm}
+      .cover{width:100%;max-height:84mm;object-fit:contain;object-position:top;border:.5pt solid var(--line);background:#f6f8f7;display:block}
+      .no-cover{aspect-ratio:2/3;border:.6pt dashed #b7c4bf;display:grid;place-items:center;color:#8a9a94;font-size:7pt;letter-spacing:.18em;text-align:center;line-height:1.8}
+      h1{font-family:Georgia,"Times New Roman",serif;font-weight:normal;font-size:21pt;line-height:1.15;margin:0 0 4px;overflow-wrap:anywhere}
+      .byline{font-size:11pt;color:var(--muted);margin:0}
+      .series{font-family:Georgia,serif;font-style:italic;font-size:9.5pt;color:var(--muted);margin-top:3px}
+      .citation{margin:6mm 0 0;padding:8px 11px;background:var(--soft);border-left:2.4pt solid var(--accent);font-family:Georgia,serif;font-size:9.5pt;line-height:1.5}
+      .citation small{display:block;font-family:"Segoe UI",Arial,sans-serif;font-size:6.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+      .section{margin-top:7mm}
+      .section h2{font-size:7pt;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:0 0 2px;padding-bottom:4px;border-bottom:1pt solid var(--accent)}
+      dl{margin:0}.cols{display:grid;grid-template-columns:1fr 1fr;column-gap:9mm}
+      .item{display:grid;grid-template-columns:36% 1fr;gap:6px;padding:5px 0;border-bottom:.5pt solid var(--line);font-size:9.3pt;break-inside:avoid}
+      dt{color:var(--muted);font-size:8pt;padding-top:1px}dd{margin:0;overflow-wrap:anywhere}.nil{color:#b5c0bc}
+      .notes .lines{height:27mm;margin-top:3mm;background:repeating-linear-gradient(to bottom,transparent 0,transparent 8.5mm,#cdd6d2 8.5mm,#cdd6d2 calc(8.5mm + .6pt))}
+      .footer{margin-top:auto;padding-top:5mm;display:flex;justify-content:space-between;align-items:flex-end;font-size:7.5pt;color:var(--muted)}
+      .footer .ex{font-family:Georgia,serif;font-style:italic;font-size:10pt;color:var(--accent)}
+      @media screen and (max-width:820px){.sheet{width:100%;min-height:0;padding:18px}.main,.cols{grid-template-columns:1fr}}
+    `;
+    const body = `<main class="sheet rec">
+      <header class="masthead"><div class="lib"><small>Koleksi peribadi</small>${esc(libraryName())}</div><div class="doc"><b>Rekod Katalog Buku</b>Kad maklumat koleksi</div></header>
+      <div class="strip"><div class="no"><small>Nombor katalog</small><span class="code">${esc(b.bookCode || '—')}</span></div><div class="bc">${code128Svg(b.bookCode)}<span>${esc(b.bookCode || '')}</span></div></div>
+      <div class="main">
+        <aside>${src ? `<img class="cover" src="${esc(src)}" alt="Kulit buku">` : '<div class="no-cover">TIADA IMEJ<br>KULIT BUKU</div>'}</aside>
+        <section>
+          <h1>${esc(b.title || 'Tanpa tajuk')}</h1>
+          <p class="byline">${esc(b.author || 'Pengarang tidak dinyatakan')}</p>
+          ${b.series ? `<div class="series">${esc(b.series)}${b.volume ? ', jilid ' + esc(b.volume) : ''}</div>` : ''}
+          <div class="citation"><small>Rujukan bibliografi</small>${citation(b)}</div>
+          <div class="section"><h2>Maklumat bibliografi</h2><dl>${items(biblio)}</dl></div>
+        </section>
+      </div>
+      <div class="section"><h2>Maklumat koleksi</h2><dl class="cols">${items(koleksi)}</dl></div>
+      <div class="section notes"><h2>Catatan</h2><div class="lines"></div></div>
+      <footer class="footer"><span class="ex">Ex Libris · ${esc(libraryName())}</span><span>Dicetak pada ${esc(longDate(Date.now()))}</span></footer>
+    </main>`;
+    openPrintWindow('Rekod Katalog — ' + (b.title || b.bookCode || 'Buku'), css, body, { note: 'Pratonton rekod katalog · A4 potret' });
+  }
+
+  // Katalog koleksi pukal (A4 landskap) — mengikut carian, penapis dan isihan semasa
+  function printCatalogue() {
+    const { shown } = filteredBooks();
+    if (!shown.length) { toast('Tiada buku untuk dicetak. Semak carian atau penapis.'); return; }
+    const sortKey = $('sortBooks').value, sortLabel = (SORTS[sortKey] || SORTS.newest)[0];
+    const groupOf = b => (sortKey === 'categoryAsc' ? (bookCategoryLabel(b) || 'Tanpa kategori') : sortKey === 'seriesAsc' ? (b.series || 'Bukan siri') : '');
+    const filters = [];
+    if ($('bookSearch').value.trim()) filters.push('carian “' + $('bookSearch').value.trim() + '”');
+    if ($('filterGenre').value) filters.push('kategori ' + bookCategoryLabel({ categoryId: $('filterGenre').value }));
+    if ($('filterReading').value) filters.push($('filterReading').value.toLowerCase());
+    if ($('filterTag').value) filters.push('tag ' + ($('filterTag').selectedOptions[0]?.textContent || '').replace(/\s*\(\d+\)$/, ''));
+    if ($('filterDupes').checked) filters.push('kemungkinan berganda');
+    const priced = shown.filter(b => numOrBlank(b.price) !== ''), total = priced.reduce((s, b) => s + Number(b.price), 0);
+    const cats = new Set(shown.map(b => bookCategoryLabel(b) || '—')).size;
+    const withCover = shown.some(b => safeImg(b.cover));
+    const cols = withCover ? 8 : 7;
+    let lastGroup = null, n = 0;
+    const rows = shown.map(b => {
+      let g = '';
+      const grp = groupOf(b);
+      if (grp && grp !== lastGroup) { lastGroup = grp; const c = shown.filter(x => groupOf(x) === grp).length; g = `<tr class="group"><td colspan="${cols}">${esc(grp)} <span>· ${c} judul</span></td></tr>`; }
+      n++;
+      const src = safeImg(b.cover);
+      const pubLine = [b.publishPlace, b.year].filter(Boolean).join(', ');
+      const extra = [b.edition, b.language, b.pages ? b.pages + ' hlm.' : ''].filter(Boolean).join(' · ');
+      return g + `<tr>
+        <td class="no">${n}</td>
+        <td><span class="code">${esc(b.bookCode || '—')}</span></td>
+        ${withCover ? `<td class="cv">${src ? `<img class="thumb" src="${esc(src)}" alt="">` : '<span class="thumb ph"></span>'}</td>` : ''}
+        <td><div class="t">${esc(b.title || 'Tanpa tajuk')}</div><div class="a">${esc(b.author || '—')}</div>${b.series ? `<div class="s">${esc(b.series)}${b.volume ? ', jilid ' + esc(b.volume) : ''}</div>` : ''}</td>
+        <td>${b.publisher ? esc(b.publisher) : '<span class="nil">—</span>'}${pubLine ? `<div class="a">${esc(pubLine)}</div>` : ''}${extra ? `<div class="s2">${esc(extra)}</div>` : ''}</td>
+        <td class="isbn">${b.isbn ? esc(b.isbn) : '<span class="nil">—</span>'}</td>
+        <td>${esc(bookCategoryLabel(b) || '—')}${b.format ? `<div class="a">${esc(b.format)}</div>` : ''}</td>
+        <td class="num">${numOrBlank(b.price) !== '' ? Number(b.price).toFixed(2) : '<span class="nil">—</span>'}</td>
+      </tr>`;
+    }).join('');
+    const lib = libraryName();
+    const css = `
+      @page{size:A4 landscape;margin:11mm 11mm 13mm;
+        @bottom-left{content:${cssStr(lib + ' · Katalog Koleksi Buku')};font:7pt Arial,sans-serif;color:#5d6d67}
+        @bottom-right{content:"Halaman " counter(page) " daripada " counter(pages);font:7pt Arial,sans-serif;color:#5d6d67}}
+      .sheet{width:297mm;padding:12mm}
+      .cat-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:7mm 0 4mm}
+      .cat-head h1{font-family:Georgia,"Times New Roman",serif;font-weight:normal;font-size:21pt;margin:0;line-height:1.1}
+      .cat-head p{margin:3px 0 0;font-size:8.5pt;color:var(--muted)}
+      .summary{display:flex;border:.6pt solid var(--line);margin:0 0 4mm}
+      .summary div{flex:1;padding:5px 10px;border-right:.6pt solid var(--line)}.summary div:last-child{border-right:0}
+      .summary span{display:block;font-size:6.5pt;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+      .summary strong{font-family:Georgia,serif;font-weight:normal;font-size:12.5pt}
+      table{width:100%;border-collapse:collapse;font-size:8.3pt}
+      thead{display:table-header-group}tfoot{display:table-row-group}
+      th{font-size:6.6pt;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--accent);text-align:left;padding:6px 7px}
+      td{padding:5px 7px;border-bottom:.5pt solid var(--line);vertical-align:top}
+      tbody tr:nth-child(even):not(.group) td{background:#f7f9f8}
+      tr{break-inside:avoid}
+      .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+      td.no{color:var(--muted);text-align:right;width:7mm;font-variant-numeric:tabular-nums}
+      .cv{width:12mm}.thumb{width:9mm;height:13mm;object-fit:cover;border:.5pt solid var(--line);display:block}.thumb.ph{background:#eef2f0}
+      .t{font-weight:700;line-height:1.3}.a{color:var(--muted)}.s{font-family:Georgia,serif;font-style:italic;font-size:7.8pt;color:var(--muted)}.s2{font-size:7.4pt;color:var(--muted)}
+      .isbn{font-family:Consolas,"Courier New",monospace;font-size:7.8pt;white-space:nowrap}.nil{color:#b5c0bc}
+      tr.group td{background:#e9f0ed;color:var(--accent);font-weight:700;font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;border-bottom:.9pt solid var(--accent);padding-top:7px}
+      tr.group span{font-weight:400;letter-spacing:.04em;text-transform:none;color:var(--muted)}
+      tfoot td{border-top:1.2pt solid var(--accent);border-bottom:0;font-weight:700;padding-top:6px}
+      .endnote{display:flex;justify-content:space-between;margin-top:5mm;font-size:7.3pt;color:var(--muted)}
+      .endnote .ex{font-family:Georgia,serif;font-style:italic;font-size:9pt;color:var(--accent)}
+    `;
+    const body = `<main class="sheet">
+      <header class="masthead"><div class="lib"><small>Koleksi peribadi</small>${esc(lib)}</div><div class="doc"><b>Katalog Koleksi Buku</b>Dicetak ${esc(longDate(Date.now()))}</div></header>
+      <div class="cat-head"><div><h1>Katalog Koleksi</h1><p>Disusun mengikut ${esc(sortLabel.toLowerCase())}${filters.length ? ' · Penapis: ' + esc(filters.join(', ')) : ' · Semua buku dalam koleksi'}</p></div></div>
+      <div class="summary"><div><span>Jumlah judul</span><strong>${shown.length}</strong></div><div><span>Kategori</span><strong>${cats}</strong></div><div><span>Nilai direkodkan</span><strong>RM ${total.toFixed(2)}</strong></div><div><span>Tanpa harga</span><strong>${shown.length - priced.length}</strong></div></div>
+      <table><thead><tr><th class="num">Bil.</th><th>No. katalog</th>${withCover ? '<th>Kulit</th>' : ''}<th>Judul &amp; pengarang</th><th>Penerbitan</th><th>ISBN</th><th>Kategori / format</th><th class="num">Harga (RM)</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><td colspan="${cols - 1}">Jumlah keseluruhan · ${shown.length} judul${priced.length < shown.length ? ` (${priced.length} berharga)` : ''}</td><td class="num">${total.toFixed(2)}</td></tr></tfoot></table>
+      <div class="endnote"><span class="ex">Ex Libris · ${esc(lib)}</span><span>Senarai ini dijana daripada sistem rekod perpustakaan peribadi.</span></div>
+    </main>`;
+    openPrintWindow('Katalog Koleksi — ' + lib, css, body, { note: `Pratonton katalog · ${shown.length} judul · A4 landskap` });
   }
 
   // ---------- Pinjaman: sub-tab ----------
@@ -2030,7 +2183,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   $('loanSearch').addEventListener('input', renderLoans);
   $('dashboardAddBtn').addEventListener('click', () => showTab('formPanel'));
   $('dashboardCollectionBtn').addEventListener('click', () => showTab('collectionPanel'));
-  $('printBtn').addEventListener('click', () => { showTab('collectionPanel'); $('printDate').textContent = 'Tarikh cetakan: ' + new Date().toLocaleDateString('ms-MY') + ' · Diisih mengikut: ' + (SORTS[$('sortBooks').value] || SORTS.newest)[0]; window.print(); });
+  $('printBtn').addEventListener('click', printCatalogue);
 
   // ---------- Muat data (dengan migrasi daripada versi localStorage lama) ----------
   async function loadData() {
