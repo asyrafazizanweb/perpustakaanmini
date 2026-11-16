@@ -220,6 +220,7 @@ dialog.scan-dialog{border:0;border-radius:16px;padding:0;width:min(560px,calc(10
 .scan-dialog .sd-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#0b1714}
 .scan-dialog video{display:block;width:100%;max-height:60vh;object-fit:cover}.scan-dialog video[hidden],.scan-dialog p[hidden]{display:none}
 .scan-dialog p{padding:30px 18px;text-align:center;margin:0;color:#d5e5de}
+.connect-box{margin-top:14px;padding:12px 14px;border:1px dashed var(--line);border-radius:10px;background:var(--soft)}.connect-box p{margin:4px 0 0}
 /* Responsif */
 @media(max-width:1000px){.dashboard-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.value-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-insights{grid-template-columns:1fr 1fr}.dashboard-insights .dash-card:last-child{grid-column:1/-1}.value-grid{grid-template-columns:1fr}}
@@ -514,9 +515,15 @@ dialog.scan-dialog{border:0;border-radius:16px;padding:0;width:min(560px,calc(10
       <p class="small">Masukkan URL projek Supabase dan kunci anon/publishable projek anda. Jangan masukkan service_role key. Maklumat sambungan disimpan pada pelayar ini sahaja.</p>
       <div class="grid">
         <div class="field full"><label for="cloudUrl">Supabase Project URL</label><input id="cloudUrl" type="url" placeholder="https://xxxxxxxx.supabase.co" autocomplete="url"></div>
-        <div class="field full"><label for="cloudKey">Publishable / anon key</label><input id="cloudKey" type="password" placeholder="sb_publishable_... atau anon key" autocomplete="off"></div>
+        <div class="field full"><label for="cloudKey">Publishable / anon key</label><div class="input-row"><input id="cloudKey" type="password" placeholder="sb_publishable_... atau anon key (eyJ...)" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="btn secondary" type="button" id="toggleKeyBtn">Tunjuk</button></div><span class="small" id="keyHint"></span></div>
       </div>
       <div class="actions"><button class="btn" id="connectCloudBtn" type="button">Simpan sambungan</button><button class="btn secondary" id="forgetCloudBtn" type="button">Padam tetapan sambungan</button></div>
+      <div class="connect-box">
+        <strong>Sambung peranti lain tanpa menaip kunci</strong>
+        <p class="small">Pada peranti yang sudah berjaya disambungkan, salin <em>pautan</em> atau <em>kod sambungan</em> dan hantar kepada diri sendiri (contohnya melalui WhatsApp/e-mel). Buka pautan itu di telefon, atau tampal kod di bawah. Kata laluan akaun tetap diperlukan untuk log masuk.</p>
+        <div class="actions" style="margin-top:8px"><button class="btn secondary" id="copyConnectLinkBtn" type="button">Salin pautan sambungan</button><button class="btn secondary" id="copyConnectCodeBtn" type="button">Salin kod sambungan</button></div>
+        <div class="input-row" style="margin-top:10px"><input id="connectCodeInput" placeholder="Tampal kod sambungan (PMSB1.…)" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Kod sambungan"><button class="btn" id="useConnectCodeBtn" type="button">Guna kod</button></div>
+      </div>
       <details style="margin-top:14px"><summary>Persediaan Supabase Storage untuk gambar kulit buku (sekali sahaja)</summary>
         <p class="small">Jalankan SQL ini dalam <em>Supabase → SQL Editor</em>. Ia mencipta bucket peribadi <code>covers</code> dan membenarkan setiap pengguna mengakses folder miliknya sahaja. Jika langkah ini belum dibuat, gambar kulit tetap disegerakkan (dalam bentuk mampat) bersama rekod.</p>
 <pre class="sql" id="storageSql">insert into storage.buckets (id, name, public)
@@ -2122,9 +2129,51 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     });
     return supabaseClient;
   }
+  // ---------- Semakan URL & kunci Supabase (elak "Invalid API key") ----------
+  const cleanUrl = v => String(v || '').replace(/\s+/g, '').replace(/\/+$/, '').replace(/\/rest\/v1$/, '');
+  const cleanKey = v => String(v || '').replace(/\s+/g, '').replace(/^["']|["']$/g, '');
+  function b64urlJson(seg) { try { const s = seg.replace(/-/g, '+').replace(/_/g, '/'); return JSON.parse(decodeURIComponent(escape(atob(s + '==='.slice((s.length + 3) % 4))))); } catch (e) { return null; } }
+  // Pulangkan mesej ralat (Bahasa Melayu) atau '' jika nampak betul
+  function checkSupabase(url, key) {
+    const m = url.match(/^https:\/\/([a-z0-9-]+)\.supabase\.co$/i);
+    if (!m) return 'URL projek tidak sah. Ia sepatutnya seperti https://abcdefgh.supabase.co (Supabase → Project Settings → Data API / API).';
+    if (!key) return 'Masukkan publishable/anon key.';
+    const ref = m[1].toLowerCase();
+    if (/^sb_secret_/i.test(key)) return 'Ini kunci RAHSIA (sb_secret_…). Jangan gunakannya dalam pelayar. Salin kunci "publishable" (sb_publishable_…) atau "anon public".';
+    if (/^sb_publishable_/i.test(key)) return key.length < 30 ? 'Kunci publishable kelihatan terpotong. Salin semula keseluruhan kunci.' : '';
+    const parts = key.split('.');
+    if (parts.length !== 3 || !/^eyJ/.test(key)) return 'Format kunci tidak dikenali. Kunci "anon public" bermula dengan eyJ… dan sangat panjang (lebih 150 aksara); kunci "publishable" bermula dengan sb_publishable_… Pastikan keseluruhan kunci disalin.';
+    const p = b64urlJson(parts[1]);
+    if (!p) return 'Kunci rosak atau tidak lengkap. Salin semula keseluruhan kunci anon dari Supabase.';
+    if (p.role === 'service_role') return 'Ini kunci service_role (rahsia). Jangan gunakannya dalam pelayar. Gunakan kunci "anon public".';
+    if (p.ref && p.ref.toLowerCase() !== ref) return `Kunci ini milik projek "${p.ref}", tetapi URL ialah projek "${ref}". Pastikan URL dan kunci daripada projek Supabase yang sama.`;
+    if (parts[2].length < 40) return 'Kunci kelihatan terpotong di hujung. Salin semula keseluruhan kunci anon.';
+    return '';
+  }
+  function friendlyAuthError(e) {
+    const msg = String(e && (e.message || e.error_description || e) || '');
+    if (/invalid api key|no api key|apikey/i.test(msg)) return 'Kunci API tidak diterima oleh Supabase. Semak semula URL dan kunci (atau gunakan kod/pautan sambungan dari peranti yang sudah berjaya disambungkan).';
+    if (/legacy api keys are disabled/i.test(msg)) return 'Kunci anon lama telah dimatikan dalam projek ini. Gunakan kunci "publishable" (sb_publishable_…).';
+    if (/invalid login credentials/i.test(msg)) return 'E-mel atau kata laluan salah.';
+    if (/email not confirmed/i.test(msg)) return 'E-mel belum disahkan. Buka e-mel pengesahan daripada Supabase dahulu.';
+    if (/failed to fetch|network|load failed/i.test(msg)) return 'Tiada sambungan ke Supabase. Semak internet dan URL projek.';
+    return msg || 'ralat tidak diketahui';
+  }
+  // Kod sambungan: memindahkan URL + kunci ke peranti lain tanpa menaip
+  const CONNECT_PREFIX = 'PMSB1.';
+  function makeConnectCode(url, key) { return CONNECT_PREFIX + btoa(JSON.stringify({ u: url, k: key })).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+  function readConnectCode(code) {
+    code = String(code || '').replace(/\s+/g, '');
+    const i = code.indexOf(CONNECT_PREFIX); if (i < 0) return null;
+    const d = b64urlJson(code.slice(i + CONNECT_PREFIX.length));
+    return d && d.u && d.k ? { url: cleanUrl(d.u), key: cleanKey(d.k) } : null;
+  }
   function saveCloudSettings() {
-    const url = $('cloudUrl').value.trim().replace(/\/$/, ''), key = $('cloudKey').value.trim();
-    if (!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) || !key) { cloudMessage('Sila masukkan URL projek Supabase yang sah dan publishable/anon key.'); return false; }
+    const url = cleanUrl($('cloudUrl').value), key = cleanKey($('cloudKey').value);
+    $('cloudUrl').value = url; $('cloudKey').value = key;
+    const bad = checkSupabase(url, key);
+    if (bad) { cloudMessage(bad); $('keyHint').textContent = bad; return false; }
+    $('keyHint').textContent = '';
     const old = cloudSettings();
     if (old.url !== url || old.key !== key) { supabaseClient = null; cloudUser = null; cloudReady = false; }
     lsSet(LS.CLOUD_SETTINGS, { url, key });
@@ -2222,7 +2271,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       return true;
     } catch (e) {
       setSyncChip(navigator.onLine ? 'error' : 'offline', navigator.onLine ? 'Sync gagal' : 'Luar talian');
-      cloudMessage('Penyegerakan gagal: ' + (e.message || 'ralat tidak diketahui') + '. Data kekal pada peranti ini dan akan dicuba semula. Semak polisi akses/RLS jadual library_sync jika berulang.');
+      cloudMessage('Penyegerakan gagal: ' + friendlyAuthError(e) + '. Data kekal pada peranti ini dan akan dicuba semula. Semak polisi akses/RLS jadual library_sync jika berulang.');
       return false;
     } finally {
       syncRunning = false;
@@ -2269,7 +2318,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       if (choice === 'merge') { cloudReady = true; bootstrapRunning = false; await syncNow(); }
       else if (choice === 'cloud') await replaceWithCloud(remote.payload);
       else { cloudMessage('Penyegerakan belum diaktifkan. Data peranti ini tidak diubah.'); setSyncChip('pending', 'Sync belum aktif'); }
-    } catch (e) { cloudReady = false; setSyncChip('error', 'Sync gagal'); cloudMessage('Tidak dapat menyediakan penyegerakan: ' + (e.message || 'ralat tidak diketahui') + '. Data tempatan tidak diubah. Semak permission/RLS jadual library_sync di Supabase.'); }
+    } catch (e) { cloudReady = false; setSyncChip('error', 'Sync gagal'); cloudMessage('Tidak dapat menyediakan penyegerakan: ' + friendlyAuthError(e) + '. Data tempatan tidak diubah. Semak permission/RLS jadual library_sync di Supabase.'); }
     finally { bootstrapRunning = false; }
   }
   async function pullReplace() {
@@ -2294,9 +2343,20 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       cloudReady = true; await syncNow({ silent: false });
     } catch (e) { cloudMessage('Gagal menghantar data: ' + (e.message || 'ralat tidak diketahui') + '.'); }
   }
+  function settingsChanged() { const c = cloudSettings(); return cleanUrl($('cloudUrl').value) !== (c.url || '') || cleanKey($('cloudKey').value) !== (c.key || ''); }
+  async function applyConnect(code) {
+    const c = readConnectCode(code);
+    if (!c) { toast('Kod sambungan tidak sah. Salin semula dari peranti yang sudah disambungkan.'); return; }
+    const bad = checkSupabase(c.url, c.key);
+    if (bad) { toast(bad, { ms: 9000 }); return; }
+    if (!await ask(`Simpan sambungan ke projek Supabase ${c.url.replace('https://', '')} pada peranti ini?`, 'Ya, simpan sambungan')) return;
+    $('cloudUrl').value = c.url; $('cloudKey').value = c.key; $('connectCodeInput').value = '';
+    if (saveCloudSettings()) { cloudMessage('Sambungan disimpan daripada kod. Sekarang masukkan e-mel dan kata laluan, kemudian tekan Log masuk.'); showTab('syncPanel'); setTimeout(() => $('cloudEmail').focus(), 200); }
+  }
   function setupCloudUI() {
     const cfg = cloudSettings();
     $('cloudUrl').value = cfg.url || ''; $('cloudKey').value = cfg.key || '';
+    if (cfg.url && cfg.key) { const bad = checkSupabase(cfg.url, cfg.key); if (bad) { $('keyHint').textContent = bad; setTimeout(() => cloudMessage('Tetapan sambungan pada peranti ini bermasalah: ' + bad), 0); } }
     if (cfg.url && cfg.key && ensureClient(cfg)) {
       supabaseClient.auth.getSession().then(({ data }) => {
         const u = data?.session?.user || null;
@@ -2304,6 +2364,18 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       }).catch(e => cloudMessage('Ralat pengesahan: ' + e.message));
     }
     $('connectCloudBtn').addEventListener('click', saveCloudSettings);
+    $('toggleKeyBtn').addEventListener('click', () => { const k = $('cloudKey'); const show = k.type === 'password'; k.type = show ? 'text' : 'password'; $('toggleKeyBtn').textContent = show ? 'Sembunyi' : 'Tunjuk'; });
+    $('cloudKey').addEventListener('input', () => { const u = cleanUrl($('cloudUrl').value), k = cleanKey($('cloudKey').value); $('keyHint').textContent = u && k ? (checkSupabase(u, k) || '✓ Format URL dan kunci kelihatan betul.') : ''; });
+    const currentConnect = () => { const c = cloudSettings(); if (!c.url || !c.key) { toast('Simpan sambungan yang berjaya pada peranti ini dahulu.'); return null; } return makeConnectCode(c.url, c.key); };
+    const copyText = (t, ok) => (navigator.clipboard?.writeText(t) || Promise.reject()).then(() => toast(ok), () => { prompt('Salin teks ini:', t); });
+    $('copyConnectCodeBtn').addEventListener('click', () => { const c = currentConnect(); if (c) copyText(c, 'Kod sambungan disalin. Tampal di peranti lain (Tetapan → Guna kod).'); });
+    $('copyConnectLinkBtn').addEventListener('click', () => {
+      const c = currentConnect(); if (!c) return;
+      const link = location.href.split('#')[0] + '#sambung=' + c;
+      if (navigator.share && window.matchMedia('(max-width:760px)').matches) navigator.share({ title: 'Sambungan Perpustakaan Mini', text: 'Buka pautan ini pada peranti lain untuk menyambung ke katalog:', url: link }).catch(() => {});
+      else copyText(link, 'Pautan sambungan disalin. Buka pautan itu di telefon.');
+    });
+    $('useConnectCodeBtn').addEventListener('click', () => applyConnect($('connectCodeInput').value));
     $('forgetCloudBtn').addEventListener('click', async () => {
       if (!await ask('Padam tetapan sambungan dari pelayar ini? Rekod buku tempatan tidak dipadam.', 'Ya, padam tetapan')) return;
       try { if (supabaseClient) await supabaseClient.auth.signOut(); } catch (e) {}
@@ -2312,22 +2384,22 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     });
     $('signupCloudBtn').addEventListener('click', async () => {
       try {
-        if (!supabaseClient && !saveCloudSettings()) return;
+        if ((!supabaseClient || settingsChanged()) && !saveCloudSettings()) return;
         const email = $('cloudEmail').value.trim(), password = $('cloudPassword').value;
         if (!email || password.length < 6) throw Error('Masukkan e-mel dan kata laluan sekurang-kurangnya 6 aksara.');
         const { data, error } = await supabaseClient.auth.signUp({ email, password }); if (error) throw error;
         if (data.session) { cloudUser = data.user; bootstrapCloud(); }
         else cloudMessage('Permintaan pendaftaran dihantar. Jika pengesahan e-mel diaktifkan, sahkan e-mel dahulu sebelum log masuk.');
-      } catch (e) { cloudMessage('Pendaftaran gagal: ' + e.message); }
+      } catch (e) { cloudMessage('Pendaftaran gagal: ' + friendlyAuthError(e)); }
     });
     $('loginCloudBtn').addEventListener('click', async () => {
       try {
-        if (!supabaseClient && !saveCloudSettings()) return;
+        if ((!supabaseClient || settingsChanged()) && !saveCloudSettings()) return;
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email: $('cloudEmail').value.trim(), password: $('cloudPassword').value });
         if (error) throw error;
         cloudUser = data.user; $('cloudPassword').value = '';
         bootstrapCloud();
-      } catch (e) { cloudMessage('Log masuk gagal: ' + e.message); }
+      } catch (e) { cloudMessage('Log masuk gagal: ' + friendlyAuthError(e)); }
     });
     $('logoutCloudBtn').addEventListener('click', async () => { try { if (supabaseClient) await supabaseClient.auth.signOut(); cloudUser = null; cloudReady = false; setSyncChip('local', 'Tempatan sahaja'); cloudMessage('Log keluar. Rekod tempatan masih tersedia.'); } catch (e) { cloudMessage('Gagal log keluar: ' + e.message); } });
     $('pullCloudBtn').addEventListener('click', pullReplace);
@@ -2403,6 +2475,8 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     showTab(ui.tab || 'dashboardPanel');
     if (isLocked()) $('lockLibName').textContent = libraryName() + ' — masukkan PIN untuk membuka.';
     setupCloudUI();
+    const handleConnectHash = () => { if (/^#sambung=/.test(location.hash)) { const code = decodeURIComponent(location.hash.slice(9)); history.replaceState(null, '', location.pathname + location.search); setTimeout(() => applyConnect(code), 300); } };
+    handleConnectHash(); window.addEventListener('hashchange', handleConnectHash);
     try { if (navigator.storage?.persist && !(await navigator.storage.persisted())) await navigator.storage.persist(); } catch (e) {}
     dailyBackup().catch(() => {});
   }
