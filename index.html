@@ -672,7 +672,10 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   function safeImg(src) { return typeof src === 'string' && IMG_RE.test(src) ? src : ''; }
   function approxBytes(d) { return d ? Math.round((d.length - d.indexOf(',') - 1) * 3 / 4) : 0; }
   function fmtSize(n) { n = Number(n) || 0; return n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
-  function touch(r, t = nowIso()) { r.updatedAt = t; if (!r.createdAt) r.createdAt = t; return r; }
+  // Cap masa sentiasa lebih baharu daripada versi sebelumnya — suntingan tidak dibatalkan walaupun jam peranti ini lebih lambat
+  const after = iso => new Date(new Date(iso).getTime() + 1).toISOString();
+  function touch(r, t = nowIso()) { if (r.updatedAt && r.updatedAt >= t) t = after(r.updatedAt); r.updatedAt = t; if (!r.createdAt) r.createdAt = t; return r; }
+  const tombTime = r => { const t = nowIso(); return r && r.updatedAt && r.updatedAt >= t ? after(r.updatedAt) : t; };
   function tsFromId(id) { const m = String(id || '').match(/^(\d{13})/); return m ? new Date(Number(m[1])).toISOString() : null; }
   function normTimes(r) { if (!r.createdAt) r.createdAt = tsFromId(r.id) || EPOCH; if (!r.updatedAt) r.updatedAt = r.createdAt; return r; }
   const codeNum = c => Number(str(c).match(/^MAA(\d+)$/)?.[1] || 0);
@@ -719,9 +722,41 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
 
   let saveChain = Promise.resolve();
   function snapshot() { return { schema: 3, books: books.map(({ cover, ...rest }) => rest), loans, categories, wishlist, borrowings, deletions, settings, pendingCoverRemovals }; }
+  // Beberapa tab/tetingkap boleh membuka sistem serentak. Sebelum menulis, gabungkan dahulu data terkini dalam storan
+  // (per rekod, yang terbaharu menang) supaya tab yang lebih lama tidak menindih perubahan dari tab lain.
+  const dataSig = () => [books, loans, categories, wishlist, borrowings].map(l => l.length + ':' + l.reduce((m, r) => (str(r.updatedAt) > m ? str(r.updatedAt) : m), '')).join('|') + '|' + Object.values(deletions).reduce((n, d) => n + Object.keys(d).length, 0) + '|' + str(settings.updatedAt);
+  async function mergeFromDisk() {
+    if (!store) return false;
+    const cur = await store.get('kv', 'data'); if (!cur) return false;
+    const before = dataSig(), prev = coverMap(), r = normalizePayload(cur);
+    deletions = mergeDeletions(deletions, r.deletions);
+    books = mergeById(books, r.books, deletions.books, true); loans = mergeById(loans, r.loans, deletions.loans, true);
+    categories = mergeById(categories, r.categories, deletions.categories, true);
+    wishlist = mergeById(wishlist, r.wishlist, deletions.wishlist, true); borrowings = mergeById(borrowings, r.borrowings, deletions.borrowings, true);
+    if (r.settings && str(r.settings.updatedAt) > str(settings.updatedAt)) settings = r.settings;
+    arr(cur.pendingCoverRemovals).forEach(x => { if (typeof x === 'string' && !pendingCoverRemovals.includes(x)) pendingCoverRemovals.push(x); });
+    const changed = dataSig() !== before;
+    if (changed) fixIntegrity();
+    for (const b of books) {
+      if (b.cover) continue;
+      const p = prev.get(b.id);
+      if (p && p.cover && p.coverHash === b.coverHash) { b.cover = p.cover; continue; }
+      if (b.coverHash) { const c = safeImg(await store.get('covers', b.id)); if (c) b.cover = c; }
+    }
+    return changed;
+  }
+  const bc = 'BroadcastChannel' in window ? new BroadcastChannel('perpustakaanMini-data') : null;
+  let renderTimer = null;
+  const scheduleRender = () => { clearTimeout(renderTimer); renderTimer = setTimeout(() => { render(); if (!$('stockMode').hidden) renderStock(); }, 40); };
+  function resyncFromDisk() { saveChain = saveChain.then(async () => { if (await mergeFromDisk()) scheduleRender(); }).catch(e => console.warn(e)); return saveChain; }
+  if (bc) bc.onmessage = e => { if (e.data === 'changed') resyncFromDisk(); };
   function persist({ sync = true } = {}) {
-    const snap = JSON.parse(JSON.stringify(snapshot()));
-    saveChain = saveChain.then(() => store.put('kv', 'data', snap)).catch(e => { console.error(e); toast('Rekod tidak dapat disimpan: ' + (e.message || e) + '. Eksport sandaran segera.'); });
+    saveChain = saveChain.then(async () => {
+      const changed = await mergeFromDisk();
+      await store.put('kv', 'data', JSON.parse(JSON.stringify(snapshot())));
+      try { bc?.postMessage('changed'); } catch (e) {}
+      if (changed) scheduleRender();
+    }).catch(e => { console.error(e); toast('Rekod tidak dapat disimpan: ' + (e.message || e) + '. Eksport sandaran segera.'); });
     if (sync) scheduleCloudPush();
     return saveChain;
   }
@@ -844,10 +879,10 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   }
 
   // ---------- Gabungan per rekod ----------
-  function mergeById(local, remote, dels) {
+  function mergeById(local, remote, dels, localWinsTie = false) {
     const m = new Map();
     remote.forEach(r => m.set(r.id, r));
-    local.forEach(l => { const r = m.get(l.id); if (!r || str(l.updatedAt) > str(r.updatedAt)) m.set(l.id, l); });
+    local.forEach(l => { const r = m.get(l.id); if (!r || str(l.updatedAt) > str(r.updatedAt) || (localWinsTie && str(l.updatedAt) === str(r.updatedAt))) m.set(l.id, l); });
     return [...m.values()].filter(x => { const d = dels[x.id]; return !d || d < str(x.updatedAt); });
   }
   function mergeDeletions(a, b) {
@@ -999,11 +1034,13 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
 
   // ---------- Draf borang ----------
   let draftTimers = {}, restoringDraft = false;
+  const draftDirty = { book: false, loan: false }; // hanya tab yang borangnya disentuh boleh menyimpan/memadam draf
   function formValues(formId) { const data = {}; $(formId).querySelectorAll('input:not([type="file"]),select,textarea').forEach(el => { if (el.id) data[el.id] = el.value; }); return data; }
   function updateDraftStatus(kind, hasDraft) { const el = $(kind === 'book' ? 'bookDraftStatus' : 'loanDraftStatus'); if (el) el.textContent = hasDraft ? 'Draf disimpan secara automatik pada peranti ini. Anda boleh bertukar tab dan menyambung semula kemudian.' : 'Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.'; }
-  function clearDraftData(kind) { lsDel(kind === 'book' ? LS.BOOK_DRAFT : LS.LOAN_DRAFT); }
-  function saveDraft(kind) {
-    if (restoringDraft) return;
+  function clearDraftData(kind) { draftDirty[kind] = false; clearTimeout(draftTimers[kind]); lsDel(kind === 'book' ? LS.BOOK_DRAFT : LS.LOAN_DRAFT); }
+  function saveDraft(kind, { force = false } = {}) {
+    if (restoringDraft || (!force && !draftDirty[kind])) return;
+    draftDirty[kind] = false; clearTimeout(draftTimers[kind]);
     const isBook = kind === 'book', formId = isBook ? 'bookForm' : 'loanForm', key = isBook ? LS.BOOK_DRAFT : LS.LOAN_DRAFT;
     const values = formValues(formId);
     const hasContent = Object.entries(values).some(([k, v]) => k !== 'bookCode' && String(v || '').trim() !== '') || (isBook && !!currentCover);
@@ -1011,7 +1048,8 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     const draft = { savedAt: nowIso(), values }; if (isBook) draft.cover = currentCover || '';
     updateDraftStatus(kind, lsSet(key, draft));
   }
-  function scheduleDraft(kind) { if (restoringDraft) return; clearTimeout(draftTimers[kind]); draftTimers[kind] = setTimeout(() => saveDraft(kind), 250); }
+  function scheduleDraft(kind) { if (restoringDraft) return; draftDirty[kind] = true; clearTimeout(draftTimers[kind]); draftTimers[kind] = setTimeout(() => saveDraft(kind), 150); }
+  const flushDrafts = () => { saveDraft('book'); saveDraft('loan'); };
   function restoreDraft(kind) {
     const isBook = kind === 'book', key = isBook ? LS.BOOK_DRAFT : LS.LOAN_DRAFT;
     const draft = lsGet(key, null); if (!draft || !draft.values) return false;
@@ -1028,7 +1066,18 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   }
   function setupDraftAutosave() {
     ['bookForm', 'loanForm'].forEach(formId => { const kind = formId === 'bookForm' ? 'book' : 'loan'; $(formId).querySelectorAll('input,select,textarea').forEach(el => { if (el.type === 'file') return; el.addEventListener('input', () => scheduleDraft(kind)); el.addEventListener('change', () => scheduleDraft(kind)); }); });
-    window.addEventListener('pagehide', () => { saveDraft('book'); saveDraft('loan'); });
+    // Simpan serta-merta apabila tab disembunyikan / dibekukan (Chrome telefon boleh menutup tab di latar belakang tanpa amaran)
+    window.addEventListener('pagehide', flushDrafts);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushDrafts(); });
+    document.addEventListener('freeze', flushDrafts);
+    window.addEventListener('blur', flushDrafts);
+    // Draf diubah dalam tab lain: kemas kini borang tab ini jika ia belum disentuh di sini
+    window.addEventListener('storage', e => {
+      const kind = e.key === LS.BOOK_DRAFT ? 'book' : e.key === LS.LOAN_DRAFT ? 'loan' : '';
+      if (!kind || draftDirty[kind]) return;
+      if (e.newValue) restoreDraft(kind);
+      else if (kind === 'book') resetBook(false); else resetLoan(false);
+    });
   }
 
   // ---------- Imej kulit: mampatan automatik ----------
@@ -1138,7 +1187,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     if (old) books = books.map(x => (x.id === id ? b : x)); else books.unshift(b);
     // Buku yang baru dibeli: buang daripada senarai hajat
     const wished = old ? [] : wishlist.filter(w => w.id === pendingWishId || (isbnKey(w.isbn) && isbnKey(w.isbn) === isbnKey(b.isbn)) || (textKey(w.title) === textKey(b.title) && (!textKey(w.author) || textKey(w.author) === textKey(b.author))));
-    if (wished.length) { const t = nowIso(); wishlist = wishlist.filter(w => !wished.includes(w)); wished.forEach(w => { deletions.wishlist[w.id] = t; }); }
+    if (wished.length) { const t = nowIso(); wishlist = wishlist.filter(w => !wished.includes(w)); wished.forEach(w => { deletions.wishlist[w.id] = tombTime(w); }); }
     persist(); resetBook(true); render(); showTab('collectionPanel');
     const msg = (old ? 'Buku dikemaskini.' : 'Buku ' + b.bookCode + ' disimpan.') + (wished.length ? ` Dibuang daripada senarai hajat: ${wished.map(w => w.title).join(', ')}.` : '');
     toast(msg, wished.length ? { undo: () => { wished.forEach(w => { delete deletions.wishlist[w.id]; touch(w); wishlist.push(w); }); persist(); render(); toast('Senarai hajat dipulihkan.'); } } : {});
@@ -1192,7 +1241,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       const c = categories.find(x => x.id === del.dataset.deleteCategory); if (!c) return;
       if (books.some(b => b.categoryId === c.id)) { $('categoryStatus').textContent = 'Kategori ini masih digunakan oleh buku. Tukar kategori buku tersebut dahulu.'; return; }
       if (categories.some(x => x.parent === c.id)) { $('categoryStatus').textContent = 'Kategori ini mempunyai subkategori. Padam atau pindahkan subkategori dahulu.'; return; }
-      categories = categories.filter(x => x.id !== c.id); deletions.categories[c.id] = nowIso();
+      categories = categories.filter(x => x.id !== c.id); deletions.categories[c.id] = tombTime(c);
       persist(); if (editingCategoryId === c.id) resetCategoryForm(); render();
       $('categoryStatus').textContent = 'Kategori "' + c.name + '" dipadam.';
       toast('Kategori "' + c.name + '" dipadam.', { undo: () => { delete deletions.categories[c.id]; touch(c); categories.push(c); persist(); render(); toast('Kategori dipulihkan.'); } });
@@ -1527,7 +1576,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     if (ed) editLoan(ed.dataset.editLoan);
     if (del) {
       const l = loans.find(x => x.id === del.dataset.deleteLoan); if (!l) return;
-      loans = loans.filter(x => x.id !== l.id); deletions.loans[l.id] = nowIso(); persist(); render();
+      loans = loans.filter(x => x.id !== l.id); deletions.loans[l.id] = tombTime(l); persist(); render();
       toast('Rekod pinjaman ' + (l.borrower || '') + ' dipadam.', { undo: () => { delete deletions.loans[l.id]; touch(l); loans.push(l); persist(); render(); toast('Rekod pinjaman dipulihkan.'); } });
     }
   });
@@ -1568,7 +1617,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     const idx = books.findIndex(x => x.id === id); if (idx < 0) return;
     const b = books[idx], related = loans.filter(l => l.bookId === id), t = nowIso();
     books.splice(idx, 1); loans = loans.filter(l => l.bookId !== id);
-    deletions.books[id] = t; related.forEach(l => { deletions.loans[l.id] = t; });
+    deletions.books[id] = tombTime(b); related.forEach(l => { deletions.loans[l.id] = tombTime(l); });
     if (b.coverPath) pendingCoverRemovals.push(b.coverPath);
     if ($('bookId').value === id) resetBook(true);
     persist(); render();
@@ -1814,7 +1863,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       Object.entries(BORROW_MAP).forEach(([el, k]) => { $(el).value = x[k] || ''; });
       $('borrowId').value = x.id; $('saveBorrowBtn').textContent = 'Kemaskini'; $('bTitle').focus(); window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      borrowings = borrowings.filter(r => r.id !== x.id); deletions.borrowings[x.id] = nowIso(); persist(); render();
+      borrowings = borrowings.filter(r => r.id !== x.id); deletions.borrowings[x.id] = tombTime(x); persist(); render();
       toast(`Rekod "${x.title}" dipadam.`, { undo: () => { delete deletions.borrowings[x.id]; touch(x); borrowings.push(x); persist(); render(); } });
     }
   });
@@ -1856,7 +1905,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       Object.entries(WISH_MAP).forEach(([el, k]) => { $(el).value = w[k] || ''; });
       $('wishId').value = w.id; $('saveWishBtn').textContent = 'Kemaskini'; $('wTitle').focus(); window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      wishlist = wishlist.filter(r => r.id !== w.id); deletions.wishlist[w.id] = nowIso(); persist(); render();
+      wishlist = wishlist.filter(r => r.id !== w.id); deletions.wishlist[w.id] = tombTime(w); persist(); render();
       toast(`"${w.title}" dibuang daripada senarai hajat.`, { undo: () => { delete deletions.wishlist[w.id]; touch(w); wishlist.push(w); persist(); render(); } });
     }
   });
@@ -2829,6 +2878,8 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     if (await createBackup('Automatik harian')) await store.put('kv', 'lastAutoBackup', nowIso());
   }
 
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && store) resyncFromDisk(); });
+  window.addEventListener('pageshow', e => { if (e.persisted && store) resyncFromDisk(); });
   async function init() {
     applyTheme(); renderPinSettings();
     if (pinCfg()) lockNow(); else document.documentElement.classList.remove('locked');
