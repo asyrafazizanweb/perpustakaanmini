@@ -1,6 +1,6 @@
 // Tukar nombor versi ini setiap kali fail statik (ikon, manifest) dikemas kini.
 const PREFIX = 'maa-pwa-';
-const CACHE = PREFIX + 'v3';
+const CACHE = PREFIX + 'v4';
 const CDN_CACHE = PREFIX + 'cdn-v1';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon.svg'];
 // Pustaka luar yang diperlukan untuk berfungsi tanpa internet (imbasan & sambungan).
