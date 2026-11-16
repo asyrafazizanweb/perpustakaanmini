@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#193f3b">
+<meta name="app-version" content="13">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <title>Perpustakaan Mini Muhammad Asyraf Azizan</title>
@@ -238,6 +239,10 @@ dialog.label-dialog{max-width:520px}
 .bulk-top{font-size:13px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}.bulk-badges .pill{font-size:11px}
 .bulk-inputs{display:grid;grid-template-columns:2fr 1.5fr .8fr;gap:6px;margin-top:6px}.bulk-inputs input{min-height:38px;padding:7px 9px}
 @media(max-width:600px){.bulk-inputs{grid-template-columns:1fr 1fr}.bulk-inputs input[data-b-f=title]{grid-column:1/-1}}
+.update-banner{position:fixed;right:20px;bottom:20px;z-index:55;display:flex;gap:12px;align-items:center;max-width:min(520px,calc(100% - 24px));background:var(--paper);color:var(--ink);border:1px solid var(--accent);border-left:5px solid var(--accent);border-radius:12px;padding:12px 14px;box-shadow:0 12px 34px var(--shadow)}
+.update-banner[hidden]{display:none}.ub-icon{font-size:22px}.ub-text{flex:1;min-width:0}.ub-text strong{display:block}.ub-actions{display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:760px){.update-banner{left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));flex-wrap:wrap}.ub-actions{width:100%}.ub-actions .btn{flex:1}}
+@media print{.update-banner{display:none!important}}
 /* Responsif */
 @media(max-width:1000px){.dashboard-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.value-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-insights{grid-template-columns:1fr 1fr}.dashboard-insights .dash-card:last-child{grid-column:1/-1}.value-grid{grid-template-columns:1fr}}
@@ -554,6 +559,7 @@ dialog.label-dialog{max-width:520px}
         <div class="field full"><label for="libraryName">Nama perpustakaan</label><input id="libraryName" maxlength="90" placeholder="Contoh: Perpustakaan Mini Keluarga Ali"></div>
       </div>
       <div class="actions"><button class="btn" id="saveLibraryNameBtn" type="button">Simpan nama</button></div>
+      <p class="small" style="margin:12px 0 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span>Versi sistem: <strong id="appVersionLabel">—</strong></span><button class="btn secondary small-btn" type="button" id="checkUpdateBtn">Semak kemas kini</button></p>
       <p class="small" id="libraryNameStatus" role="status" aria-live="polite">Nama ini dipaparkan pada tajuk sistem, cetakan koleksi dan rekod buku. Ia turut disegerakkan ke peranti lain.</p>
     </div>
     <div class="dash-card" style="margin-bottom:16px">
@@ -629,6 +635,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       <div class="table-wrap" style="margin-top:10px"><table style="min-width:560px"><thead><tr><th>Tarikh sandaran</th><th>Sebab</th><th>Kandungan</th><th>Tindakan</th></tr></thead><tbody id="backupRows"><tr><td colspan="4" class="empty">Memuatkan…</td></tr></tbody></table></div>
     </div>
   </section>
+  <div id="updateBanner" class="update-banner no-print" role="status" aria-live="polite" hidden><span class="ub-icon">🔄</span><div class="ub-text"><strong>Versi baharu tersedia</strong><span id="updateBannerText" class="small"></span></div><div class="ub-actions"><button type="button" class="btn small-btn" id="updateReloadBtn">Muat semula sekarang</button><button type="button" class="btn secondary small-btn" id="updateLaterBtn">Kemudian</button></div></div>
   <div id="toast" class="toast no-print" role="status" aria-live="polite" hidden><span id="toastText"></span><button type="button" id="toastAction" hidden>Buat asal</button></div>
   <dialog id="choiceDialog" class="choice"><p id="choiceText"></p><div class="actions" id="choiceActions"></div></dialog>
   <dialog id="scanDialog" class="scan-dialog" aria-label="Imbas barkod"><div class="sd-head"><strong style="font-size:14px" id="scanDialogTitle">Halakan kamera pada barkod ISBN</strong><button type="button" class="btn secondary small-btn" id="scanDialogClose">Tutup ✕</button></div><video id="scanDialogVideo" playsinline muted hidden></video><p id="scanDialogMsg">Membuka kamera…</p></dialog>
@@ -3052,6 +3059,45 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
 
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && store) resyncFromDisk(); });
   window.addEventListener('pageshow', e => { if (e.persisted && store) resyncFromDisk(); });
+
+  // ---------- Pemberitahuan versi baharu ----------
+  // Fail di laman disemak secara senyap; jika nombor versinya berbeza daripada versi yang sedang berjalan, banner dipaparkan.
+  const APP_VERSION = document.querySelector('meta[name="app-version"]')?.content || '';
+  const verLabel = v => 'Fasa ' + v;
+  $('appVersionLabel').textContent = APP_VERSION ? verLabel(APP_VERSION) : '—';
+  let lastUpdateCheck = 0, newVersion = '';
+  async function checkForUpdate({ manual = false } = {}) {
+    if (!APP_VERSION || !/^https?:/.test(location.protocol)) { if (manual) toast('Semakan kemas kini hanya berfungsi apabila sistem dibuka melalui laman web (https://…).'); return; }
+    if (!navigator.onLine) { if (manual) toast('Tidak dapat menyemak kemas kini: tiada internet.'); return; }
+    if (!manual && Date.now() - lastUpdateCheck < 60000) return;
+    lastUpdateCheck = Date.now();
+    try {
+      const res = await fetch(location.pathname, { cache: 'no-store' }); // tanpa parameter supaya cache service worker tidak bertambah
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const html = await res.text();
+      const m = html.match(/<meta name="app-version" content="([^"]+)"/);
+      if (!m) { if (manual) toast('Tidak dapat mengenal pasti versi di laman.'); return; }
+      if (m[1] !== APP_VERSION) {
+        newVersion = m[1];
+        if (manual || sessionStorage.getItem('pm_update_later') !== newVersion) {
+          $('updateBannerText').textContent = `${verLabel(newVersion)} sedia digunakan (anda kini menggunakan ${verLabel(APP_VERSION)}). Draf borang akan disimpan.`;
+          $('updateBanner').hidden = false;
+        }
+      } else if (manual) toast(`Anda sudah menggunakan versi terkini (${verLabel(APP_VERSION)}).`);
+    } catch (e) { if (manual) toast('Tidak dapat menyemak kemas kini: ' + (navigator.onLine ? (e.message || e) : 'tiada internet') + '.'); }
+  }
+  $('checkUpdateBtn').addEventListener('click', () => checkForUpdate({ manual: true }));
+  $('updateLaterBtn').addEventListener('click', () => { $('updateBanner').hidden = true; try { sessionStorage.setItem('pm_update_later', newVersion); } catch (e) {} });
+  $('updateReloadBtn').addEventListener('click', async () => {
+    $('updateReloadBtn').disabled = true; $('updateReloadBtn').textContent = 'Memuat semula…';
+    try { flushDrafts(); } catch (e) {}
+    try { await Promise.race([saveChain, new Promise(r => setTimeout(r, 1500))]); } catch (e) {}
+    try { const reg = await navigator.serviceWorker?.getRegistration(); await reg?.update(); } catch (e) {}
+    location.reload();
+  });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkForUpdate(); });
+  window.addEventListener('online', () => setTimeout(checkForUpdate, 2000));
+  setInterval(() => { if (document.visibilityState === 'visible') checkForUpdate(); }, 5 * 60000);
   async function init() {
     applyTheme(); renderPinSettings();
     if (pinCfg()) lockNow(); else document.documentElement.classList.remove('locked');
@@ -3071,6 +3117,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     handleConnectHash(); window.addEventListener('hashchange', handleConnectHash);
     try { if (navigator.storage?.persist && !(await navigator.storage.persisted())) await navigator.storage.persist(); } catch (e) {}
     dailyBackup().catch(() => {});
+    setTimeout(checkForUpdate, 8000);
   }
   init().catch(e => { console.error(e); toast('Sistem gagal dimuatkan: ' + (e.message || e)); });
   if (location.protocol.startsWith('http') && 'serviceWorker' in navigator) window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
