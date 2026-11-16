@@ -221,6 +221,15 @@ dialog.scan-dialog{border:0;border-radius:16px;padding:0;width:min(560px,calc(10
 .scan-dialog video{display:block;width:100%;max-height:60vh;object-fit:cover}.scan-dialog video[hidden],.scan-dialog p[hidden]{display:none}
 .scan-dialog p{padding:30px 18px;text-align:center;margin:0;color:#d5e5de}
 .connect-box{margin-top:14px;padding:12px 14px;border:1px dashed var(--line);border-radius:10px;background:var(--soft)}.connect-box p{margin:4px 0 0}
+.load-more{text-align:center;margin:14px 0}.load-more[hidden]{display:none}
+.stock-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;max-width:640px}.stock-count{text-align:right}.stock-count strong{font-size:28px;color:var(--accent)}
+.stock-last{max-width:640px;margin-top:10px;padding:10px 12px;border-radius:10px;font-weight:650}.stock-last.ok{background:var(--st-green-bg);color:var(--st-green)}.stock-last.dup{background:var(--st-amber-bg);color:var(--st-amber)}.stock-last.bad{background:var(--st-red-bg);color:var(--st-red)}
+.stock-list{max-width:640px;border:1px solid var(--line);border-radius:10px;max-height:420px;overflow:auto}
+.stock-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 12px;border-bottom:1px solid var(--line2);font-size:14px}.stock-item:last-child{border-bottom:0}.stock-item .small{display:block}
+#stockMode .progress-track,#stockMode .scan-box{max-width:640px}
+.report-card{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.report-actions{display:flex;gap:8px;align-items:center}.report-actions select{width:auto;min-width:110px}
+.qr-box{display:grid;place-items:center;min-height:220px;background:#fff;border-radius:10px;padding:10px}.qr-box svg{width:min(300px,80vw);height:auto}
+dialog.label-dialog{max-width:520px}
 /* Responsif */
 @media(max-width:1000px){.dashboard-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.value-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-insights{grid-template-columns:1fr 1fr}.dashboard-insights .dash-card:last-child{grid-column:1/-1}.value-grid{grid-template-columns:1fr}}
@@ -328,6 +337,7 @@ dialog.scan-dialog{border:0;border-radius:16px;padding:0;width:min(560px,calc(10
       <div class="dash-card"><h3>Komposisi koleksi</h3><div class="insight-split"><div><h4>Format buku</h4><div id="formatBreakdown"></div></div><div><h4>Bahasa</h4><div id="languageBreakdown"></div></div></div></div>
       <div class="dash-card"><h3>Ringkasan pinjaman</h3><div id="loanBreakdown"></div></div>
     </div>
+    <div class="dash-card value-section report-card"><div><h3 style="margin:0 0 4px">Laporan tahunan</h3><p class="small" style="margin:0">Ringkasan pemerolehan, perbelanjaan, koleksi dan pinjaman bagi satu tahun — sedia dicetak (A4).</p></div><div class="report-actions"><select id="reportYear" aria-label="Tahun laporan"></select><button class="btn" type="button" id="reportBtn">Cetak laporan</button></div></div>
     <div class="dash-card value-section"><h3>Analisis nilai koleksi</h3><div id="valueAnalysis"><p class="small">Belum ada rekod harga.</p></div></div>
   </section>
 
@@ -344,6 +354,7 @@ dialog.scan-dialog{border:0;border-radius:16px;padding:0;width:min(560px,calc(10
       <label class="check" for="filterDupes"><input type="checkbox" id="filterDupes"> Berganda sahaja</label>
       <span class="spacer"></span>
       <button class="btn secondary" id="printBtn" type="button">Cetak Katalog (A4)</button>
+      <button class="btn secondary" id="labelBtn" type="button">Cetak Label</button>
       <div class="view-switch" role="group" aria-label="Paparan koleksi">
         <button type="button" class="btn secondary selected" id="tableViewBtn" aria-pressed="true">☷ <span class="lbl-desk">Jadual</span><span class="lbl-mob">Senarai</span></button>
         <button type="button" class="btn secondary" id="galleryViewBtn" aria-pressed="false">▦ Galeri</button>
@@ -355,16 +366,39 @@ dialog.scan-dialog{border:0;border-radius:16px;padding:0;width:min(560px,calc(10
     <div id="bookListView" class="list-view"></div>
     <div id="bookGalleryView" class="gallery-grid" style="display:none"></div>
     <div id="shelfView" class="shelf-view"></div>
+    <div id="loadMore" class="load-more no-print" hidden><button type="button" class="btn secondary">Papar lagi</button></div>
     <div class="actions no-print"><button class="btn secondary" id="exportBtn" type="button">Eksport Sandaran (.json)</button><label class="btn secondary" for="importFile" style="cursor:pointer">Import Sandaran (.json)</label><input id="importFile" type="file" accept=".json,application/json" hidden></div>
     <p class="small no-print">“Cetak Katalog (A4)” mencetak buku yang sedang dipaparkan (ikut carian, penapis dan isihan). Pilih “Save as PDF” dalam dialog cetak untuk menyimpan sebagai PDF.</p>
   </section>
 
   <section id="scanPanel" class="panel" role="tabpanel" aria-labelledby="tab-scanPanel" tabindex="-1">
-    <h2>Imbas &amp; Semak</h2><p class="sub">Halakan kamera pada barkod ISBN di belakang buku (atau barkod nombor katalog pada rekod cetakan) untuk menyemak sama ada buku itu sudah ada dalam koleksi.</p>
+    <h2>Imbas &amp; Semak</h2>
+    <div class="subtabs" role="tablist" aria-label="Mod imbasan"><button type="button" role="tab" data-scanmode="checkMode" aria-selected="true">Semak buku</button><button type="button" role="tab" data-scanmode="stockMode" aria-selected="false">Semakan stok</button></div>
+    <div id="checkMode"><p class="sub">Halakan kamera pada barkod ISBN di belakang buku (atau barkod nombor katalog pada rekod cetakan) untuk menyemak sama ada buku itu sudah ada dalam koleksi.</p>
     <div class="scan-box"><video id="scanVideo" playsinline muted hidden></video><div class="scan-frame" id="scanFrame" hidden></div><div class="scan-msg" id="scanMsg">Tekan “Mula imbas” untuk membuka kamera belakang.</div></div>
     <div class="actions" style="margin-top:12px"><button class="btn" type="button" id="scanStartBtn">📷 Mula imbas</button><button class="btn secondary" type="button" id="scanStopBtn" disabled>Hentikan</button></div>
     <form id="scanManualForm" class="scan-manual"><input id="scanCode" inputmode="numeric" autocomplete="off" placeholder="atau taip ISBN / no. katalog" aria-label="ISBN atau nombor katalog"><button class="btn secondary" type="submit">Semak</button></form>
     <div id="scanResult" aria-live="polite"></div>
+    </div>
+    <div id="stockMode" hidden>
+      <div id="stockStart">
+        <p class="sub">Semakan stok memastikan semua buku masih ada di rak. Imbas setiap buku satu demi satu — kamera kekal aktif — dan sistem akan menyenaraikan buku yang <strong>belum ditemui</strong>. Semakan boleh disambung kemudian; kemajuan disimpan pada peranti ini.</p>
+        <div class="grid" style="max-width:640px"><div class="field"><label for="stockScope">Skop semakan</label><select id="stockScope"><option value="">Semua buku</option></select></div></div>
+        <label class="check" style="margin-top:10px"><input type="checkbox" id="stockSkipLent" checked> Kecualikan buku yang sedang dipinjamkan</label>
+        <div class="actions"><button class="btn" type="button" id="stockBeginBtn">Mula semakan stok</button></div>
+      </div>
+      <div id="stockSession" hidden>
+        <div class="stock-head"><div><strong id="stockTitle">Semakan stok</strong><div class="small" id="stockMeta"></div></div><div class="stock-count"><strong id="stockFound">0</strong> / <span id="stockTotal">0</span><div class="small">ditemui</div></div></div>
+        <div class="progress-track" style="margin:8px 0 14px"><div id="stockBar" class="progress-fill"></div></div>
+        <div class="scan-box"><video id="stockVideo" playsinline muted hidden></video><div class="scan-frame" id="stockFrame" hidden></div><div class="scan-msg" id="stockMsg">Tekan “Mula kamera” dan imbas buku satu demi satu.</div></div>
+        <div id="stockLast" class="stock-last" aria-live="polite" hidden></div>
+        <div class="actions" style="margin-top:12px"><button class="btn" type="button" id="stockCamBtn">📷 Mula kamera</button><button class="btn secondary" type="button" id="stockCamStopBtn" disabled>Hentikan kamera</button></div>
+        <form id="stockManualForm" class="scan-manual"><input id="stockCode" inputmode="numeric" autocomplete="off" placeholder="atau taip ISBN / no. katalog" aria-label="ISBN atau nombor katalog untuk semakan stok"><button class="btn secondary" type="submit">Tanda</button></form>
+        <div class="subtabs" role="tablist" aria-label="Senarai semakan stok" style="margin-top:16px"><button type="button" role="tab" data-stocklist="missing" aria-selected="true">Belum ditemui</button><button type="button" role="tab" data-stocklist="found" aria-selected="false">Ditemui</button><button type="button" role="tab" data-stocklist="unknown" aria-selected="false">Tidak dikenali</button></div>
+        <div id="stockList" class="stock-list"></div>
+        <div class="actions"><button class="btn secondary" type="button" id="stockPrintBtn">Cetak laporan semakan (A4)</button><button class="btn danger" type="button" id="stockEndBtn">Tamatkan semakan</button></div>
+      </div>
+    </div>
   </section>
 
   <section id="formPanel" class="panel" role="tabpanel" aria-labelledby="tab-formPanel" tabindex="-1">
@@ -521,7 +555,7 @@ dialog.scan-dialog{border:0;border-radius:16px;padding:0;width:min(560px,calc(10
       <div class="connect-box">
         <strong>Sambung peranti lain tanpa menaip kunci</strong>
         <p class="small">Pada peranti yang sudah berjaya disambungkan, salin <em>pautan</em> atau <em>kod sambungan</em> dan hantar kepada diri sendiri (contohnya melalui WhatsApp/e-mel). Buka pautan itu di telefon, atau tampal kod di bawah. Kata laluan akaun tetap diperlukan untuk log masuk.</p>
-        <div class="actions" style="margin-top:8px"><button class="btn secondary" id="copyConnectLinkBtn" type="button">Salin pautan sambungan</button><button class="btn secondary" id="copyConnectCodeBtn" type="button">Salin kod sambungan</button></div>
+        <div class="actions" style="margin-top:8px"><button class="btn" id="showQrBtn" type="button">Papar kod QR</button><button class="btn secondary" id="scanQrBtn" type="button">📷 Imbas kod QR sambungan</button><button class="btn secondary" id="copyConnectLinkBtn" type="button">Salin pautan sambungan</button><button class="btn secondary" id="copyConnectCodeBtn" type="button">Salin kod sambungan</button></div>
         <div class="input-row" style="margin-top:10px"><input id="connectCodeInput" placeholder="Tampal kod sambungan (PMSB1.…)" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Kod sambungan"><button class="btn" id="useConnectCodeBtn" type="button">Guna kod</button></div>
       </div>
       <details style="margin-top:14px"><summary>Persediaan Supabase Storage untuk gambar kulit buku (sekali sahaja)</summary>
@@ -567,7 +601,15 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   </section>
   <div id="toast" class="toast no-print" role="status" aria-live="polite" hidden><span id="toastText"></span><button type="button" id="toastAction" hidden>Buat asal</button></div>
   <dialog id="choiceDialog" class="choice"><p id="choiceText"></p><div class="actions" id="choiceActions"></div></dialog>
-  <dialog id="scanDialog" class="scan-dialog" aria-label="Imbas barkod"><div class="sd-head"><strong style="font-size:14px">Halakan kamera pada barkod ISBN</strong><button type="button" class="btn secondary small-btn" id="scanDialogClose">Tutup ✕</button></div><video id="scanDialogVideo" playsinline muted hidden></video><p id="scanDialogMsg">Membuka kamera…</p></dialog>
+  <dialog id="scanDialog" class="scan-dialog" aria-label="Imbas barkod"><div class="sd-head"><strong style="font-size:14px" id="scanDialogTitle">Halakan kamera pada barkod ISBN</strong><button type="button" class="btn secondary small-btn" id="scanDialogClose">Tutup ✕</button></div><video id="scanDialogVideo" playsinline muted hidden></video><p id="scanDialogMsg">Membuka kamera…</p></dialog>
+  <dialog id="labelDialog" class="choice label-dialog" aria-labelledby="labelDialogTitle"><h3 id="labelDialogTitle" style="margin:0 0 4px">Cetak label barkod</h3><p class="small" id="labelInfo" style="margin:0 0 12px"></p>
+    <div class="field"><label for="labelPreset">Jenis kertas pelekat A4</label><select id="labelPreset"></select></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:10px"><div class="field"><label for="labelStart">Mula pada label ke-</label><input id="labelStart" type="number" min="1" value="1"></div><div class="field"><label for="labelCopies">Salinan setiap buku</label><input id="labelCopies" type="number" min="1" max="10" value="1"></div>
+    <div class="field"><label for="labelOffTop">Laras atas (mm)</label><input id="labelOffTop" type="number" step="0.5" value="0"></div><div class="field"><label for="labelOffLeft">Laras kiri (mm)</label><input id="labelOffLeft" type="number" step="0.5" value="0"></div></div>
+    <label class="check" style="margin-top:10px"><input type="checkbox" id="labelGuides"> Tunjuk garis sempadan label (untuk cetakan cubaan pada kertas biasa)</label>
+    <p class="small" style="margin:10px 0 0">Tip: cetak sekali pada kertas biasa dahulu, letakkan di atas kertas pelekat dan semak padanannya. Gunakan "Laras" jika perlu. Pilih skala <strong>100% / Actual size</strong> dalam dialog cetak.</p>
+    <div class="actions"><button class="btn" type="button" id="labelPrintBtn">Cetak label</button><button class="btn secondary" type="button" id="labelCancelBtn">Batal</button></div></dialog>
+  <dialog id="qrDialog" class="choice" aria-labelledby="qrTitle" style="max-width:420px;text-align:center"><h3 id="qrTitle" style="margin:0 0 6px">Imbas untuk menyambung</h3><p class="small" style="margin:0 0 10px">Buka <strong>kamera telefon</strong> dan halakan pada kod ini — pautan akan dibuka dan sambungan disimpan. Dalam PWA: <em>Sambungan katalog → Imbas kod QR sambungan</em>.</p><div id="qrBox" class="qr-box">Menjana kod QR…</div><p class="small" style="margin:10px 0 0">Kod ini mengandungi URL dan kunci publishable (bukan kata laluan). Kata laluan akaun tetap diperlukan untuk log masuk.</p><div class="actions" style="justify-content:center"><button class="btn secondary" type="button" id="qrCloseBtn">Tutup</button></div></dialog>
   <dialog id="bookDialog" class="book-dialog" aria-labelledby="bdTitle"><div class="bd-head"><strong class="small">Butiran buku</strong><button type="button" class="btn secondary small-btn" id="bdCloseBtn">Tutup ✕</button></div><div class="bd-body" id="bdBody"></div><div class="bd-actions" id="bdActions"></div></dialog>
 </main>
 <nav class="bottom-nav no-print" aria-label="Navigasi utama">
@@ -873,7 +915,8 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     tabs.forEach(b => { const on = b.dataset.tab === id; b.classList.toggle('active', on); b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
     document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
     const inMore = ['loanPanel', 'wishlistPanel', 'categoryPanel', 'syncPanel'].includes(id);
-    if (id !== 'scanPanel' && scan.on && !$('scanDialog').open) { stopScanner(); setScanUi('idle', 'Tekan “Mula imbas” untuk membuka kamera belakang.'); }
+    if (id !== 'scanPanel' && scan.on && !$('scanDialog').open) { stopScanner(); setScanUi('idle', 'Tekan “Mula imbas” untuk membuka kamera belakang.'); setStockCam(false); }
+    if (id === 'scanPanel' && !$('stockMode').hidden) renderStock();
     bottomBtns.forEach(b => b.classList.toggle('active', b.dataset.go === id || (inMore && b.dataset.go === 'more')));
     closeSheet();
     saveUi({ tab: id });
@@ -915,7 +958,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     document.body.classList.remove('view-table', 'view-gallery', 'view-shelf'); document.body.classList.add('view-' + view);
     Object.entries(VIEWS).forEach(([v, id]) => { $(id).classList.toggle('selected', v === view); $(id).setAttribute('aria-pressed', String(v === view)); });
     saveUi({ view });
-    if (view === 'shelf') renderShelf();
+    resetPaging(); if (typeof renderBooks === 'function' && books) renderBooks();
   }
   Object.entries(VIEWS).forEach(([v, id]) => $(id).addEventListener('click', () => setCollectionView(v)));
 
@@ -1257,7 +1300,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   };
   $('sortBooks').innerHTML = Object.entries(SORTS).map(([k, [label]]) => `<option value="${k}">Isih: ${esc(label)}</option>`).join('');
   $('sortBooks').value = SORTS[ui.sort] ? ui.sort : 'newest';
-  $('sortBooks').addEventListener('change', () => { saveUi({ sort: $('sortBooks').value }); renderBooks(); });
+  $('sortBooks').addEventListener('change', () => { saveUi({ sort: $('sortBooks').value }); resetPaging(); renderBooks(); });
   function sortedBooks() {
     const primary = (SORTS[$('sortBooks').value] || SORTS.newest)[1];
     return [...books].sort((a, b) => primary(a, b) || collator.compare(str(a.title), str(b.title)) || byNewest(a, b));
@@ -1288,18 +1331,50 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     const shown = sortedBooks().filter(b => (!dupOnly || dupIds.has(b.id)) && (!q || [b.bookCode, b.title, b.author, b.isbn, b.publisher, b.purchase, b.publishPlace, b.series, b.tags, b.edition, b.language].some(v => (v || '').toLowerCase().includes(q))) && (!g || b.categoryId === g) && (!r || b.reading === r) && (!tg || parseTags(b.tags).some(t => lc(t) === tg)));
     return { shown, dupIds, dupOnly };
   }
+  // Paparan berperingkat: hanya paparan aktif dilukis, {PAGE} buku pada satu masa (koleksi besar kekal pantas)
+  const PAGE = 60, mobileMq = window.matchMedia('(max-width:760px)');
+  let rendered = 0, renderTarget = null, renderRow = null, lastDupIds = new Set();
+  const dupBadge = b => (lastDupIds.has(b.id) ? ' <span class="pill st-amber">Berganda?</span>' : '');
+  const rowTable = b => `<tr><td>${coverImg(b, 'book-cover', 'Kulit buku') || '—'}</td><td><strong>${esc(b.bookCode || '—')}</strong></td><td><button type="button" class="linklike" data-open-book="${esc(b.id)}">${esc(b.title || 'Nama buku tidak diisi')}</button>${dupBadge(b)}<br><span class="small">Penulis: ${esc(b.author || '—')}</span><br><span class="small">${b.isbn ? 'ISBN: ' + esc(b.isbn) : 'ISBN tidak diisi'}</span>${b.series ? `<br><span class="small">Siri: ${seriesLine(b)}</span>` : ''}${tagChips(b)}</td><td>${esc(b.format)}<br><span class="small">${esc(bookCategoryLabel(b))}</span>${b.language ? `<br><span class="small">${esc(b.language)}</span>` : ''}</td><td class="col-st">${readingPill(b.reading)}</td><td>${money(b.price)}</td><td>${esc(b.publishPlace || '—')}<br><span class="small">${esc(b.year || 'Tahun tidak diisi')}</span></td><td class="col-st">${loanPill(b)}</td><td class="no-print"><button class="btn secondary small-btn" type="button" data-edit-book="${esc(b.id)}">Edit</button> <button class="btn secondary small-btn" type="button" data-print-book="${esc(b.id)}">Cetak</button> <button class="btn danger small-btn" type="button" data-delete-book="${esc(b.id)}">Padam</button></td></tr>`;
+  const rowList = b => `<button type="button" class="list-card" data-open-book="${esc(b.id)}">${coverImg(b, '', '') || `<span class="ph">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</span>`}<span><strong>${esc(b.title || 'Nama buku tidak diisi')}</strong><span class="small">${esc(b.author || '—')} · ${esc(b.bookCode || '')}</span><span class="meta">${readingPill(b.reading)}${activeLoan(b.id) ? loanPill(b) : ''}${dupBadge(b)}</span></span></button>`;
+  const rowGallery = b => `<button type="button" class="gallery-card" data-open-book="${esc(b.id)}"><div class="gallery-cover">${coverImg(b, '', 'Kulit buku ' + (b.title || '')) || `<span class="cover-letter">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</span>`}</div><div class="gallery-info"><div class="small">${esc(b.bookCode || '—')}${b.series ? ' · ' + seriesLine(b) : ''}</div><h3>${esc(b.title || 'Nama buku tidak diisi')}</h3><div class="author">${esc(b.author || 'Penulis tidak dinyatakan')}</div><div class="gallery-meta">${readingPill(b.reading)}${activeLoan(b.id) ? loanPill(b) : ''}${dupBadge(b)}</div><div class="small">${esc(bookCategoryLabel(b) || 'Tanpa kategori')} · ${money(b.price)}</div></div></button>`;
+  function activeView() { const v = ui.view || 'table'; return v === 'table' ? (mobileMq.matches ? 'list' : 'table') : v; }
+  function resetPaging() { rendered = 0; }
   function renderBooks() {
     const { shown, dupIds, dupOnly } = filteredBooks();
-    lastShown = shown;
+    lastShown = shown; lastDupIds = dupIds;
     $('totalDupes').textContent = dupIds.size; $('dupStatBtn').classList.toggle('has', dupIds.size > 0); $('dupStatBtn').setAttribute('aria-pressed', String(dupOnly));
     $('totalBooks').textContent = books.length; $('totalLoans').textContent = loans.filter(l => l.status === 'Dipinjam').length; $('totalValue').textContent = 'RM ' + books.reduce((s, b) => s + (Number(b.price) || 0), 0).toFixed(2);
-    const dupBadge = b => (dupIds.has(b.id) ? ' <span class="pill st-amber">Berganda?</span>' : '');
     const emptyMsg = books.length ? 'Tiada buku yang sepadan dengan carian atau penapis ini.' : 'Belum ada buku. Tekan "Tambah Buku" untuk mendaftar buku pertama.';
-    $('bookRows').innerHTML = shown.length ? shown.map(b => `<tr><td>${coverImg(b, 'book-cover', 'Kulit buku') || '—'}</td><td><strong>${esc(b.bookCode || '—')}</strong></td><td><button type="button" class="linklike" data-open-book="${esc(b.id)}">${esc(b.title || 'Nama buku tidak diisi')}</button>${dupBadge(b)}<br><span class="small">Penulis: ${esc(b.author || '—')}</span><br><span class="small">${b.isbn ? 'ISBN: ' + esc(b.isbn) : 'ISBN tidak diisi'}</span>${b.series ? `<br><span class="small">Siri: ${seriesLine(b)}</span>` : ''}${tagChips(b)}</td><td>${esc(b.format)}<br><span class="small">${esc(bookCategoryLabel(b))}</span>${b.language ? `<br><span class="small">${esc(b.language)}</span>` : ''}</td><td class="col-st">${readingPill(b.reading)}</td><td>${money(b.price)}</td><td>${esc(b.publishPlace || '—')}<br><span class="small">${esc(b.year || 'Tahun tidak diisi')}</span></td><td class="col-st">${loanPill(b)}</td><td class="no-print"><button class="btn secondary small-btn" type="button" data-edit-book="${esc(b.id)}">Edit</button> <button class="btn secondary small-btn" type="button" data-print-book="${esc(b.id)}">Cetak</button> <button class="btn danger small-btn" type="button" data-delete-book="${esc(b.id)}">Padam</button></td></tr>`).join('') : `<tr><td colspan="9" class="empty">${emptyMsg}</td></tr>`;
-    $('bookListView').innerHTML = shown.length ? shown.map(b => `<button type="button" class="list-card" data-open-book="${esc(b.id)}">${coverImg(b, '', '') || `<span class="ph">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</span>`}<span><strong>${esc(b.title || 'Nama buku tidak diisi')}</strong><span class="small">${esc(b.author || '—')} · ${esc(b.bookCode || '')}</span><span class="meta">${readingPill(b.reading)}${activeLoan(b.id) ? loanPill(b) : ''}${dupBadge(b)}</span></span></button>`).join('') : `<div class="empty">${emptyMsg}</div>`;
-    $('bookGalleryView').innerHTML = shown.length ? shown.map(b => `<button type="button" class="gallery-card" data-open-book="${esc(b.id)}"><div class="gallery-cover">${coverImg(b, '', 'Kulit buku ' + (b.title || '')) || `<span class="cover-letter">${esc((b.title || 'B').trim().charAt(0).toUpperCase())}</span>`}</div><div class="gallery-info"><div class="small">${esc(b.bookCode || '—')}${b.series ? ' · ' + seriesLine(b) : ''}</div><h3>${esc(b.title || 'Nama buku tidak diisi')}</h3><div class="author">${esc(b.author || 'Penulis tidak dinyatakan')}</div><div class="gallery-meta">${readingPill(b.reading)}${activeLoan(b.id) ? loanPill(b) : ''}${dupBadge(b)}</div><div class="small">${esc(bookCategoryLabel(b) || 'Tanpa kategori')} · ${money(b.price)}</div></div></button>`).join('') : `<div class="empty collection-empty">${emptyMsg}</div>`;
-    if (document.body.classList.contains('view-shelf')) renderShelf();
+    const view = activeView();
+    const targets = { table: 'bookRows', list: 'bookListView', gallery: 'bookGalleryView' };
+    Object.values(targets).forEach(id => { if (id !== targets[view]) $(id).innerHTML = ''; });
+    if (view !== 'shelf') $('shelfView').innerHTML = '';
+    const count = Math.min(shown.length, Math.max(PAGE, rendered));
+    if (view === 'shelf') { rendered = count; renderShelf(); }
+    else {
+      renderTarget = $(targets[view]); renderRow = { table: rowTable, list: rowList, gallery: rowGallery }[view];
+      renderTarget.innerHTML = shown.length ? shown.slice(0, count).map(renderRow).join('') : (view === 'table' ? `<tr><td colspan="9" class="empty">${emptyMsg}</td></tr>` : `<div class="empty${view === 'gallery' ? ' collection-empty' : ''}">${emptyMsg}</div>`);
+      rendered = count;
+    }
+    updateLoadMore();
   }
+  function updateLoadMore() {
+    const left = lastShown.length - rendered, el = $('loadMore');
+    el.hidden = left <= 0;
+    if (left > 0) el.querySelector('button').textContent = `Papar ${Math.min(left, PAGE)} lagi · ${rendered} daripada ${lastShown.length} dipaparkan`;
+  }
+  function loadMoreBooks() {
+    if (rendered >= lastShown.length) return;
+    const next = lastShown.slice(rendered, rendered + PAGE);
+    if (activeView() === 'shelf') { rendered += next.length; renderShelf(); }
+    else if (renderTarget) { renderTarget.insertAdjacentHTML('beforeend', next.map(renderRow).join('')); rendered += next.length; }
+    updateLoadMore();
+  }
+  $('loadMore').querySelector('button').addEventListener('click', loadMoreBooks);
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => { if (es.some(e => e.isIntersecting) && $('collectionPanel').classList.contains('active')) loadMoreBooks(); }, { rootMargin: '600px' }).observe($('loadMore'));
+  mobileMq.addEventListener?.('change', () => renderBooks());
+
   ['bookRows', 'bookListView', 'bookGalleryView', 'shelfView', 'recentBooks'].forEach(id => $(id).addEventListener('click', e => {
     const t = e.target.closest('[data-open-book],[data-edit-book],[data-print-book],[data-delete-book]'); if (!t) return;
     if (t.dataset.openBook) openBookDetail(t.dataset.openBook);
@@ -1337,7 +1412,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   function renderShelf() {
     const sortKey = $('sortBooks').value, groups = new Map();
     const groupOf = b => (sortKey === 'categoryAsc' ? (bookCategoryLabel(b) || 'Tanpa kategori') : sortKey === 'seriesAsc' ? (b.series || 'Bukan siri') : sortKey === 'readingAsc' ? (b.reading || 'Belum dibaca') : '');
-    lastShown.forEach(b => { const g = groupOf(b); if (!groups.has(g)) groups.set(g, []); groups.get(g).push(b); });
+    lastShown.slice(0, Math.max(rendered, PAGE)).forEach(b => { const g = groupOf(b); if (!groups.has(g)) groups.set(g, []); groups.get(g).push(b); });
     const legend = `<div class="shelf-legend"><span><i style="background:var(--st-grey)"></i>Belum dibaca</span><span><i style="background:var(--st-blue)"></i>Sedang dibaca</span><span><i style="background:var(--st-green)"></i>Selesai</span><span><i style="background:#f0c46b;border-radius:2px"></i>Dipinjamkan</span><span>· Isih "Kategori", "Siri" atau "Status bacaan" untuk rak berkumpulan</span></div>`;
     if (!lastShown.length) { $('shelfView').innerHTML = legend + `<div class="empty">${books.length ? 'Tiada buku yang sepadan dengan carian atau penapis ini.' : 'Rak masih kosong.'}</div>`; return; }
     const dotColor = { 'Sedang dibaca': 'var(--st-blue)', 'Selesai': 'var(--st-green)' };
@@ -1370,7 +1445,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       <dl class="bd-dl">${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
       ${si ? `<div class="bd-section"><h3>Siri: ${esc(b.series)}</h3><p class="small" style="margin:0 0 6px">Anda ada ${si.same.length} buku dalam siri ini${si.total ? ' (daripada ' + si.total + ' jilid)' : ''}.${si.missing.length ? ' <strong>Belum ada jilid: ' + si.missing.join(', ') + '</strong>' : ''}</p>${si.same.map(x => `<div class="loan-item">${x.id === id ? '<strong>' : '<button type="button" class="linklike" data-open-book="' + esc(x.id) + '">'}${x.volume ? 'Jilid ' + esc(x.volume) + ' · ' : ''}${esc(x.title)}${x.id === id ? ' (buku ini)</strong>' : '</button>'}</div>`).join('')}</div>` : ''}
       <div class="bd-section"><h3>Rekod pinjaman</h3>${history.length ? history.map(l => `<div class="loan-item"><strong>${esc(l.borrower || '—')}</strong> <span class="pill ${l.status === 'Dipinjam' ? 'st-amber' : 'st-teal'}">${esc(l.status)}</span><div class="small">${l.borrowDate ? 'Dipinjam ' + esc(l.borrowDate) : ''}${l.returnDate ? ' · dipulangkan ' + esc(l.returnDate) : ''}</div></div>`).join('') : '<p class="small">Buku ini belum pernah dipinjamkan.</p>'}</div>`;
-    $('bdActions').innerHTML = `<button class="btn" type="button" data-bd="edit">Edit</button>${loan ? `<button class="btn secondary" type="button" data-bd="loan">Lihat pinjaman</button>` : `<button class="btn secondary" type="button" data-bd="lend">Pinjamkan</button>`}<button class="btn secondary" type="button" data-bd="print">Cetak</button><button class="btn danger" type="button" data-bd="delete">Padam</button>`;
+    $('bdActions').innerHTML = `<button class="btn" type="button" data-bd="edit">Edit</button>${loan ? `<button class="btn secondary" type="button" data-bd="loan">Lihat pinjaman</button>` : `<button class="btn secondary" type="button" data-bd="lend">Pinjamkan</button>`}<button class="btn secondary" type="button" data-bd="print">Cetak</button><button class="btn secondary" type="button" data-bd="label">Label</button><button class="btn danger" type="button" data-bd="delete">Padam</button>`;
     const dlg = $('bookDialog');
     if (!dlg.open) { if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', ''); }
     $('bdBody').scrollTop = 0; dlg.scrollTop = 0;
@@ -1382,6 +1457,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   $('bdActions').addEventListener('click', e => {
     const a = e.target.closest('[data-bd]')?.dataset.bd, id = detailId; if (!a) return;
     if (a === 'print') { printBookRecord(id); return; }
+    if (a === 'label') { closeBookDetail(); openLabelDialog([books.find(b => b.id === id)]); return; }
     closeBookDetail();
     if (a === 'edit') editBook(id);
     else if (a === 'delete') deleteBook(id);
@@ -1439,7 +1515,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
       (activeLoans.length ? '<div class="small" style="font-weight:700;margin-top:12px">Buku anda di tangan orang lain</div>' + activeLoans.slice(0, 3).map(l => `<div class="loan-item"><strong>${esc(l.borrower || 'Peminjam tidak dinyatakan')}</strong><span>${esc(bookName(l.bookId))}</span>${l.borrowDate ? `<div class="small">Sejak ${esc(l.borrowDate)}</div>` : ''}</div>`).join('') : '') +
       (activeBorrows.length ? '<div class="small" style="font-weight:700;margin-top:12px">Perlu dipulangkan</div>' + [...activeBorrows].sort(cmpBy(x => x.dueDate)).slice(0, 3).map(x => { const st = borrowStatus(x); return `<div class="loan-item"><strong>${esc(x.title)}</strong><span>daripada ${esc(x.lender || '—')}</span><div class="small">${x.dueDate ? 'Sebelum ' + esc(x.dueDate) : 'Tiada tarikh akhir'} ${st.late ? '<span class="pill st-red">Lewat</span>' : ''}</div></div>`; }).join('') : '') +
       (!activeLoans.length && !activeBorrows.length ? '<p class="insight-empty">Tiada pinjaman aktif.</p>' : '');
-    renderValueAnalysis();
+    renderValueAnalysis(); renderReportYears();
   }
   function renderLoans() {
     const q = $('loanSearch').value.toLowerCase();
@@ -1880,7 +1956,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   }
   async function nativeDetector() {
     if (!('BarcodeDetector' in window)) return null;
-    try { const f = await BarcodeDetector.getSupportedFormats(); const want = ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128'].filter(x => f.includes(x)); return want.includes('ean_13') ? new BarcodeDetector({ formats: want }) : null; } catch (e) { return null; }
+    try { const f = await BarcodeDetector.getSupportedFormats(); const want = ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'qr_code'].filter(x => f.includes(x)); return want.includes('ean_13') ? new BarcodeDetector({ formats: want }) : null; } catch (e) { return null; }
   }
   const scan = { on: false, controls: null, stream: null, raf: 0, video: null, session: 0 };
   function cameraError(e) {
@@ -1892,14 +1968,21 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     return (e && e.message) || String(e);
   }
   // Mula mengimbas ke dalam elemen <video>; onCode dipanggil sekali sahaja, kemudian kamera dihentikan.
-  async function startScanner(video, onCode) {
+  // continuous: kamera kekal aktif (semakan stok); kod yang sama diabaikan selama 2.5 saat
+  async function startScanner(video, onCode, { continuous = false } = {}) {
     stopScanner();
     if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) throw new Error(cameraError());
     const session = ++scan.session; scan.on = true; scan.video = video;
     video.setAttribute('playsinline', ''); video.muted = true;
     const constraints = { video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false };
     let fired = false;
-    const hit = code => { if (fired || !scan.on || session !== scan.session) return; fired = true; try { navigator.vibrate?.(60); } catch (e) {} stopScanner(); onCode(String(code).trim()); };
+    const recent = new Map();
+    const hit = code => {
+      if (fired || !scan.on || session !== scan.session) return;
+      code = String(code).trim();
+      if (continuous) { const t = recent.get(code); if (t && Date.now() - t < 2500) return; recent.set(code, Date.now()); onCode(code); return; }
+      fired = true; try { navigator.vibrate?.(60); } catch (e) {} stopScanner(); onCode(code);
+    };
     const detector = await nativeDetector();
     if (detector) {
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -1924,7 +2007,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     if (scan.stream) { scan.stream.getTracks().forEach(t => t.stop()); scan.stream = null; }
     if (scan.video) { try { scan.video.srcObject?.getTracks?.().forEach(t => t.stop()); } catch (e) {} scan.video.srcObject = null; }
   }
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && scan.on) { stopScanner(); setScanUi('idle', 'Kamera dihentikan. Tekan “Mula imbas” untuk meneruskan.'); closeScanDialog(); } });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && scan.on) { stopScanner(); setScanUi('idle', 'Kamera dihentikan. Tekan “Mula imbas” untuk meneruskan.'); setStockCam(false); closeScanDialog(); } });
 
   // Tab "Imbas & Semak"
   function setScanUi(state, msg) {
@@ -1947,6 +2030,7 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   $('scanManualForm').addEventListener('submit', e => { e.preventDefault(); scanLookup($('scanCode').value); });
 
   function scanLookup(raw) {
+    if (String(raw).includes('PMSB1.')) { applyConnect(raw); return; }
     const q = normCode(raw), qi = isbnKey(raw), out = $('scanResult');
     if (!q) { out.innerHTML = '<p class="small">Imbas atau taip ISBN / nombor katalog.</p>'; return; }
     const matches = books.filter(b => (qi.length >= 10 && isbnKey(b.isbn) === qi) || (b.bookCode && normCode(b.bookCode) === q));
@@ -1980,21 +2064,299 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   // Butang 📷 pada medan ISBN (borang buku, senarai hajat, pinjaman)
   let scanTarget = '';
   function closeScanDialog() { const d = $('scanDialog'); stopScanner(); if (d.open) { if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); } }
-  document.querySelectorAll('[data-scan-into]').forEach(btn => btn.addEventListener('click', async () => {
-    scanTarget = btn.dataset.scanInto;
-    const d = $('scanDialog'); $('scanDialogMsg').textContent = 'Membuka kamera…'; $('scanDialogMsg').hidden = false; $('scanDialogVideo').hidden = true;
-    if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
+  async function openScanDialog(title, onCode) {
+    const d = $('scanDialog'); $('scanDialogTitle').textContent = title; $('scanDialogMsg').textContent = 'Membuka kamera…'; $('scanDialogMsg').hidden = false; $('scanDialogVideo').hidden = true;
+    if (typeof d.showModal === 'function') { if (!d.open) d.showModal(); } else d.setAttribute('open', '');
     try {
-      const ok = await startScanner($('scanDialogVideo'), code => {
-        closeScanDialog();
-        const f = $(scanTarget); f.value = code; f.dispatchEvent(new Event('input', { bubbles: true })); f.focus();
-        toast('ISBN dibaca: ' + code);
-      });
+      const ok = await startScanner($('scanDialogVideo'), code => { closeScanDialog(); onCode(code); });
       if (ok !== false && scan.on) { $('scanDialogVideo').hidden = false; $('scanDialogMsg').hidden = true; }
     } catch (e) { stopScanner(); $('scanDialogMsg').textContent = 'Kamera tidak dapat diaktifkan: ' + cameraError(e); }
+  }
+  document.querySelectorAll('[data-scan-into]').forEach(btn => btn.addEventListener('click', () => {
+    scanTarget = btn.dataset.scanInto;
+    openScanDialog('Halakan kamera pada barkod ISBN', code => { const f = $(scanTarget); f.value = code; f.dispatchEvent(new Event('input', { bubbles: true })); f.focus(); toast('ISBN dibaca: ' + code); });
   }));
   $('scanDialogClose').addEventListener('click', closeScanDialog);
   $('scanDialog').addEventListener('cancel', () => stopScanner());
+
+  // ---------- Mod imbasan: Semak buku / Semakan stok ----------
+  function showScanMode(id) {
+    ['checkMode', 'stockMode'].forEach(m => { $(m).hidden = m !== id; });
+    document.querySelectorAll('[data-scanmode]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.scanmode === id)));
+    stopAllCams(); saveUi({ scanMode: id });
+    if (id === 'stockMode') renderStock();
+  }
+  document.querySelectorAll('[data-scanmode]').forEach(b => b.addEventListener('click', () => showScanMode(b.dataset.scanmode)));
+  function stopAllCams() {
+    if (scan.on && !$('scanDialog').open) stopScanner();
+    setScanUi($('scanResult').innerHTML ? 'done' : 'idle', $('scanResult').innerHTML ? null : 'Tekan “Mula imbas” untuk membuka kamera belakang.');
+    setStockCam(false);
+  }
+
+  // ---------- Semakan stok ----------
+  const STOCK_KEY = 'perpustakaanMini_stocktake_v1';
+  let stock = lsGet(STOCK_KEY, null), stockListTab = 'missing', audioCtx = null;
+  const saveStock = () => lsSet(STOCK_KEY, stock);
+  function beep(ok) {
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.frequency.value = ok ? 1046 : 330; o.type = ok ? 'sine' : 'square'; g.gain.value = 0.08;
+      o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + (ok ? 0.09 : 0.22));
+    } catch (e) {}
+    try { navigator.vibrate?.(ok ? 50 : [80, 60, 80]); } catch (e) {}
+  }
+  function stockScopeBooks() {
+    if (!stock) return { expected: [], lent: [] };
+    const inScope = books.filter(b => !stock.scope || b.categoryId === stock.scope || categories.find(c => c.id === b.categoryId)?.parent === stock.scope);
+    const lent = stock.skipLent ? inScope.filter(b => activeLoan(b.id)) : [];
+    return { expected: inScope.filter(b => !lent.includes(b)), lent };
+  }
+  function renderStockScopeOptions() {
+    const sel = $('stockScope'), old = sel.value;
+    sel.innerHTML = '<option value="">Semua buku</option>' + [...categories].sort((a, b) => categoryLabel(a).localeCompare(categoryLabel(b), 'ms')).map(c => `<option value="${esc(c.id)}">${esc(categoryLabel(c))}${c.parent ? '' : ' (termasuk subkategori)'}</option>`).join('');
+    sel.value = old;
+  }
+  function renderStock() {
+    renderStockScopeOptions();
+    $('stockStart').hidden = !!stock; $('stockSession').hidden = !stock;
+    if (!stock) return;
+    const { expected, lent } = stockScopeBooks();
+    const found = expected.filter(b => stock.found[b.id]), missing = expected.filter(b => !stock.found[b.id]);
+    const unknown = Object.entries(stock.unknown || {});
+    $('stockTitle').textContent = 'Semakan stok · ' + (stock.scope ? categoryLabel(categories.find(c => c.id === stock.scope)) || 'Kategori' : 'Semua buku');
+    $('stockMeta').textContent = 'Dimulakan ' + new Date(stock.startedAt).toLocaleString('ms-MY') + (lent.length ? ` · ${lent.length} buku sedang dipinjamkan dikecualikan` : '');
+    $('stockFound').textContent = found.length; $('stockTotal').textContent = expected.length;
+    $('stockBar').style.width = (expected.length ? found.length / expected.length * 100 : 0) + '%';
+    const tabs = { missing: `Belum ditemui (${missing.length})`, found: `Ditemui (${found.length})`, unknown: `Tidak dikenali (${unknown.length})` };
+    document.querySelectorAll('[data-stocklist]').forEach(b => { b.textContent = tabs[b.dataset.stocklist]; b.setAttribute('aria-selected', String(b.dataset.stocklist === stockListTab)); });
+    const item = (b, action) => `<div class="stock-item"><span><strong>${esc(b.title || 'Tanpa tajuk')}</strong><span class="small"><span class="code-txt">${esc(b.bookCode || '')}</span> · ${esc(b.author || '—')} · ${esc(bookCategoryLabel(b) || '—')}</span></span>${action}</div>`;
+    let html = '';
+    if (stockListTab === 'missing') html = missing.length ? missing.sort(cmpBy(b => b.bookCode)).map(b => item(b, `<button class="btn secondary small-btn" type="button" data-stock-mark="${esc(b.id)}">Tanda ditemui</button>`)).join('') : '<p class="empty">🎉 Semua buku dalam skop telah ditemui.</p>';
+    else if (stockListTab === 'found') html = found.length ? found.sort((a, b) => str(stock.found[b.id]).localeCompare(str(stock.found[a.id]))).map(b => item(b, `<button class="btn secondary small-btn" type="button" data-stock-unmark="${esc(b.id)}">Batal</button>`)).join('') : '<p class="empty">Belum ada buku diimbas.</p>';
+    else html = unknown.length ? unknown.map(([code]) => `<div class="stock-item"><span><strong class="code-txt">${esc(code)}</strong><span class="small">Tidak sepadan dengan mana-mana buku dalam koleksi</span></span><span><button class="btn secondary small-btn" type="button" data-stock-add="${esc(code)}">Daftar</button> <button class="btn secondary small-btn" type="button" data-stock-drop="${esc(code)}">Buang</button></span></div>`).join('') : '<p class="empty">Tiada kod yang tidak dikenali.</p>';
+    if (lent.length && stockListTab === 'missing') html += `<div class="stock-item" style="background:var(--soft)"><span class="small"><strong>Dikecualikan (sedang dipinjamkan):</strong> ${lent.map(b => esc(b.title) + ' → ' + esc(activeLoan(b.id)?.borrower || '')).join('; ')}</span></div>`;
+    $('stockList').innerHTML = html;
+  }
+  document.querySelectorAll('[data-stocklist]').forEach(b => b.addEventListener('click', () => { stockListTab = b.dataset.stocklist; renderStock(); }));
+  $('stockBeginBtn').addEventListener('click', () => {
+    stock = { startedAt: nowIso(), scope: $('stockScope').value, skipLent: $('stockSkipLent').checked, found: {}, unknown: {} };
+    saveStock(); stockListTab = 'missing'; renderStock(); toast('Semakan stok dimulakan. Tekan “Mula kamera” dan imbas buku.');
+  });
+  function stockLast(cls, html) { const el = $('stockLast'); el.hidden = false; el.className = 'stock-last ' + cls; el.innerHTML = html; }
+  function stockScan(raw) {
+    if (!stock) return;
+    const q = normCode(raw), qi = isbnKey(raw);
+    if (!q) return;
+    const { expected } = stockScopeBooks();
+    let b = expected.find(x => x.bookCode && normCode(x.bookCode) === q);
+    let dup = false;
+    if (!b && qi.length >= 10) {
+      const copies = expected.filter(x => isbnKey(x.isbn) === qi);
+      b = copies.find(x => !stock.found[x.id]);
+      if (!b && copies.length) { b = copies[0]; dup = true; }
+    } else if (b && stock.found[b.id]) dup = true;
+    if (b && !dup) { stock.found[b.id] = nowIso(); saveStock(); beep(true); stockLast('ok', `✓ Ditemui: ${esc(b.title)} <span class="code-txt">${esc(b.bookCode)}</span>`); }
+    else if (b) { beep(true); stockLast('dup', `Sudah diimbas sebelum ini: ${esc(b.title)} (${esc(b.bookCode)})${books.filter(x => isbnKey(x.isbn) === qi).length > 1 ? ' — semua naskhah dengan ISBN ini telah ditanda' : ''}`); }
+    else {
+      const outside = books.find(x => (x.bookCode && normCode(x.bookCode) === q) || (qi.length >= 10 && isbnKey(x.isbn) === qi));
+      beep(false);
+      if (outside) stockLast('dup', `Buku ini di luar skop semakan${activeLoan(outside.id) ? ' / sedang dipinjamkan' : ''}: ${esc(outside.title)} (${esc(outside.bookCode)})`);
+      else { stock.unknown = stock.unknown || {}; stock.unknown[raw.trim()] = nowIso(); saveStock(); stockLast('bad', `✗ Tidak dikenali: <span class="code-txt">${esc(raw)}</span> — tiada dalam koleksi`); }
+    }
+    renderStock();
+  }
+  function setStockCam(on) { $('stockVideo').hidden = !on; $('stockFrame').hidden = !on; $('stockMsg').hidden = on; $('stockCamBtn').disabled = on; $('stockCamStopBtn').disabled = !on; $('stockCamBtn').textContent = on ? 'Kamera aktif' : '📷 Mula kamera'; }
+  $('stockCamBtn').addEventListener('click', async () => {
+    try { const ok = await startScanner($('stockVideo'), stockScan, { continuous: true }); if (ok !== false && scan.on) setStockCam(true); }
+    catch (e) { stopScanner(); setStockCam(false); $('stockMsg').innerHTML = 'Kamera tidak dapat diaktifkan: ' + esc(cameraError(e)); }
+  });
+  $('stockCamStopBtn').addEventListener('click', () => { stopScanner(); setStockCam(false); $('stockMsg').textContent = 'Kamera dihentikan. Kemajuan disimpan.'; });
+  $('stockManualForm').addEventListener('submit', e => { e.preventDefault(); stockScan($('stockCode').value); $('stockCode').value = ''; $('stockCode').focus(); });
+  $('stockList').addEventListener('click', e => {
+    const t = e.target.closest('[data-stock-mark],[data-stock-unmark],[data-stock-add],[data-stock-drop]'); if (!t || !stock) return;
+    if (t.dataset.stockMark) stock.found[t.dataset.stockMark] = nowIso();
+    else if (t.dataset.stockUnmark) delete stock.found[t.dataset.stockUnmark];
+    else if (t.dataset.stockDrop) delete stock.unknown[t.dataset.stockDrop];
+    else if (t.dataset.stockAdd) { stopScanner(); setStockCam(false); resetBook(true); showTab('formPanel'); $('isbn').value = t.dataset.stockAdd; renderDupWarning(); $('title').focus(); return; }
+    saveStock(); renderStock();
+  });
+  $('stockEndBtn').addEventListener('click', async () => {
+    const { expected } = stockScopeBooks(), missing = expected.filter(b => !stock.found[b.id]).length;
+    const c = await choose(`Tamatkan semakan stok?${missing ? `\n${missing} buku masih belum ditemui.` : ''}\nCetak laporan dahulu jika anda mahu menyimpan rekod.`, [{ value: 'print', label: 'Cetak laporan, kemudian tamatkan', primary: true }, { value: 'end', label: 'Tamatkan tanpa cetak' }, { value: 'no', label: 'Batal' }]);
+    if (c === 'no') return;
+    if (c === 'print') printStockReport();
+    stopScanner(); setStockCam(false); stock = null; lsDel(STOCK_KEY); $('stockLast').hidden = true; renderStock();
+  });
+  function printStockReport() {
+    if (!stock) return;
+    const { expected, lent } = stockScopeBooks(), found = expected.filter(b => stock.found[b.id]), missing = expected.filter(b => !stock.found[b.id]).sort(cmpBy(b => b.bookCode));
+    const unknown = Object.keys(stock.unknown || {}), lib = libraryName();
+    const scope = stock.scope ? categoryLabel(categories.find(c => c.id === stock.scope)) : 'Semua buku';
+    const rows = list => list.map((b, i) => `<tr><td class="num">${i + 1}</td><td class="code">${esc(b.bookCode || '—')}</td><td><b>${esc(b.title || '')}</b><div class="m">${esc(b.author || '')}</div></td><td>${esc(bookCategoryLabel(b) || '—')}</td><td class="mono">${esc(b.isbn || '—')}</td></tr>`).join('');
+    const css = `@page{size:A4 portrait;margin:14mm}.sheet{width:210mm;padding:14mm}
+      h1{font-family:Georgia,serif;font-weight:normal;font-size:20pt;margin:7mm 0 1mm}.sub{color:var(--muted);font-size:9pt;margin:0 0 5mm}
+      .summary{display:flex;border:.6pt solid var(--line);margin-bottom:6mm}.summary div{flex:1;padding:6px 10px;border-right:.6pt solid var(--line)}.summary div:last-child{border:0}.summary span{display:block;font-size:6.5pt;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}.summary strong{font-family:Georgia,serif;font-weight:normal;font-size:14pt}
+      h2{font-size:7.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border-bottom:1pt solid var(--accent);padding-bottom:4px;margin:6mm 0 0}
+      table{width:100%;border-collapse:collapse;font-size:8.6pt}thead{display:table-header-group}th{text-align:left;font-size:6.6pt;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:5px 6px;border-bottom:.6pt solid var(--line)}td{padding:5px 6px;border-bottom:.5pt solid var(--line);vertical-align:top}tr{break-inside:avoid}.num{text-align:right;color:var(--muted);width:7mm}.m{color:var(--muted)}.mono{font-family:Consolas,monospace;font-size:7.8pt}.none{color:var(--muted);font-style:italic;padding:6px 0}
+      .sign{display:flex;gap:20mm;margin-top:12mm;font-size:8.5pt;color:var(--muted)}.sign div{flex:1;border-top:.6pt solid #9aa9a3;padding-top:4px}`;
+    const body = `<main class="sheet"><header class="masthead"><div class="lib"><small>Koleksi peribadi</small>${esc(lib)}</div><div class="doc"><b>Laporan Semakan Stok</b>Dicetak ${esc(longDate(Date.now()))}</div></header>
+      <h1>Semakan Stok</h1><p class="sub">Skop: ${esc(scope)} · Dimulakan ${esc(new Date(stock.startedAt).toLocaleString('ms-MY'))}${stock.skipLent ? ' · buku yang sedang dipinjamkan dikecualikan' : ''}</p>
+      <div class="summary"><div><span>Dijangka</span><strong>${expected.length}</strong></div><div><span>Ditemui</span><strong>${found.length}</strong></div><div><span>Belum ditemui</span><strong>${expected.length - found.length}</strong></div><div><span>Kadar</span><strong>${expected.length ? Math.round(found.length / expected.length * 100) : 0}%</strong></div></div>
+      <h2>Buku belum ditemui (${missing.length})</h2>${missing.length ? `<table><thead><tr><th class="num">#</th><th>No. katalog</th><th>Judul &amp; pengarang</th><th>Kategori</th><th>ISBN</th></tr></thead><tbody>${rows(missing)}</tbody></table>` : '<p class="none">Tiada — semua buku dalam skop ditemui.</p>'}
+      ${lent.length ? `<h2>Dikecualikan — sedang dipinjamkan (${lent.length})</h2><table><tbody>${lent.map((b, i) => `<tr><td class="num">${i + 1}</td><td class="code">${esc(b.bookCode)}</td><td><b>${esc(b.title)}</b></td><td>Dipinjam oleh ${esc(activeLoan(b.id)?.borrower || '—')}</td></tr>`).join('')}</tbody></table>` : ''}
+      ${unknown.length ? `<h2>Kod tidak dikenali (${unknown.length})</h2><p class="mono" style="margin:4px 0">${unknown.map(esc).join(' · ')}</p>` : ''}
+      <div class="sign"><div>Disemak oleh</div><div>Tarikh</div></div></main>`;
+    openPrintWindow('Laporan Semakan Stok — ' + lib, css, body, { note: 'Pratonton laporan semakan stok · A4' });
+  }
+  $('stockPrintBtn').addEventListener('click', printStockReport);
+
+  // ---------- Label barkod (kertas pelekat A4) ----------
+  const LABEL_PRESETS = {
+    l3x8: { name: '24 label · 3 × 8 · 70 × 37 mm', cols: 3, rows: 8, w: 70, h: 37, top: 0.5, left: 0, gx: 0, gy: 0 },
+    l3x7: { name: '21 label · 3 × 7 · 70 × 42.3 mm', cols: 3, rows: 7, w: 70, h: 42.3, top: 0.45, left: 0, gx: 0, gy: 0 },
+    l7159: { name: '24 label · 3 × 8 · 63.5 × 33.9 mm (Avery L7159 / setara)', cols: 3, rows: 8, w: 63.5, h: 33.9, top: 12.9, left: 7.25, gx: 2.5, gy: 0 },
+    l7163: { name: '14 label · 2 × 7 · 99.1 × 38.1 mm (Avery L7163 / setara)', cols: 2, rows: 7, w: 99.1, h: 38.1, top: 15.15, left: 4.65, gx: 2.5, gy: 0 },
+    l4x10: { name: '40 label · 4 × 10 · 52.5 × 29.7 mm', cols: 4, rows: 10, w: 52.5, h: 29.7, top: 0, left: 0, gx: 0, gy: 0 }
+  };
+  let labelBooks = [];
+  $('labelPreset').innerHTML = Object.entries(LABEL_PRESETS).map(([k, v]) => `<option value="${k}">${esc(v.name)}</option>`).join('');
+  $('labelPreset').value = LABEL_PRESETS[ui.labelPreset] ? ui.labelPreset : 'l3x8';
+  function openLabelDialog(list) {
+    labelBooks = list.filter(Boolean);
+    if (!labelBooks.length) { toast('Tiada buku untuk dicetak label. Semak carian atau penapis.'); return; }
+    $('labelInfo').textContent = labelBooks.length === 1 ? `Label untuk: ${labelBooks[0].title} (${labelBooks[0].bookCode})` : `${labelBooks.length} buku (ikut carian, penapis dan isihan semasa di Koleksi).`;
+    const lp = ui.labelOffsets || {}; $('labelOffTop').value = lp.top || 0; $('labelOffLeft').value = lp.left || 0;
+    const d = $('labelDialog'); if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
+  }
+  const closeLabelDialog = () => { const d = $('labelDialog'); if (d.open) d.close?.(); d.removeAttribute('open'); };
+  $('labelCancelBtn').addEventListener('click', closeLabelDialog);
+  $('labelBtn').addEventListener('click', () => openLabelDialog(filteredBooks().shown));
+  $('labelPrintBtn').addEventListener('click', () => {
+    const P = LABEL_PRESETS[$('labelPreset').value], per = P.cols * P.rows;
+    const start = Math.max(1, Math.min(per, parseInt($('labelStart').value, 10) || 1)), copies = Math.max(1, Math.min(10, parseInt($('labelCopies').value, 10) || 1));
+    const offT = Number($('labelOffTop').value) || 0, offL = Number($('labelOffLeft').value) || 0, guides = $('labelGuides').checked;
+    saveUi({ labelPreset: $('labelPreset').value, labelOffsets: { top: offT, left: offL } });
+    const items = []; labelBooks.forEach(b => { for (let i = 0; i < copies; i++) items.push(b); });
+    const slots = [...Array(start - 1).fill(null), ...items];
+    const pages = []; for (let i = 0; i < slots.length; i += per) pages.push(slots.slice(i, i + per));
+    const lib = libraryName(), small = P.h < 32;
+    const label = (b, idx) => {
+      const r = Math.floor(idx / P.cols), c = idx % P.cols;
+      const x = P.left + offL + c * (P.w + P.gx), y = P.top + offT + r * (P.h + P.gy);
+      const pos = `left:${x.toFixed(2)}mm;top:${y.toFixed(2)}mm;width:${P.w}mm;height:${P.h}mm`;
+      if (!b) return `<div class="lbl empty" style="${pos}"></div>`;
+      return `<div class="lbl" style="${pos}"><div class="in"><div class="lib">${esc(lib)}</div>${code128Svg(b.bookCode)}<div class="code">${esc(b.bookCode || '')}</div><div class="t">${esc(b.title || '')}</div>${small ? '' : `<div class="a">${esc(bookCategoryLabel(b) || '')}</div>`}</div></div>`;
+    };
+    const css = `@page{size:A4 portrait;margin:0}
+      .page{position:relative;width:210mm;height:297mm;background:#fff;margin:18px auto;box-shadow:0 8px 30px #0002;overflow:hidden;page-break-after:always;break-after:page}.page:last-child{page-break-after:auto;break-after:auto}
+      .lbl{position:absolute;box-sizing:border-box;display:flex;align-items:center;justify-content:center;overflow:hidden${guides ? ';outline:.3mm dashed #9bb0a8;outline-offset:-.15mm' : ''}}
+      .in{width:calc(100% - 6mm);text-align:center;line-height:1.15}
+      .lib{font-family:Georgia,serif;font-size:${small ? 5.5 : 6.5}pt;color:#1f4f47;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.8mm}
+      .barcode{display:block;width:${Math.min(P.w - 10, 62)}mm;height:${small ? 8 : Math.min(12, P.h * .3)}mm;margin:0 auto}
+      .code{font-family:Consolas,"Courier New",monospace;font-weight:700;font-size:${small ? 7 : 8.5}pt;letter-spacing:.12em;margin-top:.6mm}
+      .t{font-size:${small ? 6 : 7}pt;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.4mm}.a{font-size:6pt;color:#5d6d67;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      @media print{.page{margin:0;box-shadow:none}}`;
+    const body = pages.map(pg => `<section class="page">${pg.map(label).join('')}</section>`).join('');
+    closeLabelDialog();
+    openPrintWindow('Label barkod — ' + lib, css, body, { note: `${items.length} label · ${pages.length} helaian · ${P.name} · cetak pada skala 100%` });
+  });
+
+  // ---------- Kod QR sambungan ----------
+  const QR_URL = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js';
+  let qrPromise = null;
+  function loadQr() {
+    if (window.qrcode) return Promise.resolve();
+    if (!qrPromise) qrPromise = new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = QR_URL; sc.onload = () => (window.qrcode ? res() : rej(new Error('pustaka QR rosak'))); sc.onerror = () => { qrPromise = null; sc.remove(); rej(new Error('pustaka kod QR tidak dapat dimuatkan (perlu internet)')); }; document.head.appendChild(sc); });
+    return qrPromise;
+  }
+  let qrTimer = null;
+  const closeQr = () => { clearTimeout(qrTimer); $('qrBox').innerHTML = ''; const d = $('qrDialog'); if (d.open) d.close?.(); d.removeAttribute('open'); };
+  $('showQrBtn').addEventListener('click', async () => {
+    const c = cloudSettings(); if (!c.url || !c.key) { toast('Simpan sambungan yang berjaya pada peranti ini dahulu.'); return; }
+    const link = location.href.split('#')[0] + '#sambung=' + makeConnectCode(c.url, c.key);
+    const d = $('qrDialog'); $('qrBox').textContent = 'Menjana kod QR…'; if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
+    try {
+      await loadQr();
+      const q = window.qrcode(0, 'M'); q.addData(link); q.make();
+      $('qrBox').innerHTML = q.createSvgTag({ cellSize: 4, margin: 4, scalable: true });
+      clearTimeout(qrTimer); qrTimer = setTimeout(closeQr, 120000); // disembunyikan selepas 2 minit
+    } catch (e) { $('qrBox').textContent = 'Kod QR tidak dapat dijana: ' + (e.message || e) + '. Gunakan "Salin pautan sambungan".'; }
+  });
+  $('qrCloseBtn').addEventListener('click', closeQr);
+  $('qrDialog').addEventListener('cancel', () => clearTimeout(qrTimer));
+  $('scanQrBtn').addEventListener('click', () => openScanDialog('Halakan kamera pada kod QR sambungan', code => applyConnect(code)));
+
+  // ---------- Laporan tahunan ----------
+  const realDate = d => (d && d > EPOCH ? d : '');
+  function reportYears() {
+    const ys = new Set([new Date().getFullYear()]);
+    books.forEach(b => { if (realDate(b.createdAt)) ys.add(new Date(b.createdAt).getFullYear()); });
+    loans.forEach(l => { if (l.borrowDate) ys.add(+l.borrowDate.slice(0, 4)); });
+    borrowings.forEach(x => { if (x.borrowDate) ys.add(+x.borrowDate.slice(0, 4)); });
+    return [...ys].filter(y => y > 1990 && y < 2200).sort((a, b) => b - a);
+  }
+  function renderReportYears() {
+    const sel = $('reportYear'), old = sel.value;
+    sel.innerHTML = reportYears().map(y => `<option>${y}</option>`).join('');
+    if ([...sel.options].some(o => o.value === old)) sel.value = old;
+  }
+  function printAnnualReport() {
+    const Y = +$('reportYear').value || new Date().getFullYear(), lib = libraryName();
+    const inYear = d => d && new Date(d).getFullYear() === Y;
+    const endY = new Date(Y + 1, 0, 1).toISOString();
+    const added = books.filter(b => inYear(realDate(b.createdAt))).sort((a, b) => str(a.createdAt).localeCompare(str(b.createdAt)));
+    const owned = books.filter(b => !realDate(b.createdAt) || b.createdAt < endY);
+    const price = b => (numOrBlank(b.price) === '' ? 0 : Number(b.price));
+    const bought = added.filter(b => b.source === 'Beli'), spend = bought.reduce((s, b) => s + price(b), 0);
+    const gifts = added.filter(b => b.source && b.source !== 'Beli');
+    const value = owned.reduce((s, b) => s + price(b), 0);
+    const months = [...Array(12)].map((_, m) => { const l = added.filter(b => new Date(b.createdAt).getMonth() === m); return { n: l.length, rm: l.filter(b => b.source === 'Beli').reduce((s, b) => s + price(b), 0) }; });
+    const maxN = Math.max(1, ...months.map(m => m.n)), maxRm = Math.max(1, ...months.map(m => m.rm));
+    const MON = ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis'];
+    const tally = (list, key, val = () => 1) => { const m = new Map(); list.forEach(b => { const k = key(b) || 'Tidak dinyatakan'; m.set(k, (m.get(k) || 0) + val(b)); }); return [...m.entries()].sort((a, b) => b[1] - a[1]); };
+    const byCat = tally(added, b => bookCategoryLabel(b)), byLang = tally(added, b => b.language), byAuthor = tally(added, b => b.author).slice(0, 5);
+    const shops = tally(bought.filter(b => b.purchase), b => b.purchase).slice(0, 5);
+    const priciest = [...added].sort((a, b) => price(b) - price(a))[0];
+    const loansY = loans.filter(l => inYear(l.borrowDate)), borrowY = borrowings.filter(x => inYear(x.borrowDate));
+    const lenders = tally(loansY, l => l.borrower).slice(0, 5);
+    const seriesOpen = [...new Set(owned.filter(b => b.series).map(b => b.series))].map(sname => { const si = seriesInfo(owned.find(b => b.series === sname)); return { sname, missing: si ? si.missing : [] }; }).filter(x => x.missing.length);
+    const rm = v => 'RM ' + v.toFixed(2);
+    const listTable = (rows, cols) => rows.length ? `<table class="mini"><tbody>${rows.map(([k, v]) => `<tr><td>${esc(k)}</td><td class="n">${cols(v)}</td></tr>`).join('')}</tbody></table>` : '<p class="none">Tiada data.</p>';
+    const css = `@page{size:A4 portrait;margin:14mm 14mm 16mm;@bottom-right{content:"Halaman " counter(page) " daripada " counter(pages);font:7pt Arial,sans-serif;color:#5d6d67}}
+      .sheet{width:210mm;padding:14mm}
+      h1{font-family:Georgia,serif;font-weight:normal;font-size:26pt;margin:8mm 0 0;line-height:1}h1 span{color:var(--accent)}.sub{color:var(--muted);font-size:9pt;margin:2mm 0 6mm}
+      .tiles{display:grid;grid-template-columns:repeat(4,1fr);border:.6pt solid var(--line)}.tiles div{padding:7px 10px;border-right:.6pt solid var(--line)}.tiles div:last-child{border:0}.tiles span{display:block;font-size:6.5pt;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}.tiles strong{font-family:Georgia,serif;font-weight:normal;font-size:15pt}.tiles em{display:block;font-style:normal;font-size:7.5pt;color:var(--muted)}
+      h2{font-size:7.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border-bottom:1pt solid var(--accent);padding-bottom:4px;margin:7mm 0 3mm}
+      .chart{display:grid;grid-template-columns:repeat(12,1fr);gap:2.5mm;align-items:end;height:38mm;border-bottom:.6pt solid var(--line)}
+      .col{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:1mm}.bar{width:62%;background:var(--accent);border-radius:1mm 1mm 0 0;min-height:.4mm}.bar.rm{background:#c9a24a}
+      .pair{display:flex;gap:.8mm;align-items:flex-end;height:100%;width:100%;justify-content:center}.pair .bar{width:38%}
+      .vals{font-size:6.3pt;color:var(--muted);text-align:center;line-height:1.2}.mon{display:grid;grid-template-columns:repeat(12,1fr);gap:2.5mm;font-size:7pt;text-align:center;color:var(--muted);margin-top:1mm}
+      .legend{font-size:7pt;color:var(--muted);margin-top:2mm}.legend i{display:inline-block;width:8px;height:8px;margin:0 4px 0 10px;vertical-align:middle}
+      .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7mm}.cols2{display:grid;grid-template-columns:1fr 1fr;gap:7mm}
+      h3{font-size:8pt;margin:0 0 2mm;color:var(--ink)}
+      table{width:100%;border-collapse:collapse;font-size:8.4pt}table.mini td{padding:3px 0;border-bottom:.5pt solid var(--line)}td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.none{color:var(--muted);font-style:italic;font-size:8pt;margin:0}
+      table.list th{text-align:left;font-size:6.5pt;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--accent);padding:5px 6px}table.list td{padding:4px 6px;border-bottom:.5pt solid var(--line);vertical-align:top}table.list tbody tr:nth-child(even) td{background:#f7f9f8}thead{display:table-header-group}tr{break-inside:avoid}
+      .hl{background:var(--soft);border-left:2.4pt solid var(--accent);padding:7px 10px;font-size:8.6pt;margin-top:3mm}
+      .endnote{display:flex;justify-content:space-between;margin-top:8mm;font-size:7.5pt;color:var(--muted)}.endnote .ex{font-family:Georgia,serif;font-style:italic;font-size:9.5pt;color:var(--accent)}`;
+    const body = `<main class="sheet"><header class="masthead"><div class="lib"><small>Koleksi peribadi</small>${esc(lib)}</div><div class="doc"><b>Laporan Tahunan</b>Dicetak ${esc(longDate(Date.now()))}</div></header>
+      <h1>Tahun <span>${Y}</span></h1><p class="sub">Ringkasan pemerolehan, perbelanjaan, koleksi dan pinjaman bagi tempoh 1 Januari – 31 Disember ${Y}.</p>
+      <div class="tiles"><div><span>Buku didaftarkan</span><strong>${added.length}</strong><em>${bought.length} dibeli · ${gifts.length} hadiah/sumbangan</em></div><div><span>Perbelanjaan buku</span><strong>${rm(spend)}</strong><em>${bought.length ? 'purata ' + rm(spend / bought.length) + ' sebuah' : '—'}</em></div><div><span>Koleksi akhir tahun</span><strong>${owned.length}</strong><em>judul</em></div><div><span>Nilai koleksi</span><strong>${rm(value)}</strong><em>berdasarkan harga direkodkan</em></div></div>
+      <h2>Pemerolehan mengikut bulan</h2>
+      <div class="chart">${months.map(m => `<div class="col"><div class="vals">${m.n || ''}${m.rm ? '<br>' + Math.round(m.rm) : ''}</div><div class="pair"><div class="bar" style="height:${(m.n / maxN * 78).toFixed(1)}%"></div><div class="bar rm" style="height:${(m.rm / maxRm * 78).toFixed(1)}%"></div></div></div>`).join('')}</div>
+      <div class="mon">${MON.map(m => `<span>${m}</span>`).join('')}</div>
+      <div class="legend"><i style="background:#1f4f47"></i>Bilangan buku didaftarkan<i style="background:#c9a24a"></i>Perbelanjaan (RM)</div>
+      <h2>Komposisi buku baharu</h2>
+      <div class="cols"><div><h3>Kategori</h3>${listTable(byCat, v => v)}</div><div><h3>Bahasa</h3>${listTable(byLang, v => v)}</div><div><h3>Pengarang terbanyak</h3>${listTable(byAuthor, v => v)}</div></div>
+      <div class="cols2" style="margin-top:5mm"><div><h3>Kedai / lokasi pembelian</h3>${listTable(shops, v => v + ' buku')}</div><div><h3>Sorotan</h3>${priciest && price(priciest) ? `<div class="hl">Buku paling mahal: <b>${esc(priciest.title)}</b> — ${rm(price(priciest))}</div>` : ''}${seriesOpen.length ? `<div class="hl">Siri belum lengkap: ${seriesOpen.slice(0, 4).map(x => `<b>${esc(x.sname)}</b> (belum ada jilid ${x.missing.join(', ')})`).join('; ')}</div>` : ''}${!priciest && !seriesOpen.length ? '<p class="none">Tiada sorotan.</p>' : ''}</div></div>
+      <h2>Pinjaman</h2>
+      <div class="cols2"><div><h3>Dipinjamkan kepada orang lain · ${loansY.length} kali</h3>${listTable(lenders, v => v + ' kali')}</div><div><h3>Dipinjam daripada orang lain · ${borrowY.length} buku</h3>${borrowY.length ? listTable(tally(borrowY, x => x.lender).slice(0, 5), v => v + ' buku') : '<p class="none">Tiada.</p>'}${borrowY.some(x => borrowStatus(x).late) ? `<p class="none" style="margin-top:2mm">${borrowY.filter(x => borrowStatus(x).late).length} buku masih lewat dipulangkan.</p>` : ''}</div></div>
+      <h2>Senarai buku didaftarkan pada ${Y} (${added.length})</h2>
+      ${added.length ? `<table class="list"><thead><tr><th>Tarikh</th><th>No. katalog</th><th>Judul &amp; pengarang</th><th>Kategori</th><th>Sumber</th><th style="text-align:right">Harga (RM)</th></tr></thead><tbody>${added.map(b => `<tr><td style="white-space:nowrap">${esc(new Date(b.createdAt).toLocaleDateString('ms-MY'))}</td><td class="code">${esc(b.bookCode)}</td><td><b>${esc(b.title)}</b><div style="color:var(--muted)">${esc(b.author || '')}</div></td><td>${esc(bookCategoryLabel(b) || '—')}</td><td>${esc(b.source || '—')}</td><td class="n">${price(b) ? price(b).toFixed(2) : '—'}</td></tr>`).join('')}</tbody></table>` : '<p class="none">Tiada buku didaftarkan pada tahun ini.</p>'}
+      <div class="endnote"><span class="ex">Ex Libris · ${esc(lib)}</span><span>Tarikh pendaftaran berdasarkan rekod sistem.</span></div></main>`;
+    openPrintWindow(`Laporan Tahunan ${Y} — ${lib}`, css, body, { note: `Pratonton laporan tahunan ${Y} · A4` });
+  }
+  $('reportBtn').addEventListener('click', printAnnualReport);
 
   // ---------- Sandaran: eksport / import / tempatan ----------
   function exportData() {
@@ -2412,9 +2774,11 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   }
 
   // ---------- Lain-lain kawalan ----------
-  ['bookSearch', 'filterGenre', 'filterReading', 'filterTag'].forEach(id => $(id).addEventListener('input', renderBooks));
-  $('filterDupes').addEventListener('change', renderBooks);
-  $('dupStatBtn').addEventListener('click', () => { $('filterDupes').checked = !$('filterDupes').checked; renderBooks(); });
+  let searchTimer = null;
+  $('bookSearch').addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => { resetPaging(); renderBooks(); }, 160); });
+  ['filterGenre', 'filterReading', 'filterTag'].forEach(id => $(id).addEventListener('input', () => { resetPaging(); renderBooks(); }));
+  $('filterDupes').addEventListener('change', () => { resetPaging(); renderBooks(); });
+  $('dupStatBtn').addEventListener('click', () => { $('filterDupes').checked = !$('filterDupes').checked; resetPaging(); renderBooks(); });
   $('loanSearch').addEventListener('input', renderLoans);
   $('dashboardAddBtn').addEventListener('click', () => showTab('formPanel'));
   $('dashboardCollectionBtn').addEventListener('click', () => showTab('collectionPanel'));
@@ -2469,9 +2833,13 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     applyTheme(); renderPinSettings();
     if (pinCfg()) lockNow(); else document.documentElement.classList.remove('locked');
     await loadData();
+    // Baca semula tetapan paparan: sejurus selepas muat semula, pelayar kadang-kadang belum menyerahkan tulisan terakhir halaman sebelumnya
+    const freshUi = lsGet(LS.UI, null);
+    if (freshUi && typeof freshUi === 'object') { Object.keys(freshUi).forEach(k => { if (!(k in ui)) ui[k] = freshUi[k]; }); if (SORTS[ui.sort]) $('sortBooks').value = ui.sort; if (LABEL_PRESETS[ui.labelPreset]) $('labelPreset').value = ui.labelPreset; if (ui.noticeClosed) $('accessNotice').hidden = true; applyTheme(); }
     render(); resetBook(false); resetLoan(false); resetBorrow(); setupDraftAutosave(); restoreDraft('book'); restoreDraft('loan');
     setCollectionView(ui.view);
     showLoanSub(ui.loanSub === 'borrowSection' ? 'borrowSection' : 'lendSection');
+    showScanMode(ui.scanMode === 'stockMode' ? 'stockMode' : 'checkMode');
     showTab(ui.tab || 'dashboardPanel');
     if (isLocked()) $('lockLibName').textContent = libraryName() + ' — masukkan PIN untuk membuka.';
     setupCloudUI();
