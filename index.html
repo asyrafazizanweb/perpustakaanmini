@@ -202,6 +202,24 @@ pre.sql{background:var(--soft);border:1px solid var(--line);border-radius:8px;pa
 details summary{cursor:pointer;font-weight:650}
 .print-heading,.print-meta{display:none}
 
+/* Pengimbas */
+.scan-box{position:relative;background:#10201c;border-radius:14px;overflow:hidden;min-height:230px;display:grid;place-items:center;max-width:640px}
+.scan-box video{width:100%;max-height:380px;object-fit:cover;display:block}.scan-box video[hidden],.scan-frame[hidden],.scan-msg[hidden]{display:none}
+.scan-frame{position:absolute;inset:30% 9%;border:2px solid #8ee0b7;border-radius:12px;box-shadow:0 0 0 999px #0004;pointer-events:none}
+.scan-msg{color:#d5e5de;text-align:center;padding:26px 18px;font-size:14px;line-height:1.6}
+.scan-manual{display:flex;gap:8px;max-width:640px;margin-top:12px}.scan-manual input{flex:1}
+#scanResult{max-width:640px;margin-top:16px}
+.verdict{border-radius:14px;padding:14px 16px;margin-bottom:12px}.verdict h3{margin:0 0 4px;font-size:20px;letter-spacing:.02em}.verdict p{margin:0;font-size:14px}
+.verdict.yes{background:var(--st-green-bg);color:var(--st-green);border:1px solid var(--st-green)}.verdict.no{background:var(--st-red-bg);color:var(--st-red);border:1px solid var(--st-red)}
+.scan-book{display:grid;grid-template-columns:70px 1fr;gap:12px;padding:12px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;background:var(--paper)}
+.scan-book img,.scan-book .ph{width:70px;height:100px;object-fit:cover;border-radius:6px;border:1px solid var(--line);background:var(--cover-bg);display:grid;place-items:center;color:var(--cover-ink);font-size:28px;font-weight:800}
+.scan-book strong{font-size:15px}.code-txt{font-family:Consolas,monospace;font-weight:700;color:var(--accent)}
+.scan-actions{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--soft)}
+.input-row{display:flex;gap:6px}.input-row input{flex:1;min-width:0}.input-row .btn{padding:0 12px;flex-shrink:0}.input-row .btn svg{width:20px;height:20px;vertical-align:middle}
+dialog.scan-dialog{border:0;border-radius:16px;padding:0;width:min(560px,calc(100% - 24px));background:#10201c;color:#fff;overflow:hidden}dialog.scan-dialog::backdrop{background:var(--overlay)}
+.scan-dialog .sd-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#0b1714}
+.scan-dialog video{display:block;width:100%;max-height:60vh;object-fit:cover}.scan-dialog video[hidden],.scan-dialog p[hidden]{display:none}
+.scan-dialog p{padding:30px 18px;text-align:center;margin:0;color:#d5e5de}
 /* Responsif */
 @media(max-width:1000px){.dashboard-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.value-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-insights{grid-template-columns:1fr 1fr}.dashboard-insights .dash-card:last-child{grid-column:1/-1}.value-grid{grid-template-columns:1fr}}
@@ -286,6 +304,7 @@ details summary{cursor:pointer;font-weight:650}
   <nav class="tabs no-print" role="tablist" aria-label="Bahagian sistem">
     <button class="tab active" type="button" role="tab" id="tab-dashboardPanel" aria-controls="dashboardPanel" aria-selected="true" tabindex="0" data-tab="dashboardPanel">Dashboard</button>
     <button class="tab" type="button" role="tab" id="tab-collectionPanel" aria-controls="collectionPanel" aria-selected="false" tabindex="-1" data-tab="collectionPanel">Koleksi</button>
+    <button class="tab" type="button" role="tab" id="tab-scanPanel" aria-controls="scanPanel" aria-selected="false" tabindex="-1" data-tab="scanPanel">Imbas &amp; Semak</button>
     <button class="tab" type="button" role="tab" id="tab-formPanel" aria-controls="formPanel" aria-selected="false" tabindex="-1" data-tab="formPanel">Tambah Buku</button>
     <button class="tab" type="button" role="tab" id="tab-loanPanel" aria-controls="loanPanel" aria-selected="false" tabindex="-1" data-tab="loanPanel">Pinjaman</button>
     <button class="tab" type="button" role="tab" id="tab-wishlistPanel" aria-controls="wishlistPanel" aria-selected="false" tabindex="-1" data-tab="wishlistPanel">Senarai Hajat</button>
@@ -339,6 +358,14 @@ details summary{cursor:pointer;font-weight:650}
     <p class="small no-print">“Cetak Katalog (A4)” mencetak buku yang sedang dipaparkan (ikut carian, penapis dan isihan). Pilih “Save as PDF” dalam dialog cetak untuk menyimpan sebagai PDF.</p>
   </section>
 
+  <section id="scanPanel" class="panel" role="tabpanel" aria-labelledby="tab-scanPanel" tabindex="-1">
+    <h2>Imbas &amp; Semak</h2><p class="sub">Halakan kamera pada barkod ISBN di belakang buku (atau barkod nombor katalog pada rekod cetakan) untuk menyemak sama ada buku itu sudah ada dalam koleksi.</p>
+    <div class="scan-box"><video id="scanVideo" playsinline muted hidden></video><div class="scan-frame" id="scanFrame" hidden></div><div class="scan-msg" id="scanMsg">Tekan “Mula imbas” untuk membuka kamera belakang.</div></div>
+    <div class="actions" style="margin-top:12px"><button class="btn" type="button" id="scanStartBtn">📷 Mula imbas</button><button class="btn secondary" type="button" id="scanStopBtn" disabled>Hentikan</button></div>
+    <form id="scanManualForm" class="scan-manual"><input id="scanCode" inputmode="numeric" autocomplete="off" placeholder="atau taip ISBN / no. katalog" aria-label="ISBN atau nombor katalog"><button class="btn secondary" type="submit">Semak</button></form>
+    <div id="scanResult" aria-live="polite"></div>
+  </section>
+
   <section id="formPanel" class="panel" role="tabpanel" aria-labelledby="tab-formPanel" tabindex="-1">
     <h2 id="bookFormTitle">Tambah Buku</h2><p class="sub">Medan bertanda * wajib diisi.</p><p id="bookDraftStatus" class="small" role="status" aria-live="polite">Draf automatik aktif — perubahan akan disimpan sementara pada peranti ini.</p>
     <form id="bookForm">
@@ -346,7 +373,7 @@ details summary{cursor:pointer;font-weight:650}
       <fieldset class="group"><legend>Maklumat asas</legend><div class="grid">
         <div class="field"><label for="title">Nama Buku *</label><input id="title" required placeholder="Masukkan tajuk buku"></div>
         <div class="field"><label for="author">Penulis *</label><input id="author" required placeholder="Nama penulis"></div>
-        <div class="field"><label for="isbn">Kod ISBN</label><input id="isbn" placeholder="Contoh: 978-..." autocomplete="off"></div>
+        <div class="field"><label for="isbn">Kod ISBN</label><div class="input-row"><input id="isbn" placeholder="Contoh: 978-..." autocomplete="off" inputmode="numeric"><button class="btn secondary" type="button" data-scan-into="isbn" aria-label="Imbas ISBN dengan kamera" title="Imbas dengan kamera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg></button></div></div>
         <div class="field"><label for="genre">Kategori / Genre *</label><select id="genre" required><option value="">Pilih kategori</option></select></div>
         <div class="field"><label for="format">Format Buku *</label><select id="format" required><option value="">Pilih format</option><option>Hardcover</option><option>Paperback</option><option>E-book</option></select></div>
         <div class="field"><label for="bookCode">ID Buku (automatik)</label><input id="bookCode" readonly placeholder="Dijana apabila buku disimpan"></div>
@@ -405,7 +432,7 @@ details summary{cursor:pointer;font-weight:650}
         <div class="grid">
           <div class="field"><label for="bTitle">Tajuk Buku *</label><input id="bTitle" required placeholder="Tajuk buku yang dipinjam"></div>
           <div class="field"><label for="bAuthor">Penulis</label><input id="bAuthor" placeholder="Nama penulis"></div>
-          <div class="field"><label for="bIsbn">ISBN</label><input id="bIsbn" placeholder="Jika ada" autocomplete="off"></div>
+          <div class="field"><label for="bIsbn">ISBN</label><div class="input-row"><input id="bIsbn" placeholder="Jika ada" autocomplete="off" inputmode="numeric"><button class="btn secondary" type="button" data-scan-into="bIsbn" aria-label="Imbas ISBN dengan kamera" title="Imbas dengan kamera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg></button></div></div>
           <div class="field"><label for="bLender">Dipinjam daripada *</label><input id="bLender" required list="lenderSuggestions" placeholder="Nama orang / perpustakaan"><datalist id="lenderSuggestions"></datalist></div>
           <div class="field"><label for="bLenderType">Jenis pemilik</label><select id="bLenderType"><option>Kawan / keluarga</option><option>Perpustakaan awam</option><option>Perpustakaan sekolah / universiti</option><option>Lain-lain</option></select></div>
           <div class="field"><label for="bDate">Tarikh Pinjam</label><input id="bDate" type="date"></div>
@@ -427,7 +454,7 @@ details summary{cursor:pointer;font-weight:650}
       <div class="grid">
         <div class="field"><label for="wTitle">Tajuk *</label><input id="wTitle" required placeholder="Tajuk buku"></div>
         <div class="field"><label for="wAuthor">Penulis</label><input id="wAuthor" placeholder="Nama penulis"></div>
-        <div class="field"><label for="wIsbn">ISBN</label><input id="wIsbn" placeholder="Jika ada" autocomplete="off"></div>
+        <div class="field"><label for="wIsbn">ISBN</label><div class="input-row"><input id="wIsbn" placeholder="Jika ada" autocomplete="off" inputmode="numeric"><button class="btn secondary" type="button" data-scan-into="wIsbn" aria-label="Imbas ISBN dengan kamera" title="Imbas dengan kamera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg></button></div></div>
         <div class="field"><label for="wPrice">Harga Sasaran (RM)</label><input id="wPrice" type="number" min="0" step="0.01" placeholder="0.00"></div>
         <div class="field"><label for="wShop">Kedai / Pautan</label><input id="wShop" placeholder="Contoh: MPH, Shopee"></div>
         <div class="field"><label for="wNote">Nota</label><input id="wNote" placeholder="Contoh: tunggu jualan PBAKL"></div>
@@ -533,18 +560,20 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
   </section>
   <div id="toast" class="toast no-print" role="status" aria-live="polite" hidden><span id="toastText"></span><button type="button" id="toastAction" hidden>Buat asal</button></div>
   <dialog id="choiceDialog" class="choice"><p id="choiceText"></p><div class="actions" id="choiceActions"></div></dialog>
+  <dialog id="scanDialog" class="scan-dialog" aria-label="Imbas barkod"><div class="sd-head"><strong style="font-size:14px">Halakan kamera pada barkod ISBN</strong><button type="button" class="btn secondary small-btn" id="scanDialogClose">Tutup ✕</button></div><video id="scanDialogVideo" playsinline muted hidden></video><p id="scanDialogMsg">Membuka kamera…</p></dialog>
   <dialog id="bookDialog" class="book-dialog" aria-labelledby="bdTitle"><div class="bd-head"><strong class="small">Butiran buku</strong><button type="button" class="btn secondary small-btn" id="bdCloseBtn">Tutup ✕</button></div><div class="bd-body" id="bdBody"></div><div class="bd-actions" id="bdActions"></div></dialog>
 </main>
 <nav class="bottom-nav no-print" aria-label="Navigasi utama">
   <button type="button" data-go="dashboardPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Utama</button>
   <button type="button" data-go="collectionPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zm0 0a2 2 0 0 0 2 2h13"/></svg>Koleksi</button>
-  <button type="button" data-go="formPanel" class="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Tambah</button>
-  <button type="button" data-go="loanPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h13l-3-3M17 17H4l3 3"/></svg>Pinjaman</button>
+  <button type="button" data-go="scanPanel" class="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"/><path d="M7 8v8M10 8v8M13 8v8M16 8v8"/></svg>Imbas</button>
+  <button type="button" data-go="formPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Tambah</button>
   <button type="button" data-go="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Lagi</button>
 </nav>
 <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
 <div class="sheet" id="moreSheet" hidden role="dialog" aria-label="Menu lain">
   <div class="handle"></div>
+  <button type="button" data-go="loanPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h13l-3-3M17 17H4l3 3"/></svg>Pinjaman</button>
   <button type="button" data-go="wishlistPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg>Senarai Hajat</button>
   <button type="button" data-go="categoryPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h7l2 2h9v10H3z"/></svg>Kategori</button>
   <button type="button" data-go="syncPanel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg>Tetapan &amp; Sync</button>
@@ -836,7 +865,8 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     if ($('loanPanel').classList.contains('active')) saveDraft('loan');
     tabs.forEach(b => { const on = b.dataset.tab === id; b.classList.toggle('active', on); b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
     document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === id));
-    const inMore = ['wishlistPanel', 'categoryPanel', 'syncPanel'].includes(id);
+    const inMore = ['loanPanel', 'wishlistPanel', 'categoryPanel', 'syncPanel'].includes(id);
+    if (id !== 'scanPanel' && scan.on && !$('scanDialog').open) { stopScanner(); setScanUi('idle', 'Tekan “Mula imbas” untuk membuka kamera belakang.'); }
     bottomBtns.forEach(b => b.classList.toggle('active', b.dataset.go === id || (inMore && b.dataset.go === 'more')));
     closeSheet();
     saveUi({ tab: id });
@@ -1825,6 +1855,139 @@ create policy "covers_delete_own" on storage.objects for delete to authenticated
     else if (hiddenAt && cfg.timeout && Date.now() - hiddenAt > cfg.timeout * 6e4) lockNow();
   });
   setInterval(() => { const cfg = pinCfg(); if (cfg && cfg.timeout && !isLocked() && Date.now() - lastActivity > cfg.timeout * 6e4) lockNow(); }, 15000);
+
+  // ---------- Pengimbas barkod (kamera telefon) ----------
+  // Android: pengesan terbina dalam (BarcodeDetector). iPhone & lain-lain: ZXing (dimuat apabila mula-mula diperlukan).
+  const ZXING_URL = 'https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/umd/zxing-browser.min.js';
+  const normCode = s => str(s).replace(/[\s-]/g, '').toUpperCase();
+  let zxingPromise = null;
+  function loadZxing() {
+    if (window.ZXingBrowser?.BrowserMultiFormatReader) return Promise.resolve();
+    if (!zxingPromise) zxingPromise = new Promise((res, rej) => {
+      const sc = document.createElement('script'); sc.src = ZXING_URL; sc.async = true;
+      sc.onload = () => (window.ZXingBrowser?.BrowserMultiFormatReader ? res() : rej(new Error('pustaka pengimbas rosak')));
+      sc.onerror = () => { zxingPromise = null; sc.remove(); rej(new Error('pustaka pengimbas tidak dapat dimuatkan. Kali pertama memerlukan internet.')); };
+      document.head.appendChild(sc);
+    });
+    return zxingPromise;
+  }
+  async function nativeDetector() {
+    if (!('BarcodeDetector' in window)) return null;
+    try { const f = await BarcodeDetector.getSupportedFormats(); const want = ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128'].filter(x => f.includes(x)); return want.includes('ean_13') ? new BarcodeDetector({ formats: want }) : null; } catch (e) { return null; }
+  }
+  const scan = { on: false, controls: null, stream: null, raf: 0, video: null, session: 0 };
+  function cameraError(e) {
+    if (location.protocol === 'file:') return 'fail dibuka terus dari storan peranti. Buka sistem melalui alamat laman web (https://…).';
+    if (!window.isSecureContext) return 'kamera hanya berfungsi pada laman HTTPS.';
+    if (e && e.name === 'NotAllowedError') return 'kebenaran kamera ditolak. Benarkan akses kamera untuk laman ini dalam tetapan pelayar/telefon, kemudian cuba lagi.';
+    if (e && (e.name === 'NotFoundError' || e.name === 'OverconstrainedError')) return 'tiada kamera ditemui pada peranti ini.';
+    if (e && e.name === 'NotReadableError') return 'kamera sedang digunakan oleh aplikasi lain.';
+    return (e && e.message) || String(e);
+  }
+  // Mula mengimbas ke dalam elemen <video>; onCode dipanggil sekali sahaja, kemudian kamera dihentikan.
+  async function startScanner(video, onCode) {
+    stopScanner();
+    if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) throw new Error(cameraError());
+    const session = ++scan.session; scan.on = true; scan.video = video;
+    video.setAttribute('playsinline', ''); video.muted = true;
+    const constraints = { video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false };
+    let fired = false;
+    const hit = code => { if (fired || !scan.on || session !== scan.session) return; fired = true; try { navigator.vibrate?.(60); } catch (e) {} stopScanner(); onCode(String(code).trim()); };
+    const detector = await nativeDetector();
+    if (detector) {
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      if (!scan.on || session !== scan.session) { stream.getTracks().forEach(t => t.stop()); return false; }
+      scan.stream = stream; video.srcObject = stream; await video.play();
+      let busy = false;
+      const loop = async () => { if (!scan.on || session !== scan.session) return; if (!busy && video.readyState >= 2) { busy = true; try { const a = await detector.detect(video); if (a.length) hit(a[0].rawValue); } catch (e) {} busy = false; } scan.raf = requestAnimationFrame(loop); };
+      scan.raf = requestAnimationFrame(loop);
+    } else {
+      await loadZxing();
+      if (!scan.on || session !== scan.session) return false;
+      const reader = new window.ZXingBrowser.BrowserMultiFormatReader();
+      const c = await reader.decodeFromConstraints(constraints, video, res => { if (res) hit(res.getText()); });
+      if (!scan.on || session !== scan.session) { try { c.stop(); } catch (e) {} return false; }
+      scan.controls = c;
+    }
+    return true;
+  }
+  function stopScanner() {
+    scan.on = false; cancelAnimationFrame(scan.raf);
+    try { scan.controls?.stop(); } catch (e) {} scan.controls = null;
+    if (scan.stream) { scan.stream.getTracks().forEach(t => t.stop()); scan.stream = null; }
+    if (scan.video) { try { scan.video.srcObject?.getTracks?.().forEach(t => t.stop()); } catch (e) {} scan.video.srcObject = null; }
+  }
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden' && scan.on) { stopScanner(); setScanUi('idle', 'Kamera dihentikan. Tekan “Mula imbas” untuk meneruskan.'); closeScanDialog(); } });
+
+  // Tab "Imbas & Semak"
+  function setScanUi(state, msg) {
+    const live = state === 'live';
+    $('scanVideo').hidden = !live; $('scanFrame').hidden = !live; $('scanMsg').hidden = live;
+    if (msg != null) $('scanMsg').innerHTML = msg;
+    $('scanStartBtn').disabled = state === 'starting' || live;
+    $('scanStartBtn').textContent = state === 'starting' ? 'Membuka kamera…' : live ? 'Kamera aktif' : state === 'done' ? '📷 Imbas buku lain' : '📷 Mula imbas';
+    $('scanStopBtn').disabled = !live;
+  }
+  async function startPanelScan() {
+    setScanUi('starting');
+    try {
+      const ok = await startScanner($('scanVideo'), code => { $('scanCode').value = code; setScanUi('done', `✓ Barkod dibaca: <strong>${esc(code)}</strong>`); scanLookup(code); setTimeout(() => $('scanResult').scrollIntoView({ behavior: 'smooth', block: 'start' }), 60); });
+      if (ok !== false && scan.on) setScanUi('live');
+    } catch (e) { stopScanner(); setScanUi('idle', 'Kamera tidak dapat diaktifkan: ' + esc(cameraError(e)) + '<br><br>Anda masih boleh menaip ISBN di bawah.'); }
+  }
+  $('scanStartBtn').addEventListener('click', startPanelScan);
+  $('scanStopBtn').addEventListener('click', () => { stopScanner(); setScanUi('idle', 'Kamera dihentikan.'); });
+  $('scanManualForm').addEventListener('submit', e => { e.preventDefault(); scanLookup($('scanCode').value); });
+
+  function scanLookup(raw) {
+    const q = normCode(raw), qi = isbnKey(raw), out = $('scanResult');
+    if (!q) { out.innerHTML = '<p class="small">Imbas atau taip ISBN / nombor katalog.</p>'; return; }
+    const matches = books.filter(b => (qi.length >= 10 && isbnKey(b.isbn) === qi) || (b.bookCode && normCode(b.bookCode) === q));
+    const borrowed = qi.length >= 10 ? borrowings.find(x => isbnKey(x.isbn) === qi && !x.returnDate) : null;
+    if (matches.length) {
+      out.innerHTML = `<div class="verdict yes"><h3>SUDAH ADA</h3><p>${matches.length > 1 ? `Anda mempunyai <strong>${matches.length} naskhah</strong> buku ini.` : 'Buku ini sudah ada dalam koleksi anda.'}</p></div>` + matches.map(b => {
+        const src = safeImg(b.cover), si = seriesInfo(b), p = numOrBlank(b.price);
+        const acq = b.source === 'Beli' ? 'Dibeli' + (p !== '' ? ' pada harga <strong>' + money(p) + '</strong>' : '') + (b.purchase ? ' di ' + esc(b.purchase) : '') : b.source ? esc(b.source) + (p !== '' ? ' (nilai ' + money(p) + ')' : '') : '';
+        return `<div class="scan-book">${src ? `<img src="${esc(src)}" alt="Kulit buku">` : `<span class="ph">${esc((b.title || 'B').charAt(0))}</span>`}<div><strong>${esc(b.title || 'Tanpa tajuk')}</strong><div class="small">${esc(b.author || '—')} · <span class="code-txt">${esc(b.bookCode || '')}</span></div><div class="chips" style="margin:6px 0">${readingPill(b.reading)}${loanPill(b)}</div>${acq ? `<div class="small">${acq}</div>` : ''}${si ? `<div class="small" style="margin-top:4px"><strong>Siri ${esc(b.series)}</strong>${b.volume ? ' · jilid ' + esc(b.volume) : ''}${si.missing.length ? ' · <strong>belum ada jilid ' + si.missing.join(', ') + '</strong>' : ''}</div>` : ''}<button type="button" class="btn secondary small-btn" style="margin-top:8px" data-open-book="${esc(b.id)}">Lihat butiran</button></div></div>`;
+      }).join('');
+      return;
+    }
+    const isIsbn = qi.length >= 10, wish = isIsbn ? wishlist.find(w => isbnKey(w.isbn) === qi) : null;
+    out.innerHTML = `<div class="verdict no"><h3>BELUM ADA</h3><p>Kod <strong>${esc(raw)}</strong> tidak sepadan dengan mana-mana buku dalam koleksi anda.</p></div>` +
+      (borrowed ? `<div class="notice">Anda sedang <strong>meminjam</strong> buku ini daripada ${esc(borrowed.lender)}${borrowed.dueDate ? ' (perlu dipulangkan ' + esc(borrowed.dueDate) + ')' : ''}.</div>` : '') +
+      (wish ? `<div class="notice">★ Sudah dalam <strong>senarai hajat</strong>: ${esc(wish.title)}${wish.targetPrice ? ' · sasaran ' + money(wish.targetPrice) : ''}</div>` : '') +
+      (isIsbn ? `<div class="scan-actions">${wish ? '' : `<div class="grid" style="grid-template-columns:2fr 1fr"><div class="field"><label for="scanWishTitle">Tajuk (pilihan)</label><input id="scanWishTitle" placeholder="Tajuk buku"></div><div class="field"><label for="scanWishPrice">Harga di kedai (RM)</label><input id="scanWishPrice" inputmode="decimal" placeholder="0.00"></div></div>`}<div class="actions" style="margin-top:10px">${wish ? '' : `<button class="btn" type="button" data-scan-wish="${esc(raw)}">☆ Tambah ke senarai hajat</button>`}<button class="btn secondary" type="button" data-scan-add="${esc(raw)}">+ Daftar sebagai buku baharu</button></div></div>` : '<p class="small">Semak ejaan kod. ISBN biasanya 13 digit bermula dengan 978 atau 979.</p>');
+  }
+  $('scanResult').addEventListener('click', e => {
+    const open = e.target.closest('[data-open-book]'), wish = e.target.closest('[data-scan-wish]'), add = e.target.closest('[data-scan-add]');
+    if (open) openBookDetail(open.dataset.openBook);
+    if (wish) {
+      const code = wish.dataset.scanWish, price = str($('scanWishPrice')?.value).replace(',', '.').trim();
+      if (price && Number.isNaN(Number(price))) { toast('Harga tidak sah.'); return; }
+      const rec = touch({ id: newId(''), title: ($('scanWishTitle')?.value.trim() || 'ISBN ' + code).toLocaleUpperCase('ms-MY'), author: '', isbn: code, targetPrice: price, shop: '', note: 'Ditambah dari imbasan', origin: 'Imbasan' });
+      wishlist.unshift(rec); persist(); render(); scanLookup(code); toast('Ditambah ke senarai hajat.');
+    }
+    if (add) { resetBook(true); showTab('formPanel'); $('isbn').value = add.dataset.scanAdd; renderDupWarning(); scheduleDraft('book'); $('title').focus(); }
+  });
+
+  // Butang 📷 pada medan ISBN (borang buku, senarai hajat, pinjaman)
+  let scanTarget = '';
+  function closeScanDialog() { const d = $('scanDialog'); stopScanner(); if (d.open) { if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); } }
+  document.querySelectorAll('[data-scan-into]').forEach(btn => btn.addEventListener('click', async () => {
+    scanTarget = btn.dataset.scanInto;
+    const d = $('scanDialog'); $('scanDialogMsg').textContent = 'Membuka kamera…'; $('scanDialogMsg').hidden = false; $('scanDialogVideo').hidden = true;
+    if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
+    try {
+      const ok = await startScanner($('scanDialogVideo'), code => {
+        closeScanDialog();
+        const f = $(scanTarget); f.value = code; f.dispatchEvent(new Event('input', { bubbles: true })); f.focus();
+        toast('ISBN dibaca: ' + code);
+      });
+      if (ok !== false && scan.on) { $('scanDialogVideo').hidden = false; $('scanDialogMsg').hidden = true; }
+    } catch (e) { stopScanner(); $('scanDialogMsg').textContent = 'Kamera tidak dapat diaktifkan: ' + cameraError(e); }
+  }));
+  $('scanDialogClose').addEventListener('click', closeScanDialog);
+  $('scanDialog').addEventListener('cancel', () => stopScanner());
 
   // ---------- Sandaran: eksport / import / tempatan ----------
   function exportData() {
